@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+#sudo snap download ubuntu-budgie-welcome
+#sudo mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
+#sudo mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
+
+#sudo rm /var/lib/snapd/state.json
+#sudo sed -i 's/After=snapd.service snapd.socket/After=core18.start-snapd.service/' /lib/systemd/system/snapd.seeded.service
+#sudo echo "  -" >> /var/lib/snapd/seed/seed.yaml
+#sudo echo "    name: ubuntu-budgie-welcome" >> /var/lib/snapd/seed/seed.yaml
+#sudo echo "    channel: stable/ubuntu-20.10" >> /var/lib/snapd/seed/seed.yaml
+#sudo echo "    file: ubuntu-budgie-welcome_237.snap" >> /var/lib/snapd/seed/seed.yaml
+#sudo echo "    classic: true" >> /var/lib/snapd/seed/seed.yaml
+
+apt update
+apt remove -y gnome-shell gdm3
+apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report eog gnome-terminal nautilus xdg-desktop-portal-gtk apt-config-icons-hidpi gamemode seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas xcursor-themes realmd adcli gnome-getting-started-docs shotwell remmina totem thunderbird deja-dup
+
+apt install -y ubuntu-budgie-desktop budgie-welcome
+apt upgrade
+
+apt-get -y install --no-install-recommends oem-config-slideshow-ubuntu-budgie
+sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/lib/ubiquity/plugins/ubi-usersetup.py
+sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
+sed -i 's/ubiquity-slideshow-ubuntu/ubiquity-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
+
+echo "/usr/sbin/lightdm" > /etc/X11/default-display-manager
+DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true dpkg-reconfigure lightdm
+echo set shared/default-x-display-manager lightdm | debconf-communicate
+update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/ubuntu-budgie-logo/ubuntu-budgie-logo.plymouth 100
+update-initramfs -u
+
+apt -y autoremove
+apt -y autoclean
+apt -y clean
+
+rm /usr/bin/setup-budgie.sh
+echo -n "" > /etc/resolv.conf
+
