@@ -35,10 +35,6 @@ class Layout:
             else:
                 gsettings.set_string(key, value)
 
-class CompactLayout(Layout):
-    _fontname="Sawasdee "
-    _compact_layout="ubuntubudgiecompact"
-
     def _apply_layout(self, layout):
 
         # well-known name for our program
@@ -74,6 +70,10 @@ class CompactLayout(Layout):
 
             iface.ResetLayout(layout)
 
+
+class CompactLayout(Layout):
+    _fontname="Sawasdee "
+
     def _set_compact_menu(self):
         args = ['/usr/lib/budgie-desktop/arm/reset.sh', 'true']
 
@@ -88,9 +88,23 @@ class CompactLayout(Layout):
         settings.set_string("datefont", datefont)
         settings.set_int("linespacing", linespacing)
 
+    def _set_desktopfonts(self):
+        settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+        settings.set_string("titlebar-font", "Noto Sans Bold 8")
+
+        settings = Gio.Settings.new("org.gnome.desktop.interface")
+        settings.set_string("monospace-font-name", "Ubuntu Mono 10")
+        settings.set_string("font-name", "Noto Sans 8")
+        settings.set_string("document-font-name" , "Noto Sans 8")
+
+        settings = Gio.Settings.new("org.nemo.desktop")
+        settings.set_string("font", "Noto Sans 8")
+
     def apply(self):
         self._set_showtime(self._fontname+"42", self._fontname+"18", -14)
-        self._apply_layout(self._compact_layout)
+        self._set_desktopfonts()
+        self._apply_layout("ubuntubudgiecompact")
+
         time.sleep(5)
         self.set_panel_key('autohide', 'automatic')
         self._set_compact_menu()
@@ -116,8 +130,29 @@ class CompactLayout(Layout):
 
 
 class DefaultLayout(Layout):
+
+    def _set_desktopfonts(self):
+        settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+        settings.reset("titlebar-font")
+
+        settings = Gio.Settings.new("org.gnome.desktop.interface")
+        settings.reset("monospace-font-name")
+        settings.reset("font-name")
+        settings.reset("document-font-name")
+
+        settings = Gio.Settings.new("org.nemo.desktop")
+        settings.reset("font")
+
+    def _set_showtime(self):
+        settings = Gio.Settings.new("org.ubuntubudgie.plugins.budgie-showtime")
+        settings.reset("timefont")
+        settings.reset("datefont")
+        settings.reset("linespacing")
+
     def apply(self):
-        print("hi")
+        self._set_desktopfonts()
+        self._set_showtime()
+        self._apply_layout("ubuntubudgie")
 
 class Handler:
     def on_ConfigWindow_destroy(self, *args):
@@ -143,7 +178,7 @@ window.show_all()
 logoutloginlabel = builder.get_object("LogoutLoginLabel")
 logoutloginlabel.set_visible(False)
 
-if height <= 1768:
+if height <= 768:
     compactlayout.ask_to_reset()
 
 Gtk.main()
