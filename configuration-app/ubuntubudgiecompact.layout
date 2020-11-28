@@ -1,0 +1,68 @@
+[Panels]
+Panels=Top Panel
+
+[Top Panel]
+Children=Budgie Menu;Spacer 1;IconTaskList;ShowTime;Clock;AppIndicator;DropBy;QuickNote;Spacer 2;Notifications;Network;Status;Separator;Spacer 3;User Indicator;Raven Trigger;
+Position=Top
+Size=32
+
+[Budgie Menu]
+ID=Budgie Menu
+
+[Spacer 1]
+ID=Spacer
+
+[IconTaskList]
+ID=Icon Task List
+Alignment=start
+
+[ShowTime]
+ID=ShowTime
+
+[Clock]
+ID=Clock
+Alignment=end
+
+[AppIndicator]
+ID=AppIndicator Applet
+Alignment=end
+
+[DropBy]
+ID=DropBy
+Alignment=end
+
+[QuickNote]
+ID=QuickNote
+Alignment=end
+
+[Network]
+ID=Network
+Alignment=end
+
+[Spacer 2]
+ID=Spacer
+Alignment=end
+
+[Notifications]
+ID=Notifications
+Alignment=end
+
+[Status]
+ID=Status Indicator
+Alignment=end
+
+[User Indicator]
+ID=User Indicator
+Alignment=end
+
+[Separator]
+ID=Separator
+Alignment=end
+
+[Spacer 3]
+ID=Spacer
+Alignment=end
+
+[Raven Trigger]
+ID=Raven Trigger
+Alignment=end
