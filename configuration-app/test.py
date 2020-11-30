@@ -100,9 +100,17 @@ class CompactLayout(Layout):
         settings = Gio.Settings.new("org.nemo.desktop")
         settings.set_string("font", "Noto Sans 8")
 
+    def _set_theme(self):
+        settings = Gio.Settings.new("org.gnome.desktop.interface")
+        settings.set_string("gtk-theme", "Pocillo-slim")
+
+        settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+        settings.set_string("theme", "Pocillo-slim")
+
     def apply(self):
         self._set_showtime(self._fontname+"42", self._fontname+"18", -14)
         self._set_desktopfonts()
+        self._set_theme()
         self._apply_layout("ubuntubudgiecompact")
 
         time.sleep(5)
@@ -149,9 +157,17 @@ class DefaultLayout(Layout):
         settings.reset("datefont")
         settings.reset("linespacing")
 
+    def _set_theme(self):
+        settings = Gio.Settings.new("org.gnome.desktop.interface")
+        settings.set_string("gtk-theme", "Pocillo")
+
+        settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+        settings.set_string("theme", "Pocillo")
+
     def apply(self):
         self._set_desktopfonts()
         self._set_showtime()
+        self._set_theme()
         self._apply_layout("ubuntubudgie")
 
 class Handler:
