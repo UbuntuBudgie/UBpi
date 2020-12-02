@@ -105,7 +105,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkGrid" id="OverclockGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -178,10 +178,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="cpuTempLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">40 deg</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -223,7 +222,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="IPLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">0.0.0.0</property>
@@ -267,6 +266,7 @@
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
                     <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="on_RefreshIP_Clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>

@@ -2,9 +2,10 @@ import gi
 import dbus
 import subprocess
 import time
+import socket
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, Gio
+from gi.repository import Gtk, Gdk, Gio, GLib
 
 class Layout:
     def getres(self):
@@ -170,6 +171,35 @@ class DefaultLayout(Layout):
         self._set_theme()
         self._apply_layout("ubuntubudgie")
 
+class Overclock:
+    def temp_monitor():
+        cputempfile = open("/sys/class/thermal/thermal_zone0/temp")
+        cpu_temp = cputempfile.read()[:2]
+        cputempfile.close()
+        cpuTempLabel.set_text(cpu_temp+"°C")
+        return True
+
+    def is_raspi():
+        with open('/proc/cpuinfo','r') as cpufile:
+            lines = cpufile.readlines()
+            for line in lines:
+                if "Raspberry Pi" in line:
+                    return True
+        return False
+
+class Remote:
+    def get_ip():
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            # doesn't even have to be reachable
+            s.connect(('10.255.255.255', 1))
+            IP = s.getsockname()[0]
+        except Exception:
+            IP = '127.0.0.1'
+        finally:
+            s.close()
+        return IP
+
 class Handler:
     def on_ConfigWindow_destroy(self, *args):
         Gtk.main_quit()
@@ -179,6 +209,9 @@ class Handler:
 
     def on_DefaultButton_clicked(self):
         defaultlayout.apply()
+        
+    def on_RefreshIP_Clicked(self):
+        iplabel.set_text(Remote.get_ip())
 
 builder = Gtk.Builder()
 builder.add_from_file("config.ui")
@@ -193,6 +226,17 @@ window = builder.get_object("ConfigWindow")
 window.show_all()
 logoutloginlabel = builder.get_object("LogoutLoginLabel")
 logoutloginlabel.set_visible(False)
+
+iplabel = builder.get_object("IPLabel")
+Handler.on_RefreshIP_Clicked(None)
+
+overclockgrid = builder.get_object("OverclockGrid")
+cpuTempLabel = builder.get_object("cpuTempLabel")
+
+if Overclock.is_raspi():
+    GLib.timeout_add_seconds(1,Overclock.temp_monitor)
+else:
+    overclockgrid.set_visible(False)
 
 if height <= 768:
     compactlayout.ask_to_reset()
