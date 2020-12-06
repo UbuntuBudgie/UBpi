@@ -9,15 +9,15 @@ copy the file ubuntubudgiecompact.layout to /usr/share/budgie-desktop/layouts
 
 run the app:
 
-    python3 test.py
+    python3 main.py
 
 To Do:
 
-- [ ] split test.py into python modules - one module per tab
+- [X] split test.py into python modules - one module per tab
 - [ ] Implement start on logon
 - [ ] when opening, navigate to last tab that was opened before closing
-- [ ] Display users current IP address - probably https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib/28950776#28950776
-- [ ] Overclock: Display CPU temperature (update once a second) - Sam's temperature code
+- [X] Display users current IP address - probably https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib/28950776#28950776
+- [X] Overclock: Display CPU temperature (update once a second) - Sam's temperature code
 - [ ] Overclock: Overclocking CPU choice - pibootctl
 - [ ] Overclock: Hide overclock tab if not running on a raspi: https://github.com/wimpysworld/desktopify/blob/50b72f96ea921618cf30b85b6ba147fc929a85cb/desktopify#L211
 
