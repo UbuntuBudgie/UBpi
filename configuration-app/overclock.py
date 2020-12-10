@@ -1,3 +1,4 @@
+from gi.repository import GLib
 
 class Overclock:
     def _markup_temp(temp):
@@ -9,7 +10,7 @@ class Overclock:
             color = "green"
         return "<b><span foreground='{}'>{}°C</span></b>".format(color,temp)
 
-    def temp_monitor():
+    def _temp_monitor(label):
         try:
             cputempfile = open("/sys/class/thermal/thermal_zone0/temp")
             cpu_temp = int(cputempfile.read()) // 1000
@@ -17,8 +18,11 @@ class Overclock:
         except:
             # Should never happen, but just in case
             cpu_temp=0
-        cpuTempLabel.set_markup(Overclock._markup_temp(cpu_temp))
+        label.set_markup(Overclock._markup_temp(cpu_temp))
         return True
+
+    def start_tempmonitor(label):
+        GLib.timeout_add_seconds(1,Overclock._temp_monitor,label)
 
     def is_raspi():
         with open('/proc/cpuinfo','r') as cpufile:
@@ -27,4 +31,3 @@ class Overclock:
                 if "Raspberry Pi" in line:
                     return True
         return False
-

@@ -43,7 +43,7 @@ overclockgrid = builder.get_object("OverclockGrid")
 cpuTempLabel = builder.get_object("cpuTempLabel")
 
 if Overclock.is_raspi():
-    GLib.timeout_add_seconds(1,Overclock.temp_monitor)
+    Overclock.start_tempmonitor(cpuTempLabel)
 else:
     overclockgrid.set_visible(False)
 
