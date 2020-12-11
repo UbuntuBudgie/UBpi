@@ -8,22 +8,80 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
 
 class Layout:
+    _fontname="Sawasdee "
+
+    # types of layouts that can be applied
+    MINI=1
+    COMPACT=2
+    STANDARD=3
 
     def __init__(self, builder):
         self.logoutloginlabel = builder.get_object("LogoutLoginLabel")
         self.logoutloginlabel.set_visible(False)
 
-    def getres(self):
-        dsp = Gdk.Display.get_default()
-        prim = dsp.get_primary_monitor()
-        geo = prim.get_geometry()
-        xoffset = geo.x
-        yoffset = geo.y
-        width = geo.width
-        height = geo.height
-        return (width, height, xoffset, yoffset)
+        self.standardradiobutton = builder.get_object("StandardRadioButton")
+        self.compactradiobutton = builder.get_object("CompactRadioButton")
+        self.miniradiobutton = builder.get_object("MiniRadioButton")
 
-    def set_panel_key(self, key, value):
+        gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
+
+        layout = gsettings.get_string('layout-style')
+        if layout == "standard":
+            self.standardradiobutton.set_active(True)
+        elif layout == "compact":
+            self.compactradiobutton.set_active(True)
+        elif layout == "mini":
+            self.miniradiobutton.set_active(True)
+        else:
+            raise SystemExit('Unknown layout to initialise')
+
+
+
+    def apply(self, layouttype):
+
+        if layouttype == Layout.MINI:
+            showtime = ["42", "18", -14]
+        elif layouttype == Layout.COMPACT:
+            showtime = ["60", "24", -25]
+        elif layouttype == Layout.STANDARD:
+            # nothing really to-do
+            print('i')
+        else:
+            raise SystemExit('unknown compacy layout')
+
+        if layouttype == Layout.STANDARD:
+            self._reset_desktopfonts()
+            self._reset_showtime()
+            self._reset_theme()
+            self._apply_layout("ubuntubudgie")
+        else:
+            self._set_showtime(self._fontname+showtime[0], self._fontname+showtime[1], showtime[2])
+            self._set_desktopfonts(layouttype)
+            self._set_theme()
+            self._apply_layout("ubuntubudgiecompact")
+
+            time.sleep(5)
+            self._set_panel_key('autohide', 'automatic')
+            self._set_compact_menu()
+
+        self.logoutloginlabel.set_visible(True)
+        self._save_layout(layouttype)
+
+    def _save_layout(self, layouttype):
+        gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
+
+        if layouttype == Layout.STANDARD:
+            layoutstr = 'standard'
+        elif layouttype == Layout.COMPACT:
+            layoutstr = 'compact'
+        elif layouttype == Layout.MINI:
+            layoutstr = 'mini'
+        else:
+            raise SystemExit('unknown layout to save')
+
+        gsettings.set_string('layout-style', layoutstr)
+
+    def _set_panel_key(self, key, value):
         # panel keys are relocatable - so need to loop through all panels
         # and set the key to the value given
 
@@ -76,17 +134,6 @@ class Layout:
 
             iface.ResetLayout(layout)
 
-
-class CompactLayout(Layout):
-    _fontname="Sawasdee "
-
-    # types of layouts that can be applied
-    MINI=1
-    COMPACT=2
-
-    def __init__(self, builder):
-        Layout.__init__(self, builder)
-
     def _set_compact_menu(self):
         args = ['/usr/lib/budgie-desktop/arm/reset.sh', 'true']
 
@@ -103,11 +150,11 @@ class CompactLayout(Layout):
 
     def _set_desktopfonts(self, layouttype):
 
-        if layouttype == CompactLayout.MINI:
+        if layouttype == Layout.MINI:
             font_size = "8"
             mono_size = "10"
 
-        if layouttype == CompactLayout.COMPACT:
+        if layouttype == Layout.COMPACT:
             font_size = "10"
             mono_size = "12"
 
@@ -129,50 +176,7 @@ class CompactLayout(Layout):
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
         settings.set_string("theme", "Pocillo-slim")
 
-    def apply(self, layouttype):
-        if layouttype == CompactLayout.MINI:
-            showtime = ["42", "18", -14]
-        elif layouttype == CompactLayout.COMPACT:
-            showtime = ["60", "24", -25]
-        else:
-            return
-
-        self._set_showtime(self._fontname+showtime[0], self._fontname+showtime[1], showtime[2])
-        self._set_desktopfonts(layouttype)
-        self._set_theme()
-        self._apply_layout("ubuntubudgiecompact")
-
-        time.sleep(5)
-        self.set_panel_key('autohide', 'automatic')
-        self._set_compact_menu()
-        self.logoutloginlabel.set_visible(True)
-
-    def ask_to_reset(self):
-        dialog = Gtk.MessageDialog(
-            transient_for=window,
-            flags=0,
-            message_type=Gtk.MessageType.QUESTION,
-            buttons=Gtk.ButtonsType.OK_CANCEL,
-            text="Reset layout to fit screen resolution?",
-        )
-        dialog.format_secondary_text(
-            "The default layout and fonts are optimised for a standard desktop screen resolution. ......"
-        )
-        response = dialog.run()
-        if response == Gtk.ResponseType.OK:
-            self.apply()
-        elif response == Gtk.ResponseType.CANCEL:
-            print("dialog closed by clicking CANCEL button")
-
-        dialog.destroy()
-
-
-class DefaultLayout(Layout):
-
-    def __init__(self, builder):
-        Layout.__init__(self, builder)
-
-    def _set_desktopfonts(self):
+    def _reset_desktopfonts(self):
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
         settings.reset("titlebar-font")
 
@@ -184,22 +188,15 @@ class DefaultLayout(Layout):
         settings = Gio.Settings.new("org.nemo.desktop")
         settings.reset("font")
 
-    def _set_showtime(self):
+    def _reset_showtime(self):
         settings = Gio.Settings.new("org.ubuntubudgie.plugins.budgie-showtime")
         settings.reset("timefont")
         settings.reset("datefont")
         settings.reset("linespacing")
 
-    def _set_theme(self):
+    def _reset_theme(self):
         settings = Gio.Settings.new("org.gnome.desktop.interface")
         settings.set_string("gtk-theme", "Pocillo")
 
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
         settings.set_string("theme", "Pocillo")
-
-    def apply(self):
-        self._set_desktopfonts()
-        self._set_showtime()
-        self._set_theme()
-        self._apply_layout("ubuntubudgie")
-        self.logoutloginlabel.set_visible(True)

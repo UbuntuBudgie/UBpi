@@ -2,10 +2,8 @@
 
 Install:
 
-create folder /usr/lib/budgie-desktop/arm
-copy the file reset.sh into this folder
 
-copy the file ubuntubudgiecompact.layout to /usr/share/budgie-desktop/layouts
+sudo bash ./install.sh
 
 run the app:
 

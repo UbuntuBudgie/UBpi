@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <enum id="org.ubuntubudgie.armconfig.LayoutStyle">
+		<value nick="standard" value="1" />
+		<value nick="compact" value="2" />
+        <value nick="mini" value="3" />
+	</enum>
+    <schema path="/org/ubuntubudgie/armconfig/"
+            id="org.ubuntubudgie.armconfig">
+
+        <key enum="org.ubuntubudgie.armconfig.LayoutStyle" name="layout-style">
+			<default>'standard'</default>
+			<summary>layout style</summary>
+			<description>Which layout to use</description>
+		</key>
+
+    </schema>
+</schemalist>
+
+
