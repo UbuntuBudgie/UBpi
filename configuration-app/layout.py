@@ -8,6 +8,11 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
 
 class Layout:
+
+    def __init__(self, builder):
+        self.logoutloginlabel = builder.get_object("LogoutLoginLabel")
+        self.logoutloginlabel.set_visible(False)
+
     def getres(self):
         dsp = Gdk.Display.get_default()
         prim = dsp.get_primary_monitor()
@@ -80,7 +85,7 @@ class CompactLayout(Layout):
     COMPACT=2
 
     def __init__(self, builder):
-        self.logoutloginlabel = builder.get_object("LogoutLoginLabel")
+        Layout.__init__(self, builder)
 
     def _set_compact_menu(self):
         args = ['/usr/lib/budgie-desktop/arm/reset.sh', 'true']
@@ -105,6 +110,7 @@ class CompactLayout(Layout):
         if layouttype == CompactLayout.COMPACT:
             font_size = "10"
             mono_size = "12"
+
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
         settings.set_string("titlebar-font", "Noto Sans Bold "+font_size)
 
@@ -164,7 +170,7 @@ class CompactLayout(Layout):
 class DefaultLayout(Layout):
 
     def __init__(self, builder):
-        self.logoutloginlabel = builder.get_object("LogoutLoginLabel")
+        Layout.__init__(self, builder)
 
     def _set_desktopfonts(self):
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")

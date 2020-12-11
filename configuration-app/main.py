@@ -41,10 +41,7 @@ builder.add_from_file("config.ui")
 builder.connect_signals(Handler)
 
 window = builder.get_object("ConfigWindow")
-
 window.show_all()
-logoutloginlabel = builder.get_object("LogoutLoginLabel")
-logoutloginlabel.set_visible(False)
 
 iplabel = builder.get_object("IPLabel")
 Handler.on_RefreshIP_Clicked(None)
