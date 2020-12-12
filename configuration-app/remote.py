@@ -1,7 +1,12 @@
 import socket
 
 class Remote:
-    def get_ip():
+
+    def __init__(self,builder):
+        self.iplabel = builder.get_object("IPLabel")
+        self.refresh_ip()
+
+    def get_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             # doesn't even have to be reachable
@@ -13,3 +18,5 @@ class Remote:
             s.close()
         return IP
 
+    def refresh_ip(self):
+        self.iplabel.set_text(self.get_ip())

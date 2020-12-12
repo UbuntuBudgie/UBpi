@@ -26,19 +26,13 @@ class Handler:
         if standardradiobutton.get_active():
             layoutstyle.apply(Layout.STANDARD)
 
-    def on_RefreshIP_Clicked(self):
-        iplabel.set_text(Remote.get_ip())
+    def on_RefreshIP_clicked(self):
+        remote.refresh_ip()
 
 builder = Gtk.Builder()
 builder.add_from_file("config.ui")
 window = builder.get_object("ConfigWindow")
 window.show_all()
-
-iplabel = builder.get_object("IPLabel")
-Handler.on_RefreshIP_Clicked(None)
-
-overclockgrid = builder.get_object("OverclockGrid")
-cpuTempLabel = builder.get_object("cpuTempLabel")
 
 standardradiobutton = builder.get_object("StandardRadioButton")
 compactradiobutton = builder.get_object("CompactRadioButton")
@@ -46,11 +40,9 @@ miniradiobutton = builder.get_object("MiniRadioButton")
 
 layoutstyle = Layout(builder)
 
-builder.connect_signals(Handler)
+remote = Remote(builder)
+overclock = Overclock(builder)
 
-if Overclock.is_raspi():
-    Overclock.start_tempmonitor(cpuTempLabel)
-else:
-    overclockgrid.set_visible(False)
+builder.connect_signals(Handler)
 
 Gtk.main()
