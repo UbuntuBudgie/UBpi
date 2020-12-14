@@ -16,11 +16,12 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkNotebook">
+          <object class="GtkNotebook" id="ConfigNotebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <signal name="switch-page" handler="on_ConfigNotebook_switch_page" swapped="no"/>
             <child>
               <object class="GtkGrid">
                 <property name="visible">True</property>

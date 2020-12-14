@@ -16,7 +16,7 @@ To Do:
 - [ ] Need an icon for the application
 - [X] split test.py into python modules - one module per tab
 - [X] Implement start on logon
-- [ ] when opening, navigate to last tab that was opened before closing
+- [X] when opening, navigate to last tab that was opened before closing
 - [X] Display users current IP address - probably https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib/28950776#28950776
 - [X] Overclock: Display CPU temperature (update once a second) - Sam's temperature code
 - [ ] Overclock: Overclocking CPU choice - pibootctl

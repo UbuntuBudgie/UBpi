@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
     <enum id="org.ubuntubudgie.armconfig.LayoutStyle">
-		<value nick="standard" value="1" />
-		<value nick="compact" value="2" />
+        <value nick="standard" value="1" />
+        <value nick="compact" value="2" />
         <value nick="mini" value="3" />
-	</enum>
+    </enum>
     <schema path="/org/ubuntubudgie/armconfig/"
             id="org.ubuntubudgie.armconfig">
 
         <key enum="org.ubuntubudgie.armconfig.LayoutStyle" name="layout-style">
-			<default>'standard'</default>
-			<summary>layout style</summary>
-			<description>Which layout to use</description>
-		</key>
-		<key type="b" name="runarmconfig">
+            <default>'standard'</default>
+            <summary>layout style</summary>
+            <description>Which layout to use</description>
+        </key>
+        <key type="b" name="runarmconfig">
             <summary>Run the Budgie ARM config utility on startup</summary>
             <description>Add to the autostart list</description>
             <default>true</default>
+        </key>
+        <key type="i" name="lastpage">
+            <summary>Current notebook page</summary>
+            <description>Current page number index of the config window</description>
+            <default>0</default>
         </key>
     </schema>
 </schemalist>

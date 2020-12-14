@@ -29,6 +29,9 @@ class Handler:
         if standardradiobutton.get_active():
             layoutstyle.apply(Layout.STANDARD)
 
+    def on_ConfigNotebook_switch_page(self, page, num):
+        gsettings.set_int('lastpage', num)
+
     def on_RefreshIP_clicked(self):
         remote.refresh_ip()
 
@@ -46,11 +49,13 @@ miniradiobutton = builder.get_object("MiniRadioButton")
 startlogincheckbutton = builder.get_object("StartLoginCheckButton")
 gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
 startlogincheckbutton.set_active(gsettings.get_boolean('runarmconfig'))
+notebook = builder.get_object('ConfigNotebook')
+notebook.set_current_page(gsettings.get_int('lastpage'))
 
 layoutstyle = Layout(builder)
-
 remote = Remote(builder)
 overclock = Overclock(builder)
+
 
 builder.connect_signals(Handler)
 
