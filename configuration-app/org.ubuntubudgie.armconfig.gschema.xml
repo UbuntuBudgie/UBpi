@@ -13,7 +13,11 @@
 			<summary>layout style</summary>
 			<description>Which layout to use</description>
 		</key>
-
+		<key type="b" name="runarmconfig">
+            <summary>Run the Budgie ARM config utility on startup</summary>
+            <description>Add to the autostart list</description>
+            <default>true</default>
+        </key>
     </schema>
 </schemalist>
 

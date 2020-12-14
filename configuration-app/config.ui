@@ -332,7 +332,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton">
+          <object class="GtkCheckButton" id="StartLoginCheckButton">
             <property name="label" translatable="yes">Start on login</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

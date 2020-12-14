@@ -2,22 +2,25 @@
 
 Install:
 
-
-sudo bash ./install.sh
+    bash ./install.sh
 
 run the app:
 
     python3 main.py
 
+to generate the resource file after modifying the .ui file
+glib-compile-resources org.ubuntubudgie.armconfig.gresource.xml
+
 To Do:
 
+- [ ] Need an icon for the application
 - [X] split test.py into python modules - one module per tab
-- [ ] Implement start on logon
+- [X] Implement start on logon
 - [ ] when opening, navigate to last tab that was opened before closing
 - [X] Display users current IP address - probably https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib/28950776#28950776
 - [X] Overclock: Display CPU temperature (update once a second) - Sam's temperature code
 - [ ] Overclock: Overclocking CPU choice - pibootctl
-- [ ] Overclock: Hide overclock tab if not running on a raspi: https://github.com/wimpysworld/desktopify/blob/50b72f96ea921618cf30b85b6ba147fc929a85cb/desktopify#L211
+- [X] Overclock: Hide overclock tab if not running on a raspi: https://github.com/wimpysworld/desktopify/blob/50b72f96ea921618cf30b85b6ba147fc929a85cb/desktopify#L211
 
 Nice to have:
 

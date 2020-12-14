@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Budgie ARM Configuration
+Exec=python3 /usr/lib/budgie-desktop/arm/main.py
+Icon=system-settings
+Categories=Utility;
+Keywords=configuration;arm;pi;raspberry
