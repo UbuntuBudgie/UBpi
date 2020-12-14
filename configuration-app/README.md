@@ -2,7 +2,7 @@
 
 Install:
 
-    bash ./install.sh
+    sudo bash ./install.sh
 
 run the app:
 
