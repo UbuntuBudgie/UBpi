@@ -27,6 +27,7 @@ mkdir -p ${PREFIX_DIR}/usr/share/budgie-desktop/layouts
 mkdir -p ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 mkdir -p ${PREFIX_DIR}/usr/share/glib-2.0/schemas
 mkdir -p ${PREFIX_DIR}/etc/xdg/autostart
+mkdir -p ${PREFIX_DIR}/usr/share/applications
 
 
 cp ubuntubudgiecompact.layout ${PREFIX_DIR}/usr/share/budgie-desktop/layouts
