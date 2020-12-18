@@ -171,10 +171,10 @@ class Layout:
 
     def _set_theme(self):
         settings = Gio.Settings.new("org.gnome.desktop.interface")
-        settings.set_string("gtk-theme", "Pocillo-slim")
+        settings.set_string("gtk-theme", "Pocillo-dark-slim")
 
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
-        settings.set_string("theme", "Pocillo-slim")
+        settings.set_string("theme", "Pocillo-dark-slim")
 
     def _reset_desktopfonts(self):
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
@@ -196,7 +196,7 @@ class Layout:
 
     def _reset_theme(self):
         settings = Gio.Settings.new("org.gnome.desktop.interface")
-        settings.set_string("gtk-theme", "Pocillo")
+        settings.reset("gtk-theme")
 
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
-        settings.set_string("theme", "Pocillo")
+        settings.reset("theme")
