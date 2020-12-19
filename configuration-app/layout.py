@@ -35,7 +35,28 @@ class Layout:
         else:
             raise SystemExit('Unknown layout to initialise')
 
+        width, height, xoffset, yoffset = self._get_resolution()
 
+        resolution = builder.get_object("ResolutionLabel")
+        resolution.set_text(str(width) + " x " + str(height))
+
+        standard_recommendation = builder.get_object("StandardRecommendedLabel")
+        compact_recommendation = builder.get_object("CompactRecommendedLabel")
+        mini_recommendation = builder.get_object("MiniRecommendedLabel")
+
+        print(height)
+        if height >= 900:
+            standard_recommendation.set_text("Recommended")
+            compact_recommendation.set_text("")
+            mini_recommendation.set_text("")
+        elif height >= 768:
+            standard_recommendation.set_text("")
+            compact_recommendation.set_text("Recommended")
+            mini_recommendation.set_text("")
+        else:
+            standard_recommendation.set_text("")
+            compact_recommendation.set_text("")
+            mini_recommendation.set_text("Recommended")
 
     def apply(self, layouttype):
 
@@ -200,3 +221,13 @@ class Layout:
 
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
         settings.reset("theme")
+
+    def _get_resolution(self):
+        dsp = Gdk.Display.get_default()
+        prim = dsp.get_primary_monitor()
+        geo = prim.get_geometry()
+        xoffset = geo.x
+        yoffset = geo.y
+        width = geo.width
+        height = geo.height
+        return (width, height, xoffset, yoffset)
