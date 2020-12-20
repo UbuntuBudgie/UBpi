@@ -2,6 +2,7 @@
 
 Install:
 
+    sudo apt install libglib2.0-dev-bin
     sudo bash ./install.sh
 
 run the app:

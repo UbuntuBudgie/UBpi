@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="ConfigWindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Budgie ARM TweakTool</property>
+    <property name="window_position">center</property>
     <property name="default_width">150</property>
     <property name="default_height">150</property>
     <signal name="destroy" handler="on_ConfigWindow_destroy" swapped="no"/>
@@ -26,18 +27,7 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_homogeneous">True</property>
                 <property name="column_homogeneous">True</property>
-                <child>
-                  <object class="GtkLabel" id="LogoutLoginLabel">
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Logout/Login to complete</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
@@ -54,20 +44,30 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="LogoutLoginLabel">
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">5</property>
+                    <property name="label" translatable="yes">Logout/Login to complete</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                      <attribute name="foreground" value="#efef29292929"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
+                    <property name="margin_bottom">5</property>
                     <child>
-                      <object class="GtkRadioButton" id="StandardRadioButton">
-                        <property name="label" translatable="yes">Standard Desktop</property>
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_StandardRadioButton_toggled" swapped="no"/>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Current Screen Resolution (Primary):</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -76,16 +76,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="CompactRadioButton">
-                        <property name="label" translatable="yes">Compact Desktop</property>
+                      <object class="GtkLabel" id="ResolutionLabel">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">StandardRadioButton</property>
-                        <signal name="toggled" handler="on_CompactRadioButton_toggled" swapped="no"/>
+                        <property name="can_focus">False</property>
+                        <property name="margin_left">5</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -93,28 +87,131 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkRadioButton" id="MiniRadioButton">
-                        <property name="label" translatable="yes">Mini Desktop</property>
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">StandardRadioButton</property>
-                        <signal name="toggled" handler="on_MiniRadioButton_toggled" swapped="no"/>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkRadioButton" id="StandardRadioButton">
+                            <property name="label" translatable="yes">Standard Desktop</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_StandardRadioButton_toggled" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="CompactRadioButton">
+                            <property name="label" translatable="yes">Compact Desktop</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">StandardRadioButton</property>
+                            <signal name="toggled" handler="on_CompactRadioButton_toggled" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="MiniRadioButton">
+                            <property name="label" translatable="yes">Mini Desktop</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">StandardRadioButton</property>
+                            <signal name="toggled" handler="on_MiniRadioButton_toggled" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="homogeneous">True</property>
+                        <child>
+                          <object class="GtkLabel" id="StandardRecommendedLabel">
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Recommended</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="CompactRecommendedLabel">
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Recommended</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="MiniRecommendedLabel">
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Recommended</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
               </object>
@@ -235,10 +332,12 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">IP Address</property>
                   </object>
                   <packing>
@@ -250,7 +349,9 @@
                   <object class="GtkLabel" id="IPLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="label" translatable="yes">0.0.0.0</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -289,7 +390,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">start</property>
                     <property name="use_stock">True</property>
+                    <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
                     <signal name="clicked" handler="on_RefreshIP_clicked" swapped="no"/>
                   </object>
