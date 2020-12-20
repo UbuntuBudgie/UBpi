@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-IMAGE="ubuntu-20.10-preinstalled-desktop-arm64+raspi.img"
-RELEASE="https://cdimage.ubuntu.com/releases/20.10/release"
-RELEASEIMAGE="ubuntubudgie-20.10-preinstalled-desktop-arm64+raspi.img"
+IMAGE="hirsute-preinstalled-desktop-arm64+raspi.img"
+RELEASE="http://cdimage.ubuntu.com/daily-preinstalled/current"
+RELEASEIMAGE="hirsute-budgie-preinstalled-desktop-arm64+raspi.img"
 MOUNT="/mnt/pi"
 NAMESERVER=1.1.1.1
 
@@ -29,9 +29,10 @@ if [ ! -f "$IMAGE" ]; then
   sudo -u $SUDO_USER xz -d -v $IMAGE.xz
 fi
 echo "Creating mount"
-OFFSET=$(parted ubuntu-20.10-preinstalled-desktop-arm64+raspi.img unit b print | grep "ext4" | awk '{ print substr($2,0,length($2)-1) }')
+OFFSET=$(parted "$IMAGE" unit b print | grep "ext4" | awk '{ print substr($2,0,length($2)-1) }')
 mkdir -p $MOUNT
 mount -o loop,offset=$OFFSET $IMAGE $MOUNT
+cp seed.yaml $MOUNT/var/lib/snapd/seed/seed.yaml
 cp /usr/bin/qemu-arm-static $MOUNT/usr/bin/
 cp setup-budgie.dontrun $MOUNT/usr/bin/setup-budgie.sh
 chmod +x $MOUNT/usr/bin/setup-budgie.sh
@@ -49,12 +50,12 @@ chroot $MOUNT /usr/bin/setup-budgie.sh
 rm $MOUNT/usr/bin/qemu-arm-static
 
 umount $MOUNT/proc
-umount $mount/sys
-umount $mount/dev
+umount -l $MOUNT/sys
+umount -l $MOUNT/dev
 cd $CURRENT_DIR
 umount $MOUNT
 rmdir $MOUNT
-mv $RELEASE $RELEASEIMAGE
+mv $IMAGE $RELEASEIMAGE
 
 # Next line commented because it takes a long time to recompress
-# sudo -u $SUDO_USER xz -v $IMAGE
+sudo -u $SUDO_USER xz -v --threads=0 $IMAGE

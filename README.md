@@ -18,3 +18,10 @@ run
     ./budgie-setup.sh
 
 When its completed you will have a .img file to write to your Pi 4
+
+Notes:
+
+The build will pause waiting for the plymouth theme to choose - do not use the budgie scale-2 theme
+seed.yaml needs to be updated to use the latest arm snap numbers
+
+After running the scripts reboot your host computer.
