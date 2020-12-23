@@ -7,20 +7,12 @@
 
 
 function disable_xrdp() {
-  if [ $2 -eq 1 ]; then
+  if [[ $2 -eq 1  ||  $1 -eq 1 ]]; then
     echo 'Disabling xrdp service'
-    systemctl disable xrdp
+    systemctl disable --now xrdp
   else
     echo 'xrdp already disabled'
   fi
-  
-  if [ $1 -eq 1 ]; then
-    echo 'Stopping xrdp service'
-    systemctl stop xrdp
-  else
-    echo 'xrdp not running'
-  fi
-  echo 'Done!'
 }
 
 function enable_xrdp() {
@@ -90,7 +82,8 @@ fi
 FILE='/etc/xrdp/startwm.sh'
 STATUS=$(systemctl status xrdp 2>/dev/null)
 
-[[ $(echo $STATUS | grep -c " active") -ne 0 ]] && ACTIVE=1 || ACTIVE=0
+systemctl is-active xrdp > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
+
 [[ $(echo $STATUS | grep -c "xrdp.service; enabled") -ne 0 ]] && ENABLED=1 || ENABLED=0
 
 if [ "$1" = "enable" ]; then
@@ -107,4 +100,3 @@ else
   xrdp_status $ACTIVE $ENABLED
   exit 1
 fi
-
