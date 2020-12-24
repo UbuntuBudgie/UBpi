@@ -5,9 +5,8 @@
 # enable / disable require sudo priveleges
 # status does NOT require sudo priveleges 
 
-
 function disable_xrdp() {
-  if [[ $2 -eq 1  ||  $1 -eq 1 ]]; then
+  if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
     echo 'Disabling xrdp service'
     systemctl disable --now xrdp
   else
@@ -20,71 +19,56 @@ function enable_xrdp() {
   if [ $(dpkg-query -W -f='${Status}' xrdp 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo 'xrdp not found. Installing...'
     apt install -y xrdp
-    systemctl enable xrdp
+    systemctl enable --now xrdp
   else
     echo 'xrdp already installed!'
-  fi
-
-  echo 'Checking if xrdp is enabled'
-  if [ $2 -eq 1 ]; then
-    echo 'xrdp already enabled!'
-  else
-    echo 'Enabling xrdp'
-    systemctl enable xrdp
-  fi
-
-  echo 'Checking if xrdp is running'
-  if [ $1 -eq 1 ]; then
-    echo 'xrdp already started!'
-  else
-    echo 'Starting xrdp'
-    systemctl start xrdp
+    echo 'Checking if xrdp is enabled'
+    if [[ $1 -eq 1  &&  $2 -eq 1 ]]; then
+      echo 'xrdp already enabled!'
+    else
+      echo 'Enabling xrdp'
+      systemctl enable --now xrdp
+    fi
   fi
 
   echo 'Checking configuration file'
   sed -e '/\/etc\/X11\/Xsession/ s/^#*/#/g' -i $FILE
   if ! grep -Fxq "budgie-desktop" $FILE; then 
     echo 'budgie-desktop' >> $FILE
+    echo 'Restarting xrdp service'
+    systemctl restart xrdp
   fi
-
-  echo 'Restarting xrdp service'
-  systemctl restart xrdp
   echo 'Done!'
 }
 
 function xrdp_status() {
-  if [ $1 -eq 1 ]; then
-    STARTED="started"
+  EXIT=0
+  if [[ $1 -eq 1 &&  $2 -eq 1 ]]; then
+    SERVICE="ok"
   else
-    STARTED="stopped"
-  fi
-
-  if [ $2 -eq 1 ]; then
-    SERVICE="enabled"
-  else
-    SERVICE="disabled"
+    SERVICE="stopped"
+    EXIT=1
   fi
   if [ $(dpkg-query -W -f='${Status}' xrdp 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     INSTALLED="missing"
+    EXIT=1
   else
     INSTALLED="installed"
   fi
-
   echo "xrdp package is $INSTALLED"
-  echo "xrdp service is $STARTED and $SERVICE"
+  echo "xrdp service is $SERVICE"
+  exit $EXIT
 }
 
 if [[ "$(id -u)" -ne 0 && ! "$1" = "status" ]]; then
   echo "You need to be root to run this."
-  exit 1
+  exit 2
 fi
 
 FILE='/etc/xrdp/startwm.sh'
-STATUS=$(systemctl status xrdp 2>/dev/null)
 
 systemctl is-active xrdp > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
-
-[[ $(echo $STATUS | grep -c "xrdp.service; enabled") -ne 0 ]] && ENABLED=1 || ENABLED=0
+systemctl is-enabled xrdp > /dev/null 2>&1 && ENABLED=1 || ENABLED=0
 
 if [ "$1" = "enable" ]; then
   enable_xrdp $ACTIVE $ENABLED
@@ -98,5 +82,5 @@ elif [ "$1" = "status" ]; then
 else
   echo "Usage: budgie-xrdp [enable|disable|status]"
   xrdp_status $ACTIVE $ENABLED
-  exit 1
+  exit 2
 fi
