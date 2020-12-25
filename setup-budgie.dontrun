@@ -42,7 +42,7 @@ echo "/usr/sbin/lightdm" > /etc/X11/default-display-manager
 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true dpkg-reconfigure lightdm
 echo set shared/default-x-display-manager lightdm | debconf-communicate
 update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/ubuntu-budgie-logo/ubuntu-budgie-logo.plymouth 100
-update-alternatives --config default.plymouth
+update-alternatives --set default.plymouth /usr/share/plymouth/themes/ubuntu-budgie-logo/ubuntu-budgie-logo.plymouth
 update-initramfs -u
 
 apt -y autoremove
