@@ -17,13 +17,13 @@ sed -i 's/After=snapd.service snapd.socket/After=core18.start-snapd.service/' /l
 #echo "    channel: stable/ubuntu-21.04" >> /var/lib/snapd/seed/seed.yaml
 #echo "    file: ubuntu-budgie-welcome_249.snap" >> /var/lib/snapd/seed/seed.yaml
 #echo "    classic: true" >> /var/lib/snapd/seed/seed.yaml
-
+add-apt-repository -y ppa:ubuntubudgie-dev/unstable-test
 apt update
 apt remove -y gnome-shell gdm3
 apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report eog gnome-terminal nautilus xdg-desktop-portal-gtk apt-config-icons-hidpi gamemode seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas xcursor-themes realmd adcli gnome-getting-started-docs shotwell remmina totem thunderbird deja-dup
 
 apt install -y ubuntu-budgie-desktop budgie-arm-environment
-apt upgrade
+apt upgrade -y
 
 apt-get -y install --no-install-recommends oem-config-slideshow-ubuntu-budgie
 sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/lib/ubiquity/plugins/ubi-usersetup.py
