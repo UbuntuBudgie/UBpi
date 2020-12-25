@@ -58,4 +58,4 @@ rmdir $MOUNT
 mv $IMAGE $RELEASEIMAGE
 
 # Next line commented because it takes a long time to recompress
-sudo -u $SUDO_USER xz -v --threads=0 $IMAGE
+xz -v --threads=0 $RELEASEIMAGE
