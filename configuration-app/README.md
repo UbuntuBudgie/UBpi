@@ -14,6 +14,7 @@ glib-compile-resources org.ubuntubudgie.armconfig.gresource.xml
 
 To Do:
 
+- [ ] Hide ssh/vnc  checkboxes until implementation
 - [ ] Need an icon for the application
 - [X] split test.py into python modules - one module per tab
 - [X] Implement start on logon
@@ -25,8 +26,11 @@ To Do:
 
 Nice to have:
 
+- [ ] option for the compact/mini layouts to enable xrandr pan and scrolling for lower screen devices such as the raspi touch screen
 - [ ] Enable VNC Server: start/stop VNC - dunno how
 - [ ] "FindMyPi" - setup a UDP server - something like https://stackoverflow.com/questions/27893804/udp-client-server-socket-in-python - on connecting return the IP address of the PI
 - [ ] "FindMyPi" - client version of app with a big "FindMyPi" that displays the IP address of the PI on the network
 - [ ] Enable SSH: install openssh-server if not installed - use packagekit python module at a guess
 - [ ] Enable SSH: start/stop SSH - probably https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-18-04/
+- [ ] Headless mode: one click method to switch to auto logon, turn off screensaver etc.
+- [ ] Setup XRDP: RDP is superior to vnc so a one click method along these lines would be useful https://froth-and-java.dev/posts/ubuntu-budgie-and-xrdp
