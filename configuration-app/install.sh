@@ -32,6 +32,7 @@ mkdir -p ${PREFIX_DIR}/usr/share/applications
 
 cp ubuntubudgiecompact.layout ${PREFIX_DIR}/usr/share/budgie-desktop/layouts
 cp reset.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
+cp budgie-xrdp.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp *.py ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 glib-compile-resources org.ubuntubudgie.armconfig.gresource.xml
 cp *.gresource ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
