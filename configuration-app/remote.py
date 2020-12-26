@@ -34,7 +34,7 @@ class Remote:
             self.run_xrdp(param, root=True)
             self.run_xrdp('status')
         else:
-            self.xrdpstatuslabel.set_text(output[0:50])
+            self.xrdpstatuslabel.set_text(output[0:50].rstrip('\n'))
 
     def xrdpbuttonclicked(self, *args):
         if 'service is ok' in self.xrdpstatuslabel.get_text():
