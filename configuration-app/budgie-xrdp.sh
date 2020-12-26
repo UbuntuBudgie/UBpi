@@ -50,12 +50,12 @@ function xrdp_status() {
     EXIT=1
   fi
   if [ $(dpkg-query -W -f='${Status}' xrdp 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    INSTALLED="missing"
+    INSTALLED="not installed"
     EXIT=1
   else
     INSTALLED="installed"
   fi
-  echo "xrdp package is $INSTALLED"
+  echo "xrdp is $INSTALLED"
   echo "xrdp service is $SERVICE"
   exit $EXIT
 }
