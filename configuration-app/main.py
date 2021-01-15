@@ -9,6 +9,7 @@ import os
 from remote import Remote
 from overclock import Overclock
 from layout import Layout
+from display import Display
 
 class Handler:
     def on_ConfigWindow_destroy(self, *args):
@@ -55,7 +56,7 @@ notebook.set_current_page(gsettings.get_int('lastpage'))
 layoutstyle = Layout(builder)
 remote = Remote(builder)
 overclock = Overclock(builder)
-
+display = Display(builder)
 
 builder.connect_signals(Handler)
 
