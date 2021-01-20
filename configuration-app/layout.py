@@ -44,7 +44,6 @@ class Layout:
         compact_recommendation = builder.get_object("CompactRecommendedLabel")
         mini_recommendation = builder.get_object("MiniRecommendedLabel")
 
-        print(height)
         if height >= 900:
             standard_recommendation.set_text("Recommended")
             compact_recommendation.set_text("")
@@ -66,14 +65,14 @@ class Layout:
             showtime = ["60", "24", -25]
         elif layouttype == Layout.STANDARD:
             # nothing really to-do
-            print('i')
+            showtime = None
         else:
             raise SystemExit('unknown compacy layout')
 
         if layouttype == Layout.STANDARD:
             self._reset_desktopfonts()
             self._reset_showtime()
-            self._reset_theme()
+            self._set_theme()
             self._apply_layout("ubuntubudgie")
         else:
             self._set_showtime(self._fontname+showtime[0], self._fontname+showtime[1], showtime[2])
@@ -87,6 +86,8 @@ class Layout:
 
         self.logoutloginlabel.set_visible(True)
         self._save_layout(layouttype)
+
+        self._set_animation()
 
     def _save_layout(self, layouttype):
         gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
@@ -191,11 +192,13 @@ class Layout:
         settings.set_string("font", "Noto Sans "+font_size)
 
     def _set_theme(self):
+        # default to Qogir since it doesnt use lots of animation
+        theme = "QogirBudgie-dark"
         settings = Gio.Settings.new("org.gnome.desktop.interface")
-        settings.set_string("gtk-theme", "Pocillo-dark-slim")
+        settings.set_string("gtk-theme", theme)
 
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
-        settings.set_string("theme", "Pocillo-dark-slim")
+        settings.set_string("theme", theme)
 
     def _reset_desktopfonts(self):
         settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
@@ -215,12 +218,17 @@ class Layout:
         settings.reset("datefont")
         settings.reset("linespacing")
 
-    def _reset_theme(self):
-        settings = Gio.Settings.new("org.gnome.desktop.interface")
-        settings.reset("gtk-theme")
+    #def _reset_theme(self):
+    #    settings = Gio.Settings.new("org.gnome.desktop.interface")
+    #    settings.reset("gtk-theme")
 
-        settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
-        settings.reset("theme")
+    #    settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+    #    settings.reset("theme")
+
+    def _set_animation(self):
+        # we turn off animations for budgie for improved responsiveness
+        settings = Gio.Settings.new("org.gnome.desktop.interface")
+        settings.set_boolean("enable-animations", False)
 
     def _get_resolution(self):
         dsp = Gdk.Display.get_default()

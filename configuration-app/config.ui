@@ -44,21 +44,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="LogoutLoginLabel">
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">5</property>
-                    <property name="label" translatable="yes">Logout/Login to complete</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                      <attribute name="foreground" value="#efef29292929"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -111,7 +96,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_StandardRadioButton_toggled" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -129,7 +113,6 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">StandardRadioButton</property>
-                            <signal name="toggled" handler="on_CompactRadioButton_toggled" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -147,7 +130,6 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">StandardRadioButton</property>
-                            <signal name="toggled" handler="on_MiniRadioButton_toggled" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -212,6 +194,51 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkButton" id="ApplyButton">
+                        <property name="label">gtk-apply</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
+                        <property name="always_show_image">True</property>
+                        <signal name="clicked" handler="on_ApplyButton_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="LogoutLoginLabel">
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="margin_top">5</property>
+                        <property name="hexpand">True</property>
+                        <property name="label" translatable="yes">Logout/Login to complete</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                          <attribute name="foreground" value="#efef29292929"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
               </object>
@@ -733,14 +760,24 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="StartLoginCheckButton">
-            <property name="label" translatable="yes">Start on login</property>
+          <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="halign">start</property>
-            <property name="active">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkCheckButton" id="StartLoginCheckButton">
+                <property name="label" translatable="yes">Start on login</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>

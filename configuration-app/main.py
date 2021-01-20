@@ -17,17 +17,12 @@ class Handler:
             startlogincheckbutton.get_active())
         Gtk.main_quit()
 
-    def on_MiniRadioButton_toggled(self):
+    def on_ApplyButton_clicked(self):
         if miniradiobutton.get_active():
             layoutstyle.apply(Layout.MINI)
-
-    def on_CompactRadioButton_toggled(self):
-        if compactradiobutton.get_active():
+        elif compactradiobutton.get_active():
             layoutstyle.apply(Layout.COMPACT)
-
-
-    def on_StandardRadioButton_toggled(self):
-        if standardradiobutton.get_active():
+        else:
             layoutstyle.apply(Layout.STANDARD)
 
     def on_ConfigNotebook_switch_page(self, page, num):
