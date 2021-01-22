@@ -28,7 +28,12 @@ sed -i 's/After=snapd.service snapd.socket/After=core18.start-snapd.service/' /l
 add-apt-repository -y ppa:ubuntubudgie-dev/unstable-test
 apt update
 apt remove -y gnome-shell gdm3
-apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report eog gnome-terminal nautilus xdg-desktop-portal-gtk apt-config-icons-hidpi gamemode seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas xcursor-themes realmd adcli gnome-getting-started-docs shotwell remmina totem
+apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report \
+  eog gnome-terminal nautilus xdg-desktop-portal-gtk apt-config-icons-hidpi gamemode \
+  seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound \
+  ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas \
+  xcursor-themes realmd adcli gnome-getting-started-docs shotwell remmina totem \
+  gir1.2-totem-1.0 libtotem0 totem-common
 
 apt install -y ubuntu-budgie-desktop-raspi
 apt upgrade -y
