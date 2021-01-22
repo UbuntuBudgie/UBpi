@@ -34,7 +34,7 @@ class Display:
         self.rebootlabel = builder.get_object("RebootLabel")
         self.rebootlabel.set_visible(False)
 
-        if Overclock.is_raspi(None):
+        if Overclock.get_pimodel(None) != '':
             self.load_initial()
             if not self.safe_to_change_mode():
                 self.disable_mode_selection()
