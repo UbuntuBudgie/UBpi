@@ -299,7 +299,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton">
+                      <object class="GtkRadioButton" id="Mid_Speed_radiobutton">
                         <property name="label" translatable="yes">1.8GHz</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -315,7 +315,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton">
+                      <object class="GtkRadioButton" id="High_Speed_radiobutton">
                         <property name="label" translatable="yes">2.0GHz</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -347,7 +347,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="CurrentSpeedLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Current Speed:</property>
@@ -359,7 +359,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="CurrentSpeedLabel">
+                          <object class="GtkLabel" id="SpeedLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
