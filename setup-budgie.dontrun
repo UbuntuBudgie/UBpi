@@ -33,7 +33,7 @@ apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubu
   seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound \
   ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas \
   xcursor-themes realmd adcli gnome-getting-started-docs shotwell remmina totem \
-  gir1.2-totem-1.0 libtotem0 totem-common
+  gir1.2-totem-1.0 libtotem0 totem-common gnome-todo
 
 apt install -y ubuntu-budgie-desktop-raspi
 apt upgrade -y
