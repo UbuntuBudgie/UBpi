@@ -42,9 +42,11 @@ class Overclock:
                 builder.get_object("Default_Speed_radiobutton"),
                 builder.get_object("Mid_Speed_radiobutton"),
                 builder.get_object("High_Speed_radiobutton")]
+        self.rebootlabel = builder.get_object("OCRebootLabel")
+        self.rebootlabel.set_visible(False)
         self.start_tempmonitor()
         self.overclockbutton.connect("clicked", self.on_overclockbutton_clicked)
-        self.currentspeeed = self._run_piclockspeed('get')
+        self.currentspeed = self._run_piclockspeed('get')
         self._set_currentspeed()
         if self.get_pimodel() == '400':
             # if Pi is Model 400, disable 1.5GHz, since its default is 1.8GHz
@@ -71,20 +73,23 @@ class Overclock:
         return model
 
     def _set_currentspeed(self):
-        speed = int(self.currentspeeed)/1000
+        if self.currentspeed == 'error':
+            self.currentspeed = '1500'
+        speed = int(self.currentspeed)/1000
         self.speedlabel.set_text(" {}GHz".format(speed))
         for i in range(len(self.speed_radiobuttons)):
-            if self.currentspeeed == self.PI_SPEEDS[i]:
+            if self.currentspeed == self.PI_SPEEDS[i]:
                 self.speed_radiobuttons[i].set_active(True)
 
     def on_overclockbutton_clicked(self, button):
         for i in range(len(self.speed_radiobuttons)):
             if (self.speed_radiobuttons[i].get_active()
-                    and self.currentspeeed != self.PI_SPEEDS[i]):
+                    and self.currentspeed != self.PI_SPEEDS[i]):
                 status = self._run_piclockspeed('set', self.PI_SPEEDS[i])
                 if status != 'error':
-                    self.currentspeeed = self.PI_SPEEDS[i]
+                    self.currentspeed = self.PI_SPEEDS[i]
                     self._set_currentspeed()
+                    self.rebootlabel.set_visible(True)
 
     def _run_piclockspeed(self, method, *params):
         if method == 'set':
