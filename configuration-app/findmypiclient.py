@@ -63,6 +63,20 @@ class FindMyPIClient:
             output = e.output.decode("utf-8")
         return output
 
+    def _answers_ping(self, ip):
+        # Returns true if a Pi responds to ping
+        # Used when arp temporarily doesn't show a pi, check before removing
+        ping = ['timeout', '2', 'ping', '-c1', ip]
+        try:
+            output = subprocess.check_output(ping,
+                stderr=subprocess.STDOUT).decode("utf-8")
+        except subprocess.CalledProcessError as e:
+            output = e.output.decode("utf-8")
+        if e.returncode == 0:
+            return True
+        else:
+            return False
+
     def get_list_from_mac(self):
         # scans using nmap / arp to look at mac address
         pi_list = []
