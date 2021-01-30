@@ -68,13 +68,13 @@ class FindMyPIClient:
         # Used when arp temporarily doesn't show a pi, check before removing
         ping = ['timeout', '2', 'ping', '-c1', ip]
         try:
-            output = subprocess.check_output(ping,
-                stderr=subprocess.STDOUT).decode("utf-8")
-        except subprocess.CalledProcessError as e:
-            output = e.output.decode("utf-8")
-        if e.returncode == 0:
-            return True
-        else:
+            output = subprocess.Popen(ping, stdout=subprocess.PIPE)
+            output.communicate()
+            if output.returncode == 0:
+                return True
+            else:
+                return False
+        except CalledProcessError:
             return False
 
     def get_list_from_mac(self):
