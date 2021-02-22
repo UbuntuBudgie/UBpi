@@ -10,6 +10,7 @@ from remote import Remote
 from overclock import Overclock
 from layout import Layout
 from display import Display
+from findmypi import FindMyPi
 
 class Handler:
     def on_ConfigWindow_destroy(self, *args):
@@ -54,5 +55,8 @@ overclock = Overclock(builder)
 display = Display(builder)
 
 builder.connect_signals(Handler)
+
+if not overclock.is_raspi():
+    findmypi = FindMyPi(builder)
 
 Gtk.main()
