@@ -10,7 +10,14 @@ class FindMyPi:
 
         # If method='server', it looks for findmypiserver.py running on remote
         # If method='mac', it will look via mac (needs arp and nmap installed)
-        self.findpi_treeview = FindMyPiTreeView(method='server')
+        self.findpi_treeview = FindMyPiTreeView()
+        if self._has_nmap_arp():
+            if self._nmap_warn():
+                self.findpi_treeview.set_method('mac')
+            else:
+                self.findpi_treeview.set_method('server')
+        else:
+            self.findpi_treeview.set_method('server')
 
         self.replace_gui(builder)
 
@@ -19,6 +26,8 @@ class FindMyPi:
         self.copyip_button = builder.get_object("PiCopyIpButton")
         self.refresh_button.connect("clicked",  self.on_refresh_clicked)
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
+
+        self.findpi_treeview.start()
 
     def replace_gui(self, builder):
         main_grid = builder.get_object("ConfigGrid")
@@ -44,3 +53,23 @@ class FindMyPi:
     def change_label(self, new_text):
         self.findpi_statuslabel.set_text(new_text)
         return False
+
+    def _has_nmap_arp(self):
+        return (GLib.find_program_in_path('nmap') and 
+                GLib.find_program_in_path('arp'))
+
+    def _nmap_warn(self):
+        nmap_dialog = Gtk.MessageDialog(None, flags=0,
+                                        message_type=Gtk.MessageType.WARNING,
+                                        buttons=Gtk.ButtonsType.OK_CANCEL,
+                                        text="Warning - nmap mode!")
+        nmap_dialog.format_secondary_text(
+              "FindMyPi will use nmap to search for PIs. Please check that "
+            + "there are no legality issues with scanning this network. If "
+            + "you are unsure, please select Cancel to scan by UDP server." )
+        response = nmap_dialog.run()
+        nmap_dialog.destroy()
+        if response == Gtk.ResponseType.OK:
+            return True
+        else:
+            return False

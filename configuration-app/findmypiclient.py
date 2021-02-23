@@ -74,7 +74,7 @@ class FindMyPIClient:
                 return True
             else:
                 return False
-        except CalledProcessError:
+        except OSError:
             return False
 
     def get_list_from_mac(self):
@@ -189,9 +189,10 @@ class FindMyPiTreeView (Gtk.TreeView):
         self.pi_liststore = Gtk.ListStore(str, str, str)
         self.set_model(self.pi_liststore)
         self.set_size_request(290, 150)
-        self.use_arp = True if method == 'mac' else False
+        self.set_method(method)
         self.fields = ['IP Address', 'Host ID', 'Model']
         self.frequency = frequency
+        self.started = False
 
         for i, field in enumerate(self.fields):
             cell = Gtk.CellRendererText()
@@ -206,10 +207,16 @@ class FindMyPiTreeView (Gtk.TreeView):
                 col.set_min_width(130)
             self.append_column(col)
 
-        self.pi_liststore.append(['Searching', '', ''])
+    def set_method(self, method='server'):
+        self.use_arp = True if method == 'mac' else False
 
-        self.thread = threading.Thread(target=self._search, daemon=True)
-        self.thread.start()
+    def start(self):
+        # Starts the thread that updates the treeview
+        if not self.started:
+            self.started = True
+            self.pi_liststore.append(['Searching', '', ''])
+            self.thread = threading.Thread(target=self._search, daemon=True)
+            self.thread.start()
 
     def _search(self):
         # Thread that automatically refreshes the list
