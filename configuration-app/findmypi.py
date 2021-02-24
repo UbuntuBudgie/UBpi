@@ -11,7 +11,7 @@ class FindMyPi:
         # If method='server', it looks for findmypiserver.py running on remote
         # If method='mac', it will look via mac (needs arp and nmap installed)
         self.findpi_treeview = FindMyPiTreeView()
-        if self._has_nmap_arp():
+        if self._has_nmap():
             if self._nmap_warn():
                 self.findpi_treeview.set_method('mac')
             else:
@@ -54,9 +54,8 @@ class FindMyPi:
         self.findpi_statuslabel.set_text(new_text)
         return False
 
-    def _has_nmap_arp(self):
-        return (GLib.find_program_in_path('nmap') and 
-                GLib.find_program_in_path('arp'))
+    def _has_nmap(self):
+        return GLib.find_program_in_path('nmap')
 
     def _nmap_warn(self):
         nmap_dialog = Gtk.MessageDialog(None, flags=0,

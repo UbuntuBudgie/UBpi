@@ -19,7 +19,7 @@ class FindMyPIClient:
         self.max_threads = 255  # max number of threads to scan network
         self.timeout = 1        # how many seconds to wait for each ip
         self.port = port        # port to look for the UDP server on
-        self.arp_pass = 0       # how many times arp has been run without nmap
+        self.last_scan = 0.0    # time of last nmap scan
         self.prior_search = []  # the previous list of Pis found via scan
 
     def _get_ip_prefix(self):
@@ -40,7 +40,7 @@ class FindMyPIClient:
         if 'dc:a6:32:' in mac_addr.lower():
             return 'Raspberry PI 4B or newer'
         elif 'b8:27:eb:' in mac_addr.lower():
-            return 'Raspberry PI 3B+ or older'
+            return 'Raspberry PI 3B+ or earlier'
         else:
             return ''
 
@@ -48,19 +48,23 @@ class FindMyPIClient:
         # Run nmap to try to expose all mac addresses on network
         nmap = ['nmap', '-F', self.ip_prefix+"0/24"]
         try:
-            nmap_output = (subprocess.check_output(nmap,
-                           stderr=subprocess.STDOUT).decode("utf-8"))
+            subprocess.check_output(nmap,
+                                    stderr=subprocess.STDOUT).decode("utf-8")
         except subprocess.CalledProcessError as e:
-            nmap_output = e.output.decode("utf-8")
+            print(e.output.decode("utf-8"))
 
     def _run_arp(self):
-        # Run arp to get the list of mac addresses / IPs
-        arp = ['arp', '-e']
+        # Look at /proc/net/arp for the list of mac addresses for IPs
+        output = []
         try:
-            output = (subprocess.check_output(arp,
-                      stderr=subprocess.STDOUT).decode("utf-8"))
-        except subprocess.CalledProcessError as e:
-            output = e.output.decode("utf-8")
+            with open('/proc/net/arp', 'r') as arp_list:
+                line = arp_list.readline().rstrip()
+                while line:
+                    if "00:00:00" not in line and "IP address" not in line:
+                        output.append(line)
+                    line = arp_list.readline().rstrip()
+        except IOError as e:
+            print("Error", e)
         return output
 
     def _answers_ping(self, ip):
@@ -81,14 +85,15 @@ class FindMyPIClient:
         # scans using nmap / arp to look at mac address
         pi_list = []
 
-        # after every nth arp, run nmap
-        if self.arp_pass % 5 == 0:
+        # after specified interval, run nmap
+        now = time.time()
+        if (now - self.last_scan) > 600.0:
+            self.last_scan = now
             self._run_nmap()
-            # Odd, but running an additional after nmap is more accurate
-            output = self._run_arp().splitlines()
-        self.arp_pass += 1
+            # slight delay between nmap and arp sometimes increases accuracy
+            time.sleep(2)
 
-        output = self._run_arp().splitlines()
+        output = self._run_arp()
         for line in output:
             results = line.split()
             ip = results[0]
@@ -139,7 +144,7 @@ class FindMyPIClient:
                         pass
                 else:
                     results.put(msg)
-            except (socket.timeout, OSError) as e:
+            except (socket.timeout, OSError):
                 pass
         sock.close()
 
