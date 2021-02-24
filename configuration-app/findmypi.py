@@ -11,6 +11,12 @@ class FindMyPi:
         # If method='server', it looks for findmypiserver.py running on remote
         # If method='mac', it will look via mac (needs arp and nmap installed)
         self.findpi_treeview = FindMyPiTreeView()
+
+        self.replace_gui(builder)
+        self.findpi_statuslabel = builder.get_object("PiStatusLabel")
+        self.refresh_button = builder.get_object("PiRefreshButton")
+        self.copyip_button = builder.get_object("PiCopyIpButton")
+
         if self._has_nmap():
             if self._nmap_warn():
                 self.findpi_treeview.set_method('mac')
@@ -19,14 +25,8 @@ class FindMyPi:
         else:
             self.findpi_treeview.set_method('server')
 
-        self.replace_gui(builder)
-
-        self.findpi_statuslabel = builder.get_object("PiStatusLabel")
-        self.refresh_button = builder.get_object("PiRefreshButton")
-        self.copyip_button = builder.get_object("PiCopyIpButton")
         self.refresh_button.connect("clicked",  self.on_refresh_clicked)
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
-
         self.findpi_treeview.start()
 
     def replace_gui(self, builder):
