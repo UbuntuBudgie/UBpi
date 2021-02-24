@@ -1,5 +1,10 @@
 import socket
 import subprocess
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import GLib
+
+
 
 class Remote:
 
@@ -10,8 +15,14 @@ class Remote:
         self.iplabel = builder.get_object("IPLabel")
         self.refresh_ip()
 
+        if GLib.find_program_in_path("pipewire") == None:
+            self.found_grd = False
+        else:
+            self.found_grd = True
+
         self.vncbutton = builder.get_object("VNCButton")
         self.vncbutton.connect('clicked', self.vncbuttonclicked)
+        self.vncbutton.set_visible(self.found_grd)
 
         self.xrdpbutton = builder.get_object("XRDPButton")
         self.xrdpbutton.connect('clicked', self.xrdpbuttonclicked)
@@ -23,7 +34,8 @@ class Remote:
         self.sshbutton.connect('clicked', self.sshbuttonclicked)
 
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
-        self.run_remote(self.sshstatuslabel, self.SSH, 'status')
+        if not self.found_grd:
+            self.run_remote(self.sshstatuslabel, self.SSH, 'status')
 
     def run_remote(self, label, connection, param, root=False):
 
@@ -51,17 +63,24 @@ class Remote:
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'enable')
 
     def sshbuttonclicked(self, *args):
+        if self.found_grd:
+            # with gnome-remote-desktop ssh is provided
+            self.open_sharing()
+            return
+
         if 'service is active' in self.sshstatuslabel.get_text():
             self.run_remote(self.sshstatuslabel, self.SSH, 'disable')
         else:
             self.run_remote(self.sshstatuslabel, self.SSH, 'enable')
 
-
-    def vncbuttonclicked(self, *args):
+    def open_sharing(self):
         try:
             subprocess.run(['gnome-control-center', 'sharing'])
         except subprocess.CalledProcessError:
             pass
+
+    def vncbuttonclicked(self, *args):
+        self.open_sharing()
 
     def get_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
