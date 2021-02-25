@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, GLib
+from gi.repository import Gtk, Gdk, GLib, Gio
 from findmypiclient import FindMyPiTreeView
 import subprocess
 
@@ -10,7 +10,7 @@ class FindMyPi:
     def __init__(self, builder):
 
         # If method='server', it looks for findmypiserver.py running on remote
-        # If method='mac', it will look via mac (needs arp and nmap installed)
+        # If method='mac', it will look via mac (needs nmap installed)
         self.findpi_treeview = FindMyPiTreeView()
 
         self.replace_gui(builder)
@@ -18,12 +18,14 @@ class FindMyPi:
         self.refresh_button = builder.get_object("PiRefreshButton")
         self.copyip_button = builder.get_object("PiCopyIpButton")
         self.nmap_button = builder.get_object("NmapButton")
+        self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
 
-        if self._has_nmap():
+        if self._has_nmap() and self.gsettings.get_boolean('nmapscan'):
             if self._nmap_warn():
                 self.findpi_treeview.set_method('mac')
                 self.nmap_button.set_label("Disable nmap")
             else:
+                self.gsettings.set_boolean('nmapscan', False)
                 self.findpi_treeview.set_method('server')
                 self.nmap_button.set_label("Enable nmap")
         else:
@@ -40,6 +42,7 @@ class FindMyPi:
         findpi_grid = builder.get_object("FindMyPiGrid")
         notebook = builder.get_object("ConfigNotebook")
         findpi_scrolledwindow = builder.get_object("FindMyPiWindow")
+        findpi_scrolledwindow.set_size_request(480,-1)
         main_grid.remove(notebook)
         findpi_scrolledwindow.add(self.findpi_treeview)
         main_grid.attach(findpi_grid, 0, 0, 2, 1)
@@ -59,16 +62,18 @@ class FindMyPi:
     def on_nmap_button_clicked(self, button):
         if not self._has_nmap():
             if self._ask_install_nmap():
-                if self._install_nmap():
-                    button.set_label("Disable nmap")
-                    self.findpi_treeview.use_arp = True
+                self.change_label("Installing...")
+                GLib.idle_add(self._install_nmap)
         elif self.findpi_treeview.use_arp:
             button.set_label("Enable nmap")
             self.findpi_treeview.use_arp = False
+            self.findpi_treeview.refresh_list()
+            self.gsettings.set_boolean('nmapscan', False)
         else:
             self.findpi_treeview.use_arp = True
             button.set_label("Disable nmap")
-        self.findpi_treeview.refresh_list()
+            self.findpi_treeview.refresh_list()
+            self.gsettings.set_boolean('nmapscan', True)
 
     def change_label(self, new_text):
         self.findpi_statuslabel.set_text(new_text)
@@ -78,6 +83,8 @@ class FindMyPi:
         return GLib.find_program_in_path('nmap')
 
     def _nmap_warn(self):
+        if self.gsettings.get_boolean('disablewarning'):
+            return True
         nmap_dialog = Gtk.MessageDialog(None, flags=0,
                                         message_type=Gtk.MessageType.WARNING,
                                         buttons=Gtk.ButtonsType.OK_CANCEL,
@@ -92,6 +99,8 @@ class FindMyPi:
         nmap_dialog.action_area.set_homogeneous(False)
         response = nmap_dialog.run()
         nmap_dialog.destroy()
+        self.gsettings.set_boolean('disablewarning',
+                                    warn_checkbutton.get_active())
         if response == Gtk.ResponseType.OK:
             return True
         else:
@@ -115,10 +124,21 @@ class FindMyPi:
             return True
 
     def _install_nmap(self):
+
+        self.change_label("Installing...")
         args = ['pkexec', '/usr/bin/apt', 'install', 'nmap']
         try:
-            output = subprocess.check_output(args)
-            return True
+            subprocess.check_output(args)
         except subprocess.CalledProcessError as e:
-            output = e.output.decode("utf-8")
+            print("Error",e.output.decode("utf-8"))
+            self.change_label("")
             return False
+
+        if self._has_nmap():  #  just to be 100% sure 
+            self.nmap_button.set_label("Disable nmap")
+            self.findpi_treeview.use_arp = True
+            self.gsettings.set_boolean('nmapscan', True)
+            self.findpi_treeview.refresh_list()
+
+        self.change_label("")
+        return False

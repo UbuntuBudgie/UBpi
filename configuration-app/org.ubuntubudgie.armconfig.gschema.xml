@@ -23,6 +23,16 @@
             <description>Current page number index of the config window</description>
             <default>0</default>
         </key>
+        <key type="b" name="nmapscan">
+            <summary>Scan using nmap</summary>
+            <description>Scan the network for Raspberry Pis using nmap</description>
+            <default>true</default>
+        </key>
+            <key type="b" name="disablewarning">
+            <summary>Disable nmap warning</summary>
+            <description>Disable the warning message for nmap scanning</description>
+            <default>false</default>
+        </key>
     </schema>
 </schemalist>
 
