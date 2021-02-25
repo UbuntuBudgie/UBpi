@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+rm /snap/bin/*
+rm -rf /snap/gnome-3-34*
+rm -rf /snap/gtk*
+rm -rf /snap/snap-store
+rm /var/lib/snapd/apparmor/profiles/*
+rm /var/lib/snapd/desktop/applications/*
+rm /var/lib/snapd/inhibit/gnome-3-34*
+rm /var/lib/snapd/inhibit/gtk*
+rm /var/lib/snapd/inhibit/snap-store.lock
+rm /var/lib/snapd/mount/*
+rm /var/lib/snapd/snaps/*
 
 snap download ubuntu-budgie-welcome
 mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
