@@ -2,6 +2,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib, Gio
 from findmypiclient import FindMyPiTreeView
+import time
 import subprocess
 
 
@@ -49,7 +50,13 @@ class FindMyPi:
         findpi_grid.show_all()
 
     def on_refresh_clicked(self, button):
-        self.findpi_treeview.refresh_list()
+        # if checking via arp, don't do nmap if it's been done in last 30 secs
+        if not self.findpi_treeview.use_arp:
+            self.findpi_treeview.refresh_list()
+        else:
+            if (time.time() - self.findpi_treeview.findpi.last_scan) > 20:
+                self.findpi_treeview.findpi.last_scan = 0
+            self.findpi_treeview.refresh_list()
 
     def on_copyip_clicked(self, button):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
