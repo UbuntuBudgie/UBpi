@@ -46,7 +46,7 @@ class FindMyPIClient:
 
     def _run_nmap(self):
         # Run nmap to try to expose all mac addresses on network
-        nmap = ['nmap', '-F', self.ip_prefix+"0/24"]
+        nmap = [GLib.find_program_in_path('nmap'), '-sn', self.ip_prefix+"0/24"]
         try:
             subprocess.check_output(nmap,
                                     stderr=subprocess.STDOUT).decode("utf-8")

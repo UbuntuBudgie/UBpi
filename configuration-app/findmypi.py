@@ -2,6 +2,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib
 from findmypiclient import FindMyPiTreeView
+import subprocess
 
 
 class FindMyPi:
@@ -16,15 +17,20 @@ class FindMyPi:
         self.findpi_statuslabel = builder.get_object("PiStatusLabel")
         self.refresh_button = builder.get_object("PiRefreshButton")
         self.copyip_button = builder.get_object("PiCopyIpButton")
+        self.nmap_button = builder.get_object("NmapButton")
 
         if self._has_nmap():
             if self._nmap_warn():
                 self.findpi_treeview.set_method('mac')
+                self.nmap_button.set_label("Disable nmap")
             else:
                 self.findpi_treeview.set_method('server')
+                self.nmap_button.set_label("Enable nmap")
         else:
             self.findpi_treeview.set_method('server')
+            self.nmap_button.set_label("Enable nmap")
 
+        self.nmap_button.connect("clicked", self.on_nmap_button_clicked)
         self.refresh_button.connect("clicked",  self.on_refresh_clicked)
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
         self.findpi_treeview.start()
@@ -50,6 +56,20 @@ class FindMyPi:
             clipboard.set_text(ip, -1)
             GLib.timeout_add_seconds(3, self.change_label, "")
 
+    def on_nmap_button_clicked(self, button):
+        if not self._has_nmap():
+            if self._ask_install_nmap():
+                if self._install_nmap():
+                    button.set_label("Disable nmap")
+                    self.findpi_treeview.use_arp = True
+        elif self.findpi_treeview.use_arp:
+            button.set_label("Enable nmap")
+            self.findpi_treeview.use_arp = False
+        else:
+            self.findpi_treeview.use_arp = True
+            button.set_label("Disable nmap")
+        self.findpi_treeview.refresh_list()
+
     def change_label(self, new_text):
         self.findpi_statuslabel.set_text(new_text)
         return False
@@ -66,9 +86,39 @@ class FindMyPi:
               "FindMyPi will use nmap to search for PIs. Please check that "
             + "there are no legality issues with scanning this network. If "
             + "you are unsure, please select Cancel to scan by UDP server." )
+        warn_checkbutton = Gtk.CheckButton(" Don't show this again")
+        warn_checkbutton.show()
+        nmap_dialog.action_area.pack_end(warn_checkbutton, True, True, 25)
+        nmap_dialog.action_area.set_homogeneous(False)
         response = nmap_dialog.run()
         nmap_dialog.destroy()
         if response == Gtk.ResponseType.OK:
             return True
         else:
+            return False
+
+    def _ask_install_nmap(self):
+        nmap_dialog = Gtk.MessageDialog(None, flags=0,
+                                        message_type=Gtk.MessageType.WARNING,
+                                        buttons=Gtk.ButtonsType.YES_NO,
+                                        text="Install Nmap?")
+        nmap_dialog.format_secondary_text(
+              "Nmap not installed.  Before installing nmap, please ensure "
+            + "there are no legality issues with installing and using nmap "
+            + "on this network.  If you are unsure, please select NO.\n" 
+            + "Install nmap?")
+        response = nmap_dialog.run()
+        nmap_dialog.destroy()
+        if response == Gtk.ResponseType.NO:
+            return False
+        else:
+            return True
+
+    def _install_nmap(self):
+        args = ['pkexec', '/usr/bin/apt', 'install', 'nmap']
+        try:
+            output = subprocess.check_output(args)
+            return True
+        except subprocess.CalledProcessError as e:
+            output = e.output.decode("utf-8")
             return False
