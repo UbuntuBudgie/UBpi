@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
+
+snap download ubuntu-budgie-welcome
+mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
+mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
+rm /var/lib/snapd/seed/snaps/gtk-common-themes*.snap
+rm /var/lib/snapd/seed/snaps/snap-store*.snap
+rm /var/lib/snapd/seed/snaps/gnome-3-34*.snap
+rm /var/lib/snapd/seed/assertions/gtk*
+rm /var/lib/snapd/seed/assertions/snap-store*
+rm /var/lib/snapd/seed/assertions/gnome*
 rm /snap/bin/*
 rm -rf /snap/gnome-3-34*
 rm -rf /snap/gtk*
@@ -10,16 +20,10 @@ rm /var/lib/snapd/inhibit/gtk*
 rm /var/lib/snapd/inhibit/snap-store.lock
 rm /var/lib/snapd/mount/*
 rm /var/lib/snapd/snaps/*
-
-snap download ubuntu-budgie-welcome
-mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
-mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
-rm /var/lib/snapd/seed/snaps/gtk-common-themes*.snap
-rm /var/lib/snapd/seed/snaps/snap-store*.snap
-rm /var/lib/snapd/seed/snaps/gnome-3-34*.snap
-rm /var/lib/snapd/seed/assertions/gtk*
-rm /var/lib/snapd/seed/assertions/snap-store*
-rm /var/lib/snapd/seed/assertions/gnome*
+rm -rf /var/snap/gnome-3.34*
+rm -rf /var/snap/gtk*
+rm -rf /var/snap/snap-store
+rm /etc/systemd/system/*.mount
 
 WELCOME=$(ls /var/lib/snapd/seed/snaps/ubuntu-budgie-welcome* | sed 's#.*/##')
 SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd* | sed 's#.*/##')
@@ -36,7 +40,7 @@ sed -i 's/After=snapd.service snapd.socket/After=core18.start-snapd.service/' /l
 #echo "    channel: stable/ubuntu-21.04" >> /var/lib/snapd/seed/seed.yaml
 #echo "    file: ubuntu-budgie-welcome_249.snap" >> /var/lib/snapd/seed/seed.yaml
 #echo "    classic: true" >> /var/lib/snapd/seed/seed.yaml
-#add-apt-repository -y ppa:ubuntubudgie-dev/unstable-test
+add-apt-repository -y ppa:ubuntubudgie-dev/unstable-test
 apt update
 apt remove -y gnome-shell gdm3
 apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report \
