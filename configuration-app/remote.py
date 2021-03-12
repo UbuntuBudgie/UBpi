@@ -1,15 +1,16 @@
 import socket
 import subprocess
+import psutil
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib
-
 
 
 class Remote:
 
     XRDP = "/usr/lib/budgie-desktop/arm/budgie-xrdp.sh"
     SSH = "/usr/lib/budgie-desktop/arm/budgie-ssh.sh"
+    FINDPI = "/usr/lib/budgie-desktop/arm/findmypiserver.py"
 
     def __init__(self,builder):
         self.iplabel = builder.get_object("IPLabel")
@@ -29,9 +30,18 @@ class Remote:
 
         self.xrdpstatuslabel = builder.get_object("XRDPStatusLabel")
         self.sshstatuslabel = builder.get_object("SSHStatusLabel")
+        self.findmypistatuslabel = builder.get_object("FindMyPiStatusLabel")
 
         self.sshbutton = builder.get_object("SSHButton")
         self.sshbutton.connect('clicked', self.sshbuttonclicked)
+
+        self.findmypibutton = builder.get_object("FindMyPiButton")
+        self.findmypibutton.connect('clicked', self.findmypibuttonclicked)
+
+        if self.findmypi_server():
+            self.findmypistatuslabel.set_text("Server is active")
+        else:
+            self.findmypistatuslabel.set_text("Not needed with nmap")
 
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
         if not self.found_grd:
@@ -73,6 +83,14 @@ class Remote:
         else:
             self.run_remote(self.sshstatuslabel, self.SSH, 'enable')
 
+    def findmypibuttonclicked(self, *args):
+        if self.findmypi_server():
+            self.findmypi_server(kill=True)
+            self.findmypistatuslabel.set_text("Server is inactive")
+        else:
+            self.start_findmypi()
+            self.findmypistatuslabel.set_text("Server is active")
+
     def open_sharing(self):
         try:
             subprocess.run(['gnome-control-center', 'sharing'])
@@ -96,3 +114,20 @@ class Remote:
 
     def refresh_ip(self):
         self.iplabel.set_text(self.get_ip())
+
+    def start_findmypi(self):
+        try:
+            subprocess.Popen(['python3', self.FINDPI])
+        except OSError as e:
+            print("Error:", e)
+
+    def findmypi_server(self, kill=False):
+        # Return True if server is running, also will kill server if kill=True
+        for proc in psutil.process_iter():
+            if (len(proc.cmdline()) > 1 and "python" in proc.cmdline()[0] 
+                                   and "findmypiserver" in proc.cmdline()[1]):
+                if kill:
+                    proc.terminate()
+                else:
+                    return True
+        return False
