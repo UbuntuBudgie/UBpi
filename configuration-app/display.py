@@ -8,6 +8,7 @@ class Display:
     MODE_ARG  = 'video.firmware.mode'
     MEM_ARG   = 'gpu.mem'
     CONFIG    = '/boot/firmware/config.txt'
+    PI_KMSMODE = '/usr/lib/budgie-desktop/arm/pi-kmsmode.sh'
 
     MODE = ['fkms', 'kms', 'legacy']
     MEM  = ['128', '256', '512']
@@ -75,6 +76,10 @@ class Display:
     def run_pibootctl(self, method, *params):
         if method == 'set':
             args = ['pkexec', self.PIBOOTCTL, method]
+            # Fix for wrong overlay location - to be removed when resolved
+            if len(params) >= 1 and "=kms" in params[0]:
+                args = ['pkexec', self.PI_KMSMODE]
+            # End fix
         else:
             args = [self.PIBOOTCTL, method]
         for item in params:
