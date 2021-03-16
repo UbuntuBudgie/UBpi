@@ -133,7 +133,7 @@ class FindMyPi:
     def _install_nmap(self):
 
         self.change_label("Installing...")
-        args = ['pkexec', '/usr/bin/apt', 'install', 'nmap']
+        args = ['pkexec', '/usr/bin/apt', 'install', '-y', 'nmap']
         try:
             subprocess.check_output(args)
         except subprocess.CalledProcessError as e:
