@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Window Shuffler GUI
+Name=Budgie ARM and Pi Configuration
 Exec=python3 /usr/lib/budgie-desktop/arm/main.py
 NoDisplay=true
 AutostartCondition=GSettings org.ubuntubudgie.armconfig runarmconfig
