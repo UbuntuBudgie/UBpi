@@ -4,6 +4,7 @@ from gi.repository import Gtk, Gdk, GLib, Gio
 from findmypiclient import FindMyPiTreeView
 import time
 import subprocess
+from threading import Thread
 
 
 class FindMyPi:
@@ -70,7 +71,7 @@ class FindMyPi:
         if not self._has_nmap():
             if self._ask_install_nmap():
                 self.change_label("Installing...")
-                GLib.idle_add(self._install_nmap)
+                self._install_nmap()
         elif self.findpi_treeview.use_arp:
             button.set_label("Enable nmap")
             self.findpi_treeview.use_arp = False
@@ -132,20 +133,24 @@ class FindMyPi:
 
     def _install_nmap(self):
 
-        self.change_label("Installing...")
-        args = ['pkexec', '/usr/bin/apt', 'install', '-y', 'nmap']
-        try:
-            subprocess.check_output(args)
-        except subprocess.CalledProcessError as e:
-            print("Error",e.output.decode("utf-8"))
+        def performinstall():
+            self.change_label("Installing...")
+            args = ['pkexec', '/usr/bin/apt', 'install', '-y', 'nmap']
+            try:
+                subprocess.check_output(args)
+            except subprocess.CalledProcessError as e:
+                print("Error",e.output.decode("utf-8"))
+                self.change_label("")
+                return False
+
+            if self._has_nmap():  #  just to be 100% sure 
+                self.nmap_button.set_label("Disable nmap")
+                self.findpi_treeview.use_arp = True
+                self.gsettings.set_boolean('nmapscan', True)
+                self.findpi_treeview.refresh_list()
+
             self.change_label("")
             return False
 
-        if self._has_nmap():  #  just to be 100% sure 
-            self.nmap_button.set_label("Disable nmap")
-            self.findpi_treeview.use_arp = True
-            self.gsettings.set_boolean('nmapscan', True)
-            self.findpi_treeview.refresh_list()
-
-        self.change_label("")
-        return False
+        thread = Thread(target=performinstall)
+        thread.start()
