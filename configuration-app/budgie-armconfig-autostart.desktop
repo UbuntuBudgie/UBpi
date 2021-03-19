@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Budgie ARM and Pi Configuration
+Comment=Application for Budgie on ARM and Pi
 Exec=python3 /usr/lib/budgie-desktop/arm/main.py
 NoDisplay=true
 AutostartCondition=GSettings org.ubuntubudgie.armconfig runarmconfig
