@@ -3,7 +3,8 @@ import subprocess
 import psutil
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import GLib
+from gi.repository import GLib, Gio
+from overclock import Overclock
 
 
 class Remote:
@@ -15,6 +16,8 @@ class Remote:
     def __init__(self,builder):
         self.iplabel = builder.get_object("IPLabel")
         self.refresh_ip()
+        self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
+        self.run_findmypi = not self.gsettings.get_boolean('nmapscan')
 
         if GLib.find_program_in_path("pipewire") == None:
             self.found_grd = False
@@ -38,10 +41,13 @@ class Remote:
         self.findmypibutton = builder.get_object("FindMyPiButton")
         self.findmypibutton.connect('clicked', self.findmypibuttonclicked)
 
-        if self.findmypi_server():
-            self.findmypistatuslabel.set_text("Server is active")
-        else:
-            self.findmypistatuslabel.set_text("Not needed with nmap")
+        if Overclock.get_pimodel(None): # Don't start UDP server if not a pi
+            if self.run_findmypi:
+                if not self.findmypi_server():
+                    self.start_findmypi()
+                self.findmypistatuslabel.set_text("Server is active")
+            else:
+                self.findmypistatuslabel.set_text("Not needed with nmap")
 
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
         if not self.found_grd:
@@ -86,9 +92,11 @@ class Remote:
     def findmypibuttonclicked(self, *args):
         if self.findmypi_server():
             self.findmypi_server(kill=True)
+            self.gsettings.set_boolean('nmapscan', True)
             self.findmypistatuslabel.set_text("Server is inactive")
         else:
             self.start_findmypi()
+            self.gsettings.set_boolean('nmapscan', False)
             self.findmypistatuslabel.set_text("Server is active")
 
     def open_sharing(self):
