@@ -2,6 +2,7 @@ import socket
 import subprocess
 import psutil
 import gi
+import getpass
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio
 from overclock import Overclock
@@ -12,11 +13,14 @@ class Remote:
     XRDP = "/usr/lib/budgie-desktop/arm/budgie-xrdp.sh"
     SSH = "/usr/lib/budgie-desktop/arm/budgie-ssh.sh"
     FINDPI = "/usr/lib/budgie-desktop/arm/findmypiserver.py"
+    AUTOLOGIN = "/usr/lib/budgie-desktop/arm/budgie-autologin.sh"
+    LIGHTDMCONF = "/etc/lightdm/lightdm.conf"
 
     def __init__(self,builder):
         self.iplabel = builder.get_object("IPLabel")
         self.refresh_ip()
         self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
+        self.locksetting = Gio.Settings.new('org.gnome.desktop.screensaver')
         self.run_findmypi = not self.gsettings.get_boolean('nmapscan')
 
         if GLib.find_program_in_path("pipewire") == None:
@@ -37,6 +41,10 @@ class Remote:
 
         self.sshbutton = builder.get_object("SSHButton")
         self.sshbutton.connect('clicked', self.sshbuttonclicked)
+
+        self.autologincheck = builder.get_object("AutoLoginCheckButton")
+        self.autologincheck.set_active(self.is_autologin())
+        self.autologin_handler = self.autologincheck.connect("toggled", self.autologintoggled)
 
         self.findmypibutton = builder.get_object("FindMyPiButton")
         self.findmypibutton.connect('clicked', self.findmypibuttonclicked)
@@ -107,6 +115,47 @@ class Remote:
 
     def vncbuttonclicked(self, *args):
         self.open_sharing()
+
+    def autologintoggled(self, button):
+        should_enable = button.get_active()
+        if should_enable:
+            user = getpass.getuser()
+        else:
+            user = ''
+        if self.get_current_autologin() != user:
+            args = ['pkexec', self.AUTOLOGIN, user]
+            try:
+                output = subprocess.check_output(args,
+                        stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
+            except subprocess.CalledProcessError as e:
+                output = e.output.decode("utf-8")
+                self.autologincheck.handler_block(self.autologin_handler)
+                self.autologincheck.set_active(not should_enable)
+                self.autologincheck.handler_unblock(self.autologin_handler)
+                #pkexec wasn't successful - return without changing screen lock
+                return
+        self.locksetting.set_boolean('lock-enabled', not should_enable)
+
+    def get_current_autologin(self):
+        # Return the autologin user from lightdm.conf, if any
+        try:
+            with open(self.LIGHTDMCONF, 'r') as lightdmconf:
+                lines = lightdmconf.readlines()
+                for line in lines:
+                    current = line.strip().split('=')
+                    if len(current) == 2 and current[0] == 'autologin-user':
+                        return current[1]
+        except EnvironmentError:
+            pass
+        return ''
+
+    def is_autologin(self):
+        # True only if screen lock is off and autologin is current user
+        if (self.locksetting.get_boolean('lock-enabled') or
+                self.get_current_autologin() != getpass.getuser()):
+            return False
+        else:
+            return True
 
     def get_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
