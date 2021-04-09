@@ -5,6 +5,7 @@ from findmypiclient import FindMyPiTreeView
 import time
 import subprocess
 from threading import Thread
+import hint
 
 
 class FindMyPi:
@@ -17,6 +18,7 @@ class FindMyPi:
 
         self.replace_gui(builder)
         self.findpi_statuslabel = builder.get_object("PiStatusLabel")
+        self.app_statuslabel = builder.get_object("AppStatusLabel")
         self.refresh_button = builder.get_object("PiRefreshButton")
         self.copyip_button = builder.get_object("PiCopyIpButton")
         self.nmap_button = builder.get_object("NmapButton")
@@ -35,8 +37,11 @@ class FindMyPi:
             self.nmap_button.set_label("Enable nmap")
 
         self.nmap_button.connect("clicked", self.on_nmap_button_clicked)
+        hint.add(self.nmap_button, self.app_statuslabel, hint.NMAP_BUTTON)
         self.refresh_button.connect("clicked",  self.on_refresh_clicked)
+        hint.add(self.refresh_button, self.app_statuslabel, hint.REFRESH_BUTTON)
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
+        hint.add(self.copyip_button, self.app_statuslabel, hint.COPYIP_BUTTON)
         self.findpi_treeview.start()
 
     def replace_gui(self, builder):

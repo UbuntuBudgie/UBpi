@@ -1,5 +1,6 @@
 from gi.repository import GLib
 import subprocess
+import hint
 
 
 class Overclock:
@@ -51,6 +52,15 @@ class Overclock:
         if self.get_pimodel() == '400':
             # if Pi is Model 400, disable 1.5GHz, since its default is 1.8GHz
             self.speed_radiobuttons[0].set_sensitive(False)
+
+        app_statuslabel = builder.get_object("AppStatusLabel")
+        tab = builder.get_object("OverclockTab")
+        cputempbox = builder.get_object("CPUTempBox")
+        hint.add(tab, app_statuslabel, hint.OVERCLOCK_TAB)
+        hint.add(cputempbox, app_statuslabel, hint.CPU_TEMP)
+        for button in self.speed_radiobuttons:
+            hint.add(button, app_statuslabel, hint.CPU_SPEEDS)
+        hint.add(self.overclockbutton, app_statuslabel, hint.SPEED_BUTTON)
 
     def start_tempmonitor(self):
         GLib.timeout_add_seconds(1, self._temp_monitor)

@@ -6,6 +6,7 @@ import getpass
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio
 from overclock import Overclock
+import hint
 
 
 class Remote:
@@ -22,6 +23,7 @@ class Remote:
         self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
         self.locksetting = Gio.Settings.new('org.gnome.desktop.screensaver')
         self.run_findmypi = not self.gsettings.get_boolean('nmapscan')
+        app_statuslabel = builder.get_object("AppStatusLabel")
 
         if GLib.find_program_in_path("pipewire") == None:
             self.found_grd = False
@@ -48,6 +50,17 @@ class Remote:
 
         self.findmypibutton = builder.get_object("FindMyPiButton")
         self.findmypibutton.connect('clicked', self.findmypibuttonclicked)
+
+        tab = builder.get_object("RemoteTab")
+        refresh_ip_button = builder.get_object("RefreshIPButton")
+
+        hint.add(refresh_ip_button, app_statuslabel, hint.REFRESH_IP)
+        hint.add(self.autologincheck, app_statuslabel, hint.AUTOLOGIN)
+        hint.add(self.findmypibutton, app_statuslabel, hint.FINDMYPI_SERVER)
+        hint.add(self.sshbutton, app_statuslabel, hint.SSH_BUTTON)
+        hint.add(self.xrdpbutton, app_statuslabel, hint.XRDP_BUTTON)
+        hint.add(self.vncbutton, app_statuslabel, hint.VNC_BUTTON)
+        hint.add(tab, app_statuslabel, hint.REMOTE_TAB)
 
         if Overclock.get_pimodel(None): # Don't start UDP server if not a pi
             if self.run_findmypi:

@@ -3,6 +3,7 @@ import dbus
 import subprocess
 import time
 import socket
+import hint
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
@@ -56,6 +57,16 @@ class Layout:
             standard_recommendation.set_text("")
             compact_recommendation.set_text("")
             mini_recommendation.set_text("Recommended")
+
+        app_statuslabel = builder.get_object("AppStatusLabel")
+        tab = builder.get_object("LayoutTab")
+        applybutton = builder.get_object("ApplyButton")
+        hint.add(tab, app_statuslabel, hint.LAYOUTS_TAB)
+        hint.add(self.standardradiobutton, app_statuslabel, hint.STANDARD_RES)
+        hint.add(self.compactradiobutton, app_statuslabel, hint.COMPACT_RES)
+        hint.add(self.miniradiobutton, app_statuslabel, hint.MINI_RES)
+        hint.add(applybutton, app_statuslabel, hint.APPLY_LAYOUT)
+
 
     def apply(self, layouttype):
 

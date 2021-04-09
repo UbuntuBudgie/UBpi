@@ -6,6 +6,7 @@ import dbus
 import subprocess
 import time
 import os
+import hint
 from remote import Remote
 from overclock import Overclock
 from layout import Layout
@@ -55,6 +56,8 @@ overclock = Overclock(builder)
 display = Display(builder)
 
 builder.connect_signals(Handler)
+app_statuslabel = builder.get_object("AppStatusLabel")
+hint.add(startlogincheckbutton, app_statuslabel, hint.AUTOSTART)
 
 if not overclock.is_raspi():
     findmypi = FindMyPi(builder)

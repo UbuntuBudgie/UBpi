@@ -1,6 +1,7 @@
 from gi.repository import GLib
 from overclock import Overclock
 import subprocess
+import hint
 
 class Display:
 
@@ -34,6 +35,16 @@ class Display:
 
         self.rebootlabel = builder.get_object("RebootLabel")
         self.rebootlabel.set_visible(False)
+
+        app_statuslabel = builder.get_object("AppStatusLabel")
+        tab = builder.get_object("DisplayTab")
+        for button in self.moderadiobuttons:
+            hint.add(button, app_statuslabel, hint.VIDEO_MODE)
+        for button in self.memradiobuttons:
+            hint.add(button, app_statuslabel, hint.GPU_MEMORY)
+        hint.add(tab, app_statuslabel, hint.DISPLAY_TAB)
+        hint.add(self.modebutton, app_statuslabel, hint.UPDATE_VIDEO)
+        hint.add(self.membutton, app_statuslabel, hint.UPDATE_MEMORY)
 
         if Overclock.get_pimodel(None) != '':
             self.load_initial()
