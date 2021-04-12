@@ -80,6 +80,8 @@ class Overclock:
                     model = '400'
                 elif "Raspberry Pi 4 " in line:
                     model = 'pi4'
+                elif "Pi Compute Module 4" in line:
+                    model = "CM4"
         return model
 
     def _set_currentspeed(self):
