@@ -1,5 +1,6 @@
 from gi.repository import GLib
 import subprocess
+import os
 import hint
 
 
@@ -7,10 +8,16 @@ class Overclock:
 
     PI_CLOCKSPEED = '/usr/lib/budgie-desktop/arm/pi-clockspeed.py'
     PI_SPEEDS = ['1500', '1800', '2000']
+    PI_1800_MODELS = ['400'] # models which run at 1800 by default
 
-    def __init__(self, builder):
+    def __init__(self, builder, forcedmodel=None, model_list=None):
         self.overclock_tab = builder.get_object("OverclockGrid")
-        if self.is_raspi():
+        self.model_list = model_list
+        if forcedmodel is None:
+            self.pi_model = self.get_pimodel()
+        else:
+            self.pi_model = forcedmodel
+        if self.pi_model:
             self._setup_overclock(builder)
         else:
             self.overclock_tab.set_visible(False)
@@ -46,10 +53,9 @@ class Overclock:
         self.rebootlabel = builder.get_object("OCRebootLabel")
         self.rebootlabel.set_visible(False)
         self.start_tempmonitor()
-        self.overclockbutton.connect("clicked", self.on_overclockbutton_clicked)
         self.currentspeed = self._run_piclockspeed('get')
         self._set_currentspeed()
-        if self.get_pimodel() == '400':
+        if self.pi_model in self.PI_1800_MODELS:
             # if Pi is Model 400, disable 1.5GHz, since its default is 1.8GHz
             self.speed_radiobuttons[0].set_sensitive(False)
 
@@ -60,33 +66,37 @@ class Overclock:
         hint.add(cputempbox, app_statuslabel, hint.CPU_TEMP)
         for button in self.speed_radiobuttons:
             hint.add(button, app_statuslabel, hint.CPU_SPEEDS)
-        hint.add(self.overclockbutton, app_statuslabel, hint.SPEED_BUTTON)
+        if os.path.exists('/boot/firmware/config.txt'):
+            hint.add(self.overclockbutton, app_statuslabel, hint.SPEED_BUTTON)
+            self.overclockbutton.connect("clicked", self.on_overclockbutton_clicked)
+        else:
+            hint.add(self.overclockbutton, app_statuslabel, hint.NO_CONFIGTXT)
 
     def start_tempmonitor(self):
         GLib.timeout_add_seconds(1, self._temp_monitor)
 
-    def is_raspi(self):
-        if self.get_pimodel() != '':
-            return True
-        else:
-            return False
-
     def get_pimodel(self):
-        model = ''
         with open('/proc/cpuinfo', 'r') as cpufile:
             lines = cpufile.readlines()
             for line in lines:
+                # Scan through model/cpu arguments
+                for i in range(len(self.model_list[0])):
+                    if self.model_list[1][i] in line:
+                        return self.model_list[0][i]
                 if "Raspberry Pi 400" in line:
-                    model = '400'
+                    return '400'
                 elif "Raspberry Pi 4 " in line:
-                    model = 'pi4'
+                    return '4'
                 elif "Pi Compute Module 4" in line:
-                    model = "CM4"
-        return model
+                    return 'CM4'
+                # Generic catch-all Pis
+                elif "Raspberry Pi" in line:
+                    return 'Pi'
+        return None
 
     def _set_currentspeed(self):
-        if self.currentspeed == 'error':
-            self.currentspeed = '1500'
+        if self.currentspeed == 'error' or self.currentspeed == '1500':
+            self.currentspeed = '1800' if self.pi_model == '400' else '1500'
         speed = int(self.currentspeed)/1000
         self.speedlabel.set_text(" {}GHz".format(speed))
         for i in range(len(self.speed_radiobuttons)):

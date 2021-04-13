@@ -5,7 +5,6 @@ import gi
 import getpass
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio
-from overclock import Overclock
 import hint
 
 
@@ -17,12 +16,12 @@ class Remote:
     AUTOLOGIN = "/usr/lib/budgie-desktop/arm/budgie-autologin.sh"
     LIGHTDMCONF = "/etc/lightdm/lightdm.conf"
 
-    def __init__(self,builder):
+    def __init__(self, builder, device):
         self.iplabel = builder.get_object("IPLabel")
         self.refresh_ip()
         self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
         self.locksetting = Gio.Settings.new('org.gnome.desktop.screensaver')
-        self.run_findmypi = not self.gsettings.get_boolean('nmapscan')
+        self.run_findmypi = self.gsettings.get_boolean('enableserver')
         app_statuslabel = builder.get_object("AppStatusLabel")
 
         if GLib.find_program_in_path("pipewire") == None:
@@ -62,13 +61,12 @@ class Remote:
         hint.add(self.vncbutton, app_statuslabel, hint.VNC_BUTTON)
         hint.add(tab, app_statuslabel, hint.REMOTE_TAB)
 
-        if Overclock.get_pimodel(None): # Don't start UDP server if not a pi
-            if self.run_findmypi:
-                if not self.findmypi_server():
-                    self.start_findmypi()
-                self.findmypistatuslabel.set_text("Server is active")
-            else:
-                self.findmypistatuslabel.set_text("Not needed with nmap")
+        if self.run_findmypi:
+            if not self.findmypi_server():
+                self.start_findmypi()
+            self.findmypistatuslabel.set_text("Server is active")
+        else:
+            self.findmypistatuslabel.set_text("Server is inactive")
 
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
         if not self.found_grd:
@@ -113,11 +111,11 @@ class Remote:
     def findmypibuttonclicked(self, *args):
         if self.findmypi_server():
             self.findmypi_server(kill=True)
-            self.gsettings.set_boolean('nmapscan', True)
+            self.gsettings.set_boolean('enableserver', False)
             self.findmypistatuslabel.set_text("Server is inactive")
         else:
             self.start_findmypi()
-            self.gsettings.set_boolean('nmapscan', False)
+            self.gsettings.set_boolean('enableserver', True)
             self.findmypistatuslabel.set_text("Server is active")
 
     def open_sharing(self):

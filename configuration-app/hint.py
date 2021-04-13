@@ -12,7 +12,8 @@ APPLY_LAYOUT = "Apply the new layout.\nLogout/Login required to complete"
 OVERCLOCK_TAB = "Configure clock speed and view CPU temperature"
 CPU_TEMP = "Current CPU temperature. The Pi will throttle at temperatures around 80°C. Overclocking may affect the throttle temp."
 CPU_SPEEDS = "Higher speeds will increase performance, but may increase heat or cause instability. Pi400 cannot be set below 1.8GHz"
-SPEED_BUTTON = "Apply the new clock speed.\nThe new speed will take effect after reboots "
+SPEED_BUTTON = "Apply the new clock speed.\nThe new speed will take effect after reboots"
+NO_CONFIGTXT = "File '/boot/firmware/config.txt' not found.\nOverclock disabled - Is this a valid Pi?"
 
 #Remote Tab
 REMOTE_TAB = "Options to configure remote access to this device"

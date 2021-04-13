@@ -7,6 +7,7 @@ import subprocess
 import time
 import os
 import hint
+import argparse
 from remote import Remote
 from overclock import Overclock
 from layout import Layout
@@ -33,6 +34,24 @@ class Handler:
     def on_RefreshIP_clicked(self):
         remote.refresh_ip()
 
+def check_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--force-findpi-mode", action="store_true", 
+                        help="Start up in FindMyPi mode")
+    parser.add_argument("--force-pi-mode", action="store_true", 
+                        help="Start in Config App mode")
+    parser.add_argument("--force-model", choices=['CM4', '4', '400'])
+    parser.add_argument("--model", action='append')
+    cpu_arg = parser.add_argument("--cpuinfo", action='append')
+    args = parser.parse_args()
+    model_list = [[],[]]
+    if args.model is not None and args.cpuinfo is not None:
+        if len(args.model) != len(args.cpuinfo):
+            parser.error("number of --cpuinfo arguments must be equal to --model arguments")
+        model_list = [args.model, args.cpuinfo]
+    return args, model_list
+
+args, model_list = check_args()
 path = os.path.dirname(os.path.abspath(__file__))
 resource = Gio.Resource.load(path + '/org.ubuntubudgie.armconfig.gresource')
 Gio.resources_register(resource)
@@ -51,15 +70,16 @@ notebook = builder.get_object('ConfigNotebook')
 notebook.set_current_page(gsettings.get_int('lastpage'))
 
 layoutstyle = Layout(builder)
-remote = Remote(builder)
-overclock = Overclock(builder)
-display = Display(builder)
+overclock = Overclock(builder, args.force_model, model_list)
 
 builder.connect_signals(Handler)
 app_statuslabel = builder.get_object("AppStatusLabel")
 hint.add(startlogincheckbutton, app_statuslabel, hint.AUTOSTART)
 
-if not overclock.is_raspi():
+if (overclock.pi_model is None and not args.force_pi_mode) or args.force_findpi_mode:
     findmypi = FindMyPi(builder)
+else:
+    remote = Remote(builder, overclock)
+    display = Display(builder, overclock)
 
 Gtk.main()

@@ -28,7 +28,12 @@
             <description>Scan the network for Raspberry Pis using nmap</description>
             <default>true</default>
         </key>
-            <key type="b" name="disablewarning">
+        <key type="b" name="enableserver">
+            <summary>Enable FindMyPi server</summary>
+            <description>Enable the FindMyPi server on app startup</description>
+            <default>false</default>
+        </key>
+        <key type="b" name="disablewarning">
             <summary>Disable nmap warning</summary>
             <description>Disable the warning message for nmap scanning</description>
             <default>false</default>

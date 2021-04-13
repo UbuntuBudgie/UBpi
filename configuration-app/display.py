@@ -14,7 +14,7 @@ class Display:
     MODE = ['fkms', 'kms', 'legacy']
     MEM  = ['128', '256', '512']
 
-    def __init__(self,builder):
+    def __init__(self, builder, device):
         self.displaygrid = builder.get_object("DisplayGrid")
 
         self.moderadiobuttons = [ builder.get_object("FkmsRadioButton"),
@@ -46,7 +46,7 @@ class Display:
         hint.add(self.modebutton, app_statuslabel, hint.UPDATE_VIDEO)
         hint.add(self.membutton, app_statuslabel, hint.UPDATE_MEMORY)
 
-        if Overclock.get_pimodel(None) != '':
+        if device.pi_model is not None:
             self.load_initial()
             if not self.safe_to_change_mode():
                 self.disable_mode_selection()
@@ -71,7 +71,7 @@ class Display:
         result = self.run_pibootctl('get', self.MODE_ARG, self.MEM_ARG, '--shell')
         # Hide Display tab if pibootctl is mising
         if result == 'error':
-            print("Unable to run pibootctl")
+            print("Unable to run pibootctl - hiding Display tab")
             self.displaygrid.set_visible(False)
         else:
             mode, mem = result.replace('=','\n').splitlines()[1::2]
