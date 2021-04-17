@@ -1,6 +1,8 @@
 # Ubuntu Budgie Pi4 21.04
 
-Date 22 April 2021 **IN PREPARATION FOR RELEASE**
+Release Date 22 April 2021
+
+**Release Candidate**
 
 Hi folks,
 
@@ -9,25 +11,30 @@ This is our first ever release of Ubuntu Budgie for a Raspberry Pi. It is based 
 
 **This image is recommended only for a Pi4B or Pi400 with 4Gb/8Gb RAM.**
 
-Just download and write to a SD Card via Gnome Disks or raspi-imager.
+Just download and write to a Class 10 SD Card or SSD/NVME (recommended) via Gnome Disks or raspi-imager.
 
 # Budgie ARM Tweak tool
 
 After installation and reboot you will see our budgie-arm-config app.
 
-Do read our [guide](https://sourceforge.net/projects/budgie-remix/files/budgie-raspi/UBPi4.pdf/download) how to use this app
+Do read our [downloadable guide](https://sourceforge.net/projects/budgie-remix/files/budgie-raspi/UBPi4.pdf/download) how to use this app
 
 By installing the package budgie-arm-environment on Intel/AMD you will see a Menu Budgie ARM application icon - run this to find your Pi IP address on your network (note the nmap issue below)
 
 
 # Known issues
 
- 1. the graphics are slightly glitchy under the default fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
- 2. using the official Pi touchscreen (the one that connects via the DSI ribbon instead of HDMI) doesn't seem to work in KMS mode.  Budgie DOES load, but you get no display.  FKMS mode works fine. This is a known upstream issue https://github.com/raspberrypi/linux/issues/4020
-  3. when installing on a Compute Module 4, using the Pi Foundation's IO Board, the USB ports may not be working. This is due to the DWC2 USB2 controller not being in host mode by default. If you are affected by this, it can be resolved by editing /boot/firmware/config.txt from another device, and adding 
+ 1. the graphics are slightly glitchy using fkms for direct access displays. We recommend using the KMS mode for direct access displays.
+ 2. The Tweak Tool displays tab text states "fkms" is the default.  For 21.04 it is in-fact KMS that is the default.
+ 3. using the official Pi touchscreen (the one that connects via the DSI ribbon instead of HDMI) doesn't seem to work in KMS mode.  Budgie DOES load, but you get no display.  FKMS mode works fine. This is a known upstream issue https://github.com/raspberrypi/linux/issues/4020
+ 4. when installing on a Compute Module 4, using the Pi Foundation's IO Board, the USB ports may not be working. This is due to the DWC2 USB2 controller not being in host mode by default. If you are affected by this, it can be resolved by editing /boot/firmware/config.txt from another device, and adding 
  `dtoverlay=dwc2,dr_mode=host`
+
 ----
 
-https://discourse.ubuntubudgie.org/t/ubuntu-budgie-plans-for-raspberry-pi/4310/30?u=fossfreedom
+For support queries https://discourse.ubuntubudgie.org
 
+For help to develop the Tweak Tool https://github.com/ubuntubudgie/ubpi
+
+Release Notes https://ubuntubudgie.org/2021/03/release-notes-ubuntu-budgie-21-04-on-a-raspberry-pi-4/
 ----
