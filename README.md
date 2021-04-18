@@ -4,8 +4,14 @@ Release Date 22 April 2021
 
 **Release Candidate**
 
-Hi folks,
+Downloading: Note Sourceforge can & will take several days and weeks to spin out to all its mirrors.  So in the
+early days a direct download of the .xz file may take a long-long-long time.
 
+Do use the torrent - but please do seed the torrent after download to ensure everyone after you benefits as well
+
+----
+
+Hi folks,
 
 This is our first ever release of Ubuntu Budgie for a Raspberry Pi. It is based on 21.04.
 
