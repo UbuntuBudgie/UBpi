@@ -3,9 +3,9 @@ AUTOSTART = "Enable or disable autostart of the configuration tool"
 
 #Layouts Tab
 LAYOUTS_TAB = "Configure different display options for smaller screens"
-STANDARD_RES = "Recommended for screens with vertical resolutions of 900 and above"
-COMPACT_RES = "Recommended for small screens with vertical resolutions of at least 768"
-MINI_RES = "Recommended for small screens with vertical resolutions of less than 768"
+STANDARD_RES = "Recommended for screens with\nvertical resolutions of 900 and above"
+COMPACT_RES = "Recommended for small screens with\nvertical resolutions of at least 768"
+MINI_RES = "Recommended for small screens with\nvertical resolutions of less than 768"
 APPLY_LAYOUT = "Apply the new layout.\nLogout/Login required to complete"
 
 #Overclock Tab
@@ -30,6 +30,7 @@ VIDEO_MODE = "KMS mode is recommended for attached displays. FKMS is recommended
 GPU_MEMORY = "Select the amout of memory to reserve for video usage. Too large a value may hurt performance if it is not needed."
 UPDATE_VIDEO = "Apply the selected video mode\nReboot required for changes to take effect"
 UPDATE_MEMORY = "Apply the selected memory setting\nReboot required for changes to take effect"
+NO_PIBOOTCTL = "Unable to make changes to the Display options.\nThis is not a Pi, or pibootctl may not be installed."
 
 #Findmypi
 NMAP_BUTTON = "When enabled, nmap is used to scan the network for Pis.\nIf disabled, it scans for Pis running the FindMyPi server."

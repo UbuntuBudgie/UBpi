@@ -5,7 +5,7 @@ import hint
 
 class Display:
 
-    PIBOOTCTL = '/usr/bin/pibootctl'
+    PIBOOTCTL = GLib.find_program_in_path('pibootctl')
     MODE_ARG  = 'video.firmware.mode'
     MEM_ARG   = 'gpu.mem'
     CONFIG    = '/boot/firmware/config.txt'
@@ -26,31 +26,31 @@ class Display:
                                   builder.get_object("Mem512RadioButton") ]
 
         self.modebutton = builder.get_object("ModeButton")
-        self.modebutton.connect("clicked",self.on_modebutton_clicked)
         self.current_mode = ''
-
         self.membutton = builder.get_object("MemoryButton")
-        self.membutton.connect("clicked", self.on_membutton_clicked)
         self.current_mem  = ''
 
         self.rebootlabel = builder.get_object("RebootLabel")
         self.rebootlabel.set_visible(False)
 
-        app_statuslabel = builder.get_object("AppStatusLabel")
+        self.app_statuslabel = builder.get_object("AppStatusLabel")
         tab = builder.get_object("DisplayTab")
         for button in self.moderadiobuttons:
-            hint.add(button, app_statuslabel, hint.VIDEO_MODE)
+            hint.add(button, self.app_statuslabel, hint.VIDEO_MODE)
         for button in self.memradiobuttons:
-            hint.add(button, app_statuslabel, hint.GPU_MEMORY)
-        hint.add(tab, app_statuslabel, hint.DISPLAY_TAB)
-        hint.add(self.modebutton, app_statuslabel, hint.UPDATE_VIDEO)
-        hint.add(self.membutton, app_statuslabel, hint.UPDATE_MEMORY)
+            hint.add(button, self.app_statuslabel, hint.GPU_MEMORY)
+        hint.add(tab, self.app_statuslabel, hint.DISPLAY_TAB)
+        hint.add(self.modebutton, self.app_statuslabel, hint.UPDATE_VIDEO)
+        hint.add(self.membutton, self.app_statuslabel, hint.UPDATE_MEMORY)
 
         if device.pi_model is not None:
-            self.load_initial()
+            if self.load_initial():
+                self.modebutton.connect("clicked", self.on_modebutton_clicked)
+                self.memsignal = self.membutton.connect("clicked", self.on_membutton_clicked)
             if not self.safe_to_change_mode():
                 self.disable_mode_selection()
         else:
+            #self.disable_controls()
             self.displaygrid.set_visible(False)
 
     def on_modebutton_clicked(self, *args):
@@ -63,16 +63,23 @@ class Display:
     def on_membutton_clicked(self, *args):
         for i in range(len(self.memradiobuttons)):
             if self.memradiobuttons[i].get_active() and self.MEM[i] != self.current_mem:
-                if self.run_pibootctl('set', self.MEM_ARG+'='+self.MEM[i]) != 'error': 
+                if self.run_pibootctl('set', self.MEM_ARG+'='+self.MEM[i]) != 'error':
                     self.current_mem = self.MEM[i]
                     self.rebootlabel.set_visible(True)
 
+    def disable_controls(self):
+        for button in (self.moderadiobuttons + self.memradiobuttons):
+            button.set_sensitive(False)
+        hint.add(self.modebutton, self.app_statuslabel, hint.NO_PIBOOTCTL)
+        hint.add(self.membutton, self.app_statuslabel, hint.NO_PIBOOTCTL)
+
     def load_initial(self):
         result = self.run_pibootctl('get', self.MODE_ARG, self.MEM_ARG, '--shell')
-        # Hide Display tab if pibootctl is mising
+        # If pibootctl is missing or unsuccessful (i.e. run on a non-Pi device)
         if result == 'error':
-            print("Unable to run pibootctl - hiding Display tab")
-            self.displaygrid.set_visible(False)
+            print("Unable to run pibootctl")
+            self.disable_controls()
+            return False
         else:
             mode, mem = result.replace('=','\n').splitlines()[1::2]
             for i in range(len(self.moderadiobuttons)):
@@ -83,6 +90,7 @@ class Display:
                 if mem == self.MEM[i]:
                     self.memradiobuttons[i].set_active(True)
                     self.current_mem = self.MEM[i]
+        return True
 
     def run_pibootctl(self, method, *params):
         if method == 'set':

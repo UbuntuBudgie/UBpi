@@ -170,7 +170,7 @@ class ConfigFile:
         for section in self.sections:
             section.clear_keys(['arm_freq', 'over_voltage',
                                 '#arm_freq', '#over_voltage'])
-        if model in ['4', 'CM4']:
+        if model in ['4', 'CM4', 'pi']:
             if speed != '1500':
                 self.update_key(use_section, 'arm_freq', speed)
                 self.update_key(use_section, 'over_voltage', VOLTAGE[speed])
@@ -252,9 +252,10 @@ def get_model():
         return('400')
     elif 'Raspberry Pi 4 ' in model:
         return('4')
-    elif 'CM4' in model:
+    elif 'Compute Module 4 ' in model:
         return('CM4')
-    elif 'Raspberry' in model:
+    # generic catch-all for Pis
+    elif 'Raspberry Pi' in model:
         return('pi')
     else:
         return('unknown')

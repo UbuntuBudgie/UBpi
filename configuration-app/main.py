@@ -36,19 +36,22 @@ class Handler:
 
 def check_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--force-findpi-mode", action="store_true", 
+    parser.add_argument("--force-findpi-mode", action="store_true",
                         help="Start up in FindMyPi mode")
-    parser.add_argument("--force-pi-mode", action="store_true", 
+    parser.add_argument("--force-arm-mode", action="store_true",
                         help="Start in Config App mode")
     parser.add_argument("--force-model", choices=['CM4', '4', '400'])
     parser.add_argument("--model", action='append')
     cpu_arg = parser.add_argument("--cpuinfo", action='append')
     args = parser.parse_args()
-    model_list = [[],[]]
-    if args.model is not None and args.cpuinfo is not None:
-        if len(args.model) != len(args.cpuinfo):
-            parser.error("number of --cpuinfo arguments must be equal to --model arguments")
-        model_list = [args.model, args.cpuinfo]
+    model_list = []
+    models = args.model if args.model is not None else []
+    cpu_infos = args.cpuinfo if args.cpuinfo is not None else []
+    if len(cpu_infos) != len(models):
+        parser.error("number of --cpuinfo and --model arguments must match")
+    else:
+        for i in range(len(models)):
+            model_list.append([models[i], cpu_infos[i]])
     return args, model_list
 
 args, model_list = check_args()
@@ -76,7 +79,8 @@ builder.connect_signals(Handler)
 app_statuslabel = builder.get_object("AppStatusLabel")
 hint.add(startlogincheckbutton, app_statuslabel, hint.AUTOSTART)
 
-if (overclock.pi_model is None and not args.force_pi_mode) or args.force_findpi_mode:
+if ((overclock.pi_model is None and not args.force_arm_mode)
+        or args.force_findpi_mode):
     findmypi = FindMyPi(builder)
 else:
     remote = Remote(builder, overclock)

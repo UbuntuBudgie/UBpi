@@ -8,7 +8,7 @@ class Overclock:
 
     PI_CLOCKSPEED = '/usr/lib/budgie-desktop/arm/pi-clockspeed.py'
     PI_SPEEDS = ['1500', '1800', '2000']
-    PI_1800_MODELS = ['400'] # models which run at 1800 by default
+    PI_1800_MODELS = ['400']  # models which run at 1800 by default
 
     def __init__(self, builder, forcedmodel=None, model_list=None):
         self.overclock_tab = builder.get_object("OverclockGrid")
@@ -70,28 +70,35 @@ class Overclock:
             hint.add(self.overclockbutton, app_statuslabel, hint.SPEED_BUTTON)
             self.overclockbutton.connect("clicked", self.on_overclockbutton_clicked)
         else:
+            for button in self.speed_radiobuttons:
+                button.set_sensitive(False)
             hint.add(self.overclockbutton, app_statuslabel, hint.NO_CONFIGTXT)
+            self.speedlabel.set_text("")
 
     def start_tempmonitor(self):
         GLib.timeout_add_seconds(1, self._temp_monitor)
 
     def get_pimodel(self):
+        model_line = ''
         with open('/proc/cpuinfo', 'r') as cpufile:
             lines = cpufile.readlines()
             for line in lines:
-                # Scan through model/cpu arguments
-                for i in range(len(self.model_list[0])):
-                    if self.model_list[1][i] in line:
-                        return self.model_list[0][i]
-                if "Raspberry Pi 400" in line:
-                    return '400'
-                elif "Raspberry Pi 4 " in line:
-                    return '4'
-                elif "Pi Compute Module 4" in line:
-                    return 'CM4'
-                # Generic catch-all Pis
-                elif "Raspberry Pi" in line:
-                    return 'Pi'
+                if line.split(':')[0].rstrip(' \t\n') in ["Model", "model name"]:
+                    model_line = line
+                    break
+        # Scan through model/cpu arguments
+        for i in range(len(self.model_list)):
+            if self.model_list[i][1] in model_line:
+                return self.model_list[i][0]
+        if "Raspberry Pi 400" in model_line:
+            return '400'
+        elif "Raspberry Pi 4 " in model_line:
+            return '4'
+        elif "Pi Compute Module 4" in model_line:
+            return 'CM4'
+        # Generic catch-all Pis
+        elif "Raspberry Pi" in model_line:
+            return 'Pi'
         return None
 
     def _set_currentspeed(self):
