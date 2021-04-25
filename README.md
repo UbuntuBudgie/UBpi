@@ -2,8 +2,6 @@
 
 Release Date 22 April 2021
 
-**Release Candidate**
-
 Downloading: Note Sourceforge can & will take several days and weeks to spin out to all its mirrors.  So in the
 early days a direct download of the .xz file may take a long-long-long time.
 
@@ -35,6 +33,8 @@ By installing the package budgie-arm-environment on Intel/AMD you will see a Men
  3. using the official Pi touchscreen (the one that connects via the DSI ribbon instead of HDMI) doesn't seem to work in KMS mode.  Budgie DOES load, but you get no display.  FKMS mode works fine. This is a known upstream issue https://github.com/raspberrypi/linux/issues/4020
  4. when installing on a Compute Module 4, using the Pi Foundation's IO Board, the USB ports may not be working. This is due to the DWC2 USB2 controller not being in host mode by default. If you are affected by this, it can be resolved by editing /boot/firmware/config.txt from another device, and adding 
  `dtoverlay=dwc2,dr_mode=host`
+ 5. The 21.04 repositories does not have an ARM64 package for Kodi - https://discourse.ubuntubudgie.org/t/psa-how-to-install-kodi-on-21-04-raspberry-pi/4909
+ 6. When rebooting sound config goes back to jack - https://discourse.ubuntubudgie.org/t/when-rebooting-sound-config-goes-back-to-jack/4907
 
 ----
 
