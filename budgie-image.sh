@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-IMAGE="hirsute-preinstalled-desktop-arm64+raspi.img"
-RELEASE="http://cdimage.ubuntu.com/daily-preinstalled/current"
-RELEASEIMAGE="hirsute-budgie-preinstalled-desktop-arm64+raspi.img"
+IMAGE="impish-preinstalled-desktop-arm64+raspi.img"
+RELEASE="https://cdimage.ubuntu.com/daily-preinstalled/current"
+RELEASEIMAGE="impish-budgie-preinstalled-desktop-arm64+raspi.img"
 MOUNT="/mnt/pi"
 NAMESERVER=1.1.1.1
 
