@@ -47,6 +47,7 @@ mount --rbind /dev dev/
 
 echo "Running conversion"
 chroot $MOUNT /usr/bin/setup-budgie.sh
+#echo $MOUNT
 rm $MOUNT/usr/bin/qemu-arm-static
 
 umount $MOUNT/proc
