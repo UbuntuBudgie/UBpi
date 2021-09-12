@@ -9,6 +9,7 @@ mv core20*.snap /var/lib/snapd/seed/snaps/
 rm /var/lib/snapd/seed/snaps/gtk-common-themes*.snap
 rm /var/lib/snapd/seed/snaps/snap-store*.snap
 rm /var/lib/snapd/seed/snaps/gnome-3-34*.snap
+rm /var/lib/snapd/seed/snaps/core18*.snap
 rm /var/lib/snapd/seed/assertions/gtk*
 rm /var/lib/snapd/seed/assertions/snap-store*
 rm /var/lib/snapd/seed/assertions/gnome*
@@ -34,7 +35,7 @@ CORE20=$(ls /var/lib/snapd/seed/snaps/core20* | sed 's#.*/##')
 
 sed -i "/ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
 sed -i "/snapd_/c\    file: $SNAPD" /var/lib/snapd/seed/seed.yaml
-sed -i "/core20_/c\    file: $CORE18" /var/lib/snapd/seed/seed.yaml
+sed -i "/core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
 
 rm /var/lib/snapd/state.json
 sed -i 's/After=snapd.service snapd.socket/After=core20.start-snapd.service/' /lib/systemd/system/snapd.seeded.service
