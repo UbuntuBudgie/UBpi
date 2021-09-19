@@ -1,11 +1,11 @@
-# beta 1 - Ubuntu Budgie Pi4 21.10
+# beta 2 - Ubuntu Budgie Pi4 21.10
 
-Date 12 Sept 2021
+Date xx Sept 2021 TBD
 
 Hi folks,
 
 
-This is our first beta release based upon 21.10
+This is our second beta release based upon 21.10
 
 **This image is recommended only for a Pi4B or Pi400 with 4Gb/8Gb RAM.**
 
@@ -23,7 +23,7 @@ By installing the package budgie-arm-environment on Intel/AMD you will see a Men
 
 The following optimisations are optional:
 
-First use the tweak tool and ensure you are booting at 2Mhz.  You should only use this option if you are using a decent heatsink - preferably with a good fan.
+First use the tweak tool and ensure you are booting at 2Ghz.  You should only use this option if you are using a decent heatsink - preferably with a good fan.
 
 The other options below apply to the 8Mb raspi model.
 
