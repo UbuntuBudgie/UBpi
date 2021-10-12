@@ -4,9 +4,9 @@ snaps:
     channel: stable
     file: core20_1084.snap
   -
-    name: snapd
+    name: core
     channel: stable
-    file: snapd_12886.snap
+    file: core_11803.snap
   -
     name: ubuntu-budgie-welcome
     channel: stable/ubuntu-21.10
