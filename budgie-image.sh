@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# this routine currently only works via a 21.04 ubuntu based install.
+# 21.10 will hang at the point of the chroot - reason is unknown.
+
 IMAGE="impish-preinstalled-desktop-arm64+raspi.img"
 RELEASE="https://cdimage.ubuntu.com/daily-preinstalled/current"
 RELEASEIMAGE="impish-budgie-preinstalled-desktop-arm64+raspi.img"
@@ -20,11 +23,12 @@ if [ ! -f "/usr/bin/qemu-arm-static" ]; then
 fi
 
 CURRENT_DIR=$(pwd)
-if [ ! -f "$IMAGE.xz" ]; then
-  echo "Downloading image"
-  sudo -u $SUDO_USER wget $RELEASE/$IMAGE.xz
-fi
 if [ ! -f "$IMAGE" ]; then
+  if [ ! -f "$IMAGE.xz" ]; then
+    echo "Downloading image"
+    sudo -u $SUDO_USER wget $RELEASE/$IMAGE.xz
+  fi
+
   echo "Uncompressing image"
   sudo -u $SUDO_USER xz -d -v $IMAGE.xz
 fi
@@ -58,5 +62,5 @@ umount $MOUNT
 rmdir $MOUNT
 mv $IMAGE $RELEASEIMAGE
 
-# Next line commented because it takes a long time to recompress
-xz -v --threads=0 $RELEASEIMAGE
+# Next line will take a long time to recompress unless you are using a 16 core NVME based Ryzen 7 or better machine!
+xz -v -9 --threads=0 $RELEASEIMAGE
