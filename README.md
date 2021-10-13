@@ -85,6 +85,9 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 
 Please be aware that other workarounds may be necessary under the fkms overlay (see bug [1899953](https://bugs.launchpad.net/ubuntu/+source/pulseaudio/+bug/1899953) for example), depending on your desktop requirements
 
+Assuming this is fixed by Canonical, we will respin this image.
+Please do click the "it impacts me" link on the bug report on launchpad.
+
 2. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
 3. Please feedback via our discourse forum https://discourse.ubuntubudgie.org
 
