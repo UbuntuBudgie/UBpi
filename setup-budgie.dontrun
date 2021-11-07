@@ -54,6 +54,13 @@ rm /var/lib/snapd/state.json
 sed -i 's/After=snapd.service snapd.socket/After=core20.start-snapd.service/' /lib/systemd/system/snapd.seeded.service
 
 apt update
+
+apt-add-repository -y -p proposed
+apt install -y linux-raspi
+apt-add-repository -y -r -p proposed
+
+apt purge -y linux-headers-5.13.0-1008-raspi linux-image-5.13.0-1008-raspi
+
 apt remove -y gdm3 gnome-shell
 
 apt install -y ubuntu-budgie-desktop-raspi

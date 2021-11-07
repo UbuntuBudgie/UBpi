@@ -1,11 +1,11 @@
-# Ubuntu Budgie Pi4 21.10
+# Ubuntu Budgie Pi4 21.10.1
 
-Date 14 Oct 2021
+Date 7th Nov 2021
 
 Hi folks,
 
 
-This is our raspberry pi build based upon 21.10 - please note the important **known issue** below
+This is our raspberry pi build based upon 21.10.  Importantly, this is a rebuild from the original 21.10 release image that incorporates a critical fix to prevent freezing when playing videos together with all software updates since launch day.
 
 **This image is recommended only for a Pi4B or Pi400 with 4Gb/8Gb RAM.**
 
@@ -15,7 +15,7 @@ Just download and write to a SD Card via Gnome Disks or raspi-imager.
 
 After installation and reboot you will see our budgie-arm-config app.
 
-Do read our [guide](https://sourceforge.net/projects/budgie-remix/files/budgie-raspi/UBPi4.pdf/download) how to use this app
+Do read our [guide](https://sourceforge.net/projects/budgie-remix/files/budgie-raspi-21.04/UBPi4.pdf/download) how to use this app
 
 By installing the package budgie-arm-environment on Intel/AMD you will see a Menu Budgie ARM application icon - run this to find your Pi IP address on your network (note the nmap issue below)
 
@@ -75,20 +75,7 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 
 # Known issues
 
-1. LP [#1946368](https://bugs.launchpad.net/bugs/1946368): There is a known Canonical issue with the full KMS support that causes the HDMI output to stop working (this appears to be particularly prevalent on monitors with higher refresh rates, i.e. 100+ Hz). To work around the issue:
- 
- - Insert the SD card in another machine
- - On the first (or only) partition labelled “system-boot” open the config.txt file in a text editor
- - Find the line: dtoverlay=vc4-kms-v3d
- - Change this line to: dtoverlay=vc4-fkms-v3d (i.e. change kms to fkms)
- - Save the file, and safely remove the SD card
-
-Please be aware that other workarounds may be necessary under the fkms overlay (see bug [1899953](https://bugs.launchpad.net/ubuntu/+source/pulseaudio/+bug/1899953) for example), depending on your desktop requirements
-
-Assuming this is fixed by Canonical, we will respin this image.
-Please do click the "it impacts me" link on the bug report on launchpad.
-
-2. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
-3. Please feedback via our discourse forum https://discourse.ubuntubudgie.org
+1. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
+2. Please feedback via our discourse forum https://discourse.ubuntubudgie.org
 
 ----
