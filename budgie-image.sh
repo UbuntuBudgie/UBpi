@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-# this routine currently only works via a 21.04 ubuntu based install.
-# 21.10 will hang at the point of the chroot - reason is unknown.
-
-IMAGE="impish-preinstalled-desktop-arm64+raspi.img"
+IMAGE="jammy-preinstalled-desktop-arm64+raspi.img"
 RELEASE="https://cdimage.ubuntu.com/daily-preinstalled/current"
-RELEASEIMAGE="impish-budgie-preinstalled-desktop-arm64+raspi.img"
+RELEASEIMAGE="jammy-budgie-preinstalled-desktop-arm64+raspi.img"
 MOUNT="/mnt/pi"
 NAMESERVER=1.1.1.1
 
