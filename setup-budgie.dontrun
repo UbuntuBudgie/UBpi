@@ -91,10 +91,10 @@ apt remove -y apt-config-icons-hidpi apturl apturl-common branding-ubuntu eog fp
 apt upgrade -y
 
 apt-get -y install --no-install-recommends oem-config-slideshow-ubuntu-budgie
-# Removing these lines - 'sed' commands fail as these files apparently no longer exist
-# sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/lib/ubiquity/plugins/ubi-usersetup.py
-# sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
-# sed -i 's/ubiquity-slideshow-ubuntu/ubiquity-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
+
+sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/lib/ubiquity/plugins/ubi-usersetup.py
+sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
+sed -i 's/ubiquity-slideshow-ubuntu/ubiquity-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
 
 echo "/usr/sbin/lightdm" > /etc/X11/default-display-manager
 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true dpkg-reconfigure lightdm
