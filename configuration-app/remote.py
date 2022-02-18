@@ -120,7 +120,7 @@ class Remote:
 
     def open_sharing(self):
         try:
-            subprocess.run(['gnome-control-center', 'sharing'])
+            subprocess.run(['budgie-control-center', 'sharing'])
         except subprocess.CalledProcessError:
             pass
 
