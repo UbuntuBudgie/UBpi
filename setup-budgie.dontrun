@@ -3,52 +3,38 @@
 snap download ubuntu-budgie-welcome
 mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
 mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
-rm /var/lib/snapd/seed/snaps/gtk-common-themes*.snap
 rm /var/lib/snapd/seed/snaps/snap-store*.snap
-rm /var/lib/snapd/seed/snaps/bare*.snap
-rm /var/lib/snapd/seed/snaps/firefox*.snap
-rm /var/lib/snapd/seed/snaps/gnome-3-38*.snap
 
-rm /var/lib/snapd/seed/assertions/gtk*
 rm /var/lib/snapd/seed/assertions/snap-store*
-rm /var/lib/snapd/seed/assertions/gnome*
-rm /var/lib/snapd/seed/assertions/bare*
-rm /var/lib/snapd/seed/assertions/firefox*
 
 rm /snap/bin/*
-rm -rf /snap/gnome-3-34*
-rm -rf /snap/gtk*
 rm -rf /snap/snap-store
-rm -rf /snap/bare
-rm -rf /snap/firefox
-rm -rf /snap/gnome-3-38*
 
 rm /var/lib/snapd/apparmor/profiles/*
 rm /var/lib/snapd/desktop/applications/*
-rm /var/lib/snapd/inhibit/gtk*
 rm /var/lib/snapd/inhibit/snap-store.lock
-rm /var/lib/snapd/inhibit/firefox.lock
-rm /var/lib/snapd/inhibit/gnome-3-38*
-
 
 rm /var/lib/snapd/mount/*
 rm -rf /var/lib/snapd/snaps/*
-rm -rf /var/snap/gnome-3.34*
-rm -rf /var/snap/gtk*
 rm -rf /var/snap/snap-store
-rm -rf /var/snap/bare
-rm -rf /var/snap/firefox
-rm -rf /var/snap/gnome-3-38*
 
 rm /etc/systemd/system/*.mount
 
 WELCOME=$(ls /var/lib/snapd/seed/snaps/ubuntu-budgie-welcome* | sed 's#.*/##')
 CORE20=$(ls /var/lib/snapd/seed/snaps/core20* | sed 's#.*/##')
 SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd* | sed 's#.*/##')
+FIREFOX=$(ls /var/lib/snapd/seed/snaps/firefox* | sed 's#.*/##')
+GTKCOMMON=$(ls /var/lib/snapd/seed/snaps/gtk-common-themes* | sed 's#.*/##')
+GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-3* | sed 's#.*/##')
+BARE=$(ls /var/lib/snapd/seed/snaps/bare* | sed 's#.*/##')
 
-sed -i "/ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
-sed -i "/core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
-sed -i "/snapd_/c\    file: $SNAPD" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: snapd_/c\    file: $SNAPD" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: gnome-/c\    file: $GNOME" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: gtk-common-themes/c\    file: $GTKCOMMON" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: firefox_/c\    file: $FIREFOX" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: bare_/c\    file: $BARE" /var/lib/snapd/seed/seed.yaml
 
 rm /var/lib/snapd/state.json
 sed -i 's/After=snapd.service snapd.socket/After=core20.start-snapd.service/' /lib/systemd/system/snapd.seeded.service
@@ -65,28 +51,12 @@ apt remove -y gdm3 gnome-shell
 
 apt install -y ubuntu-budgie-desktop-raspi
 
-apt remove -y apt-config-icons-hidpi apturl apturl-common branding-ubuntu eog fprintd gamemode \
-  gamemode-daemon genisoimage gir1.2-accountsservice-1.0 gir1.2-gck-1 gir1.2-gcr-3 \
-  gir1.2-gdm-1.0 gir1.2-gnomebluetooth-1.0 gir1.2-graphene-1.0 gir1.2-gtk-4.0 gir1.2-mutter-9 \
-  gir1.2-rsvg-2.0 gir1.2-totem-1.0 gir1.2-totemplparser-1.0 gir1.2-upowerglib-1.0 gnome-initial-setup \
-  gnome-session-canberra gnome-shell-common gnome-shell-extension-appindicator \
-  gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gnome-terminal gnome-terminal-data \
-  gnome-todo gnome-todo-common grilo-plugins-0.3-base gsettings-ubuntu-schemas gstreamer1.0-pipewire \
-  gstreamer1.0-plugins-base-apps gstreamer1.0-tools ibus-table ldap-utils libavahi-ui-gtk3-0 \
-  libbasicobjects0 libc-ares2 libcollection4 libcue2 libdhash1 libfprint-2-2 libgamemode0 \
-  libgamemodeauto0 libgdm1 libgif7 libgnome-autoar-0-0 libgnome-todo libgom-1.0-0 libini-config5 \
-  libipa-hbac0 libnfsidmap2 libnss-sss libpam-fprintd libpam-pwquality libpam-sss libpath-utils1 \
-  libref-array1 libreoffice-style-breeze libsasl2-modules-gssapi-mit libsss-certmap0 libsss-idmap0 \
-  libsss-nss-idmap0 libsysmetrics1 libtotem0 libtracker-sparql-3.0-0 libvncclient1 nautilus \
-  nautilus-data nautilus-extension-gnome-terminal nautilus-sendto nautilus-share \
-  network-manager-config-connectivity-ubuntu plymouth-theme-spinner python3-sss remmina remmina-common \
-  remmina-plugin-rdp remmina-plugin-secret remmina-plugin-vnc seahorse session-migration shotwell \
-  shotwell-common sssd sssd-ad sssd-ad-common sssd-common sssd-ipa sssd-krb5 sssd-krb5-common \
-  sssd-ldap sssd-proxy switcheroo-control totem totem-common totem-plugins tracker tracker-extract \
-  tracker-miner-fs ubiquity-slideshow-ubuntu ubuntu-desktop ubuntu-desktop-minimal ubuntu-report \
-  ubuntu-session ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-impish xcursor-themes \
-  xdg-desktop-portal-gnome xserver-xorg-input-all xserver-xorg-input-wacom xwayland yaru-theme-gnome-shell \
-  yaru-theme-gtk yaru-theme-icon yaru-theme-sound
+apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report \
+  eog gnome-terminal nautilus apt-config-icons-hidpi gamemode \
+  seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound \
+  ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas \
+  xcursor-themes realmd adcli shotwell remmina totem \
+  gir1.2-totem-1.0 libtotem0 totem-common gnome-todo gnome-initial-setup gnome-control-center
 
 apt upgrade -y
 

@@ -31,7 +31,9 @@ class Remote:
 
         self.vncbutton = builder.get_object("VNCButton")
         self.vncbutton.connect('clicked', self.vncbuttonclicked)
-        self.vncbutton.set_visible(self.found_grd)
+        # Temporarily disabled
+        # self.vncbutton.set_visible(self.found_grd)
+        self.vncbutton.set_visible(False)
 
         self.xrdpbutton = builder.get_object("XRDPButton")
         self.xrdpbutton.connect('clicked', self.xrdpbuttonclicked)
@@ -192,7 +194,7 @@ class Remote:
     def findmypi_server(self, kill=False):
         # Return True if server is running, also will kill server if kill=True
         for proc in psutil.process_iter():
-            if (len(proc.cmdline()) > 1 and "python" in proc.cmdline()[0] 
+            if (len(proc.cmdline()) > 1 and "python" in proc.cmdline()[0]
                                    and "findmypiserver" in proc.cmdline()[1]):
                 if kill:
                     proc.terminate()
