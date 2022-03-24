@@ -73,6 +73,15 @@ class Display:
         hint.add(self.modebutton, self.app_statuslabel, hint.NO_PIBOOTCTL)
         hint.add(self.membutton, self.app_statuslabel, hint.NO_PIBOOTCTL)
 
+    def find_value(self, result, key):
+        # search pibootctl output for a key, and return the value
+        lines = result.splitlines()
+        find = key + "="
+        for line in lines:
+            if find in line:
+                return line.split("=")[1]
+        return None
+
     def load_initial(self):
         result = self.run_pibootctl('get', self.MODE_ARG, self.MEM_ARG, '--shell')
         # If pibootctl is missing or unsuccessful (i.e. run on a non-Pi device)
@@ -81,7 +90,8 @@ class Display:
             self.disable_controls()
             return False
         else:
-            mode, mem = result.replace('=','\n').splitlines()[1::2]
+            mode = self.find_value(result, "video_firmware_mode")
+            mem = self.find_value(result, "gpu_mem")
             for i in range(len(self.moderadiobuttons)):
                 if mode == self.MODE[i]:
                     self.moderadiobuttons[i].set_active(True)
