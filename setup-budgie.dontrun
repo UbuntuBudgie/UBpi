@@ -27,6 +27,7 @@ FIREFOX=$(ls /var/lib/snapd/seed/snaps/firefox* | sed 's#.*/##')
 GTKCOMMON=$(ls /var/lib/snapd/seed/snaps/gtk-common-themes* | sed 's#.*/##')
 GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-3* | sed 's#.*/##')
 BARE=$(ls /var/lib/snapd/seed/snaps/bare* | sed 's#.*/##')
+DESKTOPINT=$(ls /var/lib/snapd/seed/snaps/snapd-desktop-integration_* | sed 's#.*/##')
 
 sed -i "/file: ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
@@ -35,6 +36,7 @@ sed -i "/file: gnome-/c\    file: $GNOME" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: gtk-common-themes/c\    file: $GTKCOMMON" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: firefox_/c\    file: $FIREFOX" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: bare_/c\    file: $BARE" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: snapd-desktop-integration_/c\    file: $DESKTOPINT" /var/lib/snapd/seed/seed.yaml
 
 rm /var/lib/snapd/state.json
 sed -i 's/After=snapd.service snapd.socket/After=core20.start-snapd.service/' /lib/systemd/system/snapd.seeded.service
@@ -56,7 +58,11 @@ apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubu
   seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound \
   ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas \
   xcursor-themes realmd adcli shotwell remmina totem \
-  gir1.2-totem-1.0 libtotem0 totem-common gnome-todo gnome-initial-setup gnome-control-center
+  gir1.2-totem-1.0 libtotem0 totem-common gnome-todo gnome-control-center \
+  gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock \
+  gnome-shell-extension-appindicator systemd-oomd nautilus-sendto nautilus-share \
+  xdg-desktop-portal-gnome plymouth-theme-spinner gstreamer1.0-plugins-base-apps \
+  libpam-fprintd libpam-sss usb-creator-gtk branding-ubuntu libreoffice-style-breeze 
 
 apt upgrade -y
 

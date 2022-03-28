@@ -10,7 +10,7 @@ snaps:
   -
     name: firefox
     channel: stable/ubuntu-22.04
-    file: firefox_1123.snap
+    file: firefox_1155.snap
   -
     name: gnome-3-38-2004
     channel: stable/ubuntu-22.04
@@ -23,6 +23,10 @@ snaps:
     name: gtk-common-themes
     channel: stable/ubuntu-22.04
     file: gtk-common-themes_1526.snap
+  -
+    name: snapd-desktop-integration
+    channel: stable/ubuntu-22.04
+    file: snapd-desktop-integration_9.snap
   -
     name: ubuntu-budgie-welcome
     channel: stable/ubuntu-22.04
