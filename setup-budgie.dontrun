@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-snap download ubuntu-budgie-welcome
+snap download ubuntu-budgie-welcome --channel=latest/stable/ubuntu-22.04
 mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
 mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
 rm /var/lib/snapd/seed/snaps/snap-store*.snap
