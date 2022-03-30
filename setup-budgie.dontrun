@@ -22,7 +22,7 @@ rm /etc/systemd/system/*.mount
 
 WELCOME=$(ls /var/lib/snapd/seed/snaps/ubuntu-budgie-welcome* | sed 's#.*/##')
 CORE20=$(ls /var/lib/snapd/seed/snaps/core20* | sed 's#.*/##')
-SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd* | sed 's#.*/##')
+SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd_* | sed 's#.*/##')
 FIREFOX=$(ls /var/lib/snapd/seed/snaps/firefox* | sed 's#.*/##')
 GTKCOMMON=$(ls /var/lib/snapd/seed/snaps/gtk-common-themes* | sed 's#.*/##')
 GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-3* | sed 's#.*/##')
