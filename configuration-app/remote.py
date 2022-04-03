@@ -77,15 +77,15 @@ class Remote:
 
         self.run_remote(self.vncstatuslabel, self.VNC, 'status')
 
-    def run_remote(self, label, connection, param, root=False, alt_param = ""):
+    def run_remote(self, label, connection, param, root=False, alt_param = []):
 
         if root:
             args = ['pkexec', connection, param]
         else:
             args = [connection, param]
 
-        if alt_param != "":
-            args.append(alt_param)
+        if alt_param != []:
+            args += (alt_param)
 
         try:
             output = subprocess.check_output(args,
@@ -142,13 +142,16 @@ class Remote:
             self.run_remote(self.vncstatuslabel, self.VNC, 'disable', root=True)
             self.run_remote(self.vncstatuslabel, self.VNC, 'status')
         else:
+            subnet =".".join(self.get_ip().split(".", 3)[:-1]) + "."
+            self.vncstatuslabel.set_text("Please wait...")
             pwdialog = vncdialog.VncDialog()
             response = pwdialog.run()
             if response == Gtk.ResponseType.OK:
                 password = pwdialog.get_result()
                 pwdialog.destroy()
-                GLib.idle_add(self.activate_vnc, password)
+                GLib.idle_add(self.activate_vnc, [password, subnet])
             else:
+                self.run_remote(self.vncstatuslabel, self.VNC, 'status')
                 pwdialog.destroy()
 
     def autologintoggled(self, button):

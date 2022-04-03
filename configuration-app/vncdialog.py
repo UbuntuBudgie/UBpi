@@ -8,9 +8,8 @@ class VncDialog(Gtk.Dialog):
         self.add_buttons(
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
         )
-        warnings = ['','- Password should be different from login',
+        warnings = ['','- Do not use root / login password for VNC',
                     '- VNC is restricted to local subnet by default',
-                    '- Local users may be able to view password',
                     '- VNC should only be enabled on trusted networks','']
         self.set_default_size(170, 100)
         pwlabels = [Gtk.Label(label=" Enter a Password:"), Gtk.Label(label="Confirm Password:")]
@@ -23,6 +22,7 @@ class VncDialog(Gtk.Dialog):
             pw.set_visibility(False)
             pw.connect("changed", self.on_entry, i)
             pw.connect("focus-in-event", self.on_field_change, i)
+            pw.connect("activate", self.on_enter_press, i)
             icon = Gtk.Image.new_from_icon_name("button_cancel", Gtk.IconSize.LARGE_TOOLBAR)
             self.passwds.append(pw)
             self.icons.append(icon)
@@ -50,6 +50,12 @@ class VncDialog(Gtk.Dialog):
                 return False
         return True
 
+    def on_enter_press(self, entry, pw):
+        if pw == 0:
+            self.passwds[1].grab_focus()
+        elif (self.passwds[0].get_text() == self.passwds[1].get_text() and self.is_pw_valid(self.passwds[0].get_text())):
+            self.response(Gtk.ResponseType.OK)
+
     def on_response(self, widget, response_id):
         self.result = self.passwds[0].get_text()
 
@@ -68,8 +74,14 @@ class VncDialog(Gtk.Dialog):
     def on_entry (self, entry, pw):
         if self.passwds[0].get_text() == "":
             self.change_mark(self.icons[0], False)
+        if pw == 0 and self.is_pw_valid(self.passwds[0].get_text()):
+            self.change_mark(self.icons[1], True)
+            self.change_mark(self.icons[0], True)
+        else:
+            self.change_mark(self.icons[1], False)
         if pw == 1:
-            if self.passwds[1].get_text() == self.passwds[0].get_text() and self.is_pw_valid(self.passwds[0].get_text()):
+            if (self.passwds[1].get_text() == self.passwds[0].get_text()
+                         and self.is_pw_valid(self.passwds[0].get_text())):
                 self.change_mark(self.icons[1], True)
                 self.button_enabled(True)
             else:
@@ -90,7 +102,8 @@ class VncDialog(Gtk.Dialog):
             self.button_enabled(False)
         if self.passwds[0].get_text() != "" and self.is_pw_valid(self.passwds[0].get_text()):
             self.change_mark(self.icons[0], True)
-        if self.passwds[0].get_text() == self .passwds[1].get_text() and self.is_pw_valid(self.passwds[0].get_text()):
+        if (self.passwds[0].get_text() == self .passwds[1].get_text()
+                     and self.is_pw_valid(self.passwds[0].get_text())):
             self.change_mark(self.icons[1], True)
             self.button_enabled(True)
         else:
