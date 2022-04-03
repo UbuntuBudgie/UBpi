@@ -35,6 +35,7 @@ cp reset.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp budgie-xrdp.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp budgie-ssh.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp budgie-vnc.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
+cp x11vnc.service ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp pi-kmsmode.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp budgie-autologin.sh ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp *.py ${PREFIX_DIR}/usr/lib/budgie-desktop/arm

@@ -140,7 +140,7 @@ class Remote:
     def vncbuttonclicked(self, *args):
         if 'vnc service is active' in self.vncstatuslabel.get_text():
             self.run_remote(self.vncstatuslabel, self.VNC, 'disable', root=True)
-            self.run_remote(self.vncstatuslabel, self.VNC, 'status', root=True)
+            self.run_remote(self.vncstatuslabel, self.VNC, 'status')
         else:
             pwdialog = vncdialog.VncDialog()
             response = pwdialog.run()
