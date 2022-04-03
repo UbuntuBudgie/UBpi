@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-# Usage: budgie-vnc.sh [setup|enable|disable|status] [password]
+# Usage: budgie-vnc.sh <enable|disable|status>
+#        budgie-vnc.sh <setup> <password> [subnet]
 #
 # setup will install service or change to the provided password
 # password is required with setup parameter 
@@ -38,6 +39,7 @@ function setup_vnc() {
   echo "Checking for vnc"
   if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo 'vnc not found. Installing...'
+    apt update
     apt install -y x11vnc
   else
     systemctl disable x11vnc --now

@@ -1,11 +1,13 @@
+import pwd
 import socket
 import subprocess
 import psutil
 import gi
 import getpass
 gi.require_version("Gtk", "3.0")
-from gi.repository import GLib, Gio
+from gi.repository import GLib, Gio, Gtk
 import hint
+import vncdialog
 
 
 class Remote:
@@ -15,6 +17,7 @@ class Remote:
     FINDPI = "/usr/lib/budgie-desktop/arm/findmypiserver.py"
     AUTOLOGIN = "/usr/lib/budgie-desktop/arm/budgie-autologin.sh"
     LIGHTDMCONF = "/etc/lightdm/lightdm.conf"
+    VNC = "/usr/lib/budgie-desktop/arm/budgie-vnc.sh"
 
     def __init__(self, builder, device):
         self.iplabel = builder.get_object("IPLabel")
@@ -31,13 +34,11 @@ class Remote:
 
         self.vncbutton = builder.get_object("VNCButton")
         self.vncbutton.connect('clicked', self.vncbuttonclicked)
-        # Temporarily disabled
-        # self.vncbutton.set_visible(self.found_grd)
-        self.vncbutton.set_visible(False)
 
         self.xrdpbutton = builder.get_object("XRDPButton")
         self.xrdpbutton.connect('clicked', self.xrdpbuttonclicked)
 
+        self.vncstatuslabel = builder.get_object("VNCStatusLabel")
         self.xrdpstatuslabel = builder.get_object("XRDPStatusLabel")
         self.sshstatuslabel = builder.get_object("SSHStatusLabel")
         self.findmypistatuslabel = builder.get_object("FindMyPiStatusLabel")
@@ -74,12 +75,17 @@ class Remote:
         if not self.found_grd:
             self.run_remote(self.sshstatuslabel, self.SSH, 'status')
 
-    def run_remote(self, label, connection, param, root=False):
+        self.run_remote(self.vncstatuslabel, self.VNC, 'status')
+
+    def run_remote(self, label, connection, param, root=False, alt_param = ""):
 
         if root:
             args = ['pkexec', connection, param]
         else:
             args = [connection, param]
+
+        if alt_param != "":
+            args.append(alt_param)
 
         try:
             output = subprocess.check_output(args,
@@ -126,8 +132,24 @@ class Remote:
         except subprocess.CalledProcessError:
             pass
 
+    def activate_vnc(self, password):
+        self.run_remote(self.vncstatuslabel, self.VNC, 'setup', root=True, alt_param=password)
+        self.run_remote(self.vncstatuslabel,self.VNC,'status')
+        return False
+
     def vncbuttonclicked(self, *args):
-        self.open_sharing()
+        if 'vnc service is active' in self.vncstatuslabel.get_text():
+            self.run_remote(self.vncstatuslabel, self.VNC, 'disable', root=True)
+            self.run_remote(self.vncstatuslabel, self.VNC, 'status', root=True)
+        else:
+            pwdialog = vncdialog.VncDialog()
+            response = pwdialog.run()
+            if response == Gtk.ResponseType.OK:
+                password = pwdialog.get_result()
+                pwdialog.destroy()
+                GLib.idle_add(self.activate_vnc, password)
+            else:
+                pwdialog.destroy()
 
     def autologintoggled(self, button):
         should_enable = button.get_active()

@@ -22,7 +22,7 @@ FINDMYPI_SERVER = "Enable FindMyPi UDP server on app startup. This is not needed
 AUTOLOGIN = "Enable automatic login, and disable the lock screen to prevent issues accessing this device through VNC"
 XRDP_BUTTON = "Enable / disable XRDP access.\nThis will install the xrdp package if necessary."
 SSH_BUTTON = "Enable SSH access to this device, using Gnome Remote Desktop settings."
-VNC_BUTTON = "Enable VNC access to this device, using Gnome Remote Desktop settings. VNC allows screen sharing."
+VNC_BUTTON = "Enable VNC access to this device, VNC allows screen sharing. Enabling / Disabling VNC may take a minute to complete."
 
 #Display Tab
 DISPLAY_TAB = "Configure Video Modes and Video Memory"
