@@ -41,6 +41,7 @@ function setup_vnc() {
     echo 'vnc not found. Installing...'
     apt update
     apt install -y x11vnc
+    echo "Hidden=true" >> /usr/share/applications/x11vnc.desktop
   else
     systemctl disable x11vnc --now
   fi
