@@ -42,6 +42,7 @@ class VncDialog(Gtk.Dialog):
         self.show_all()
 
     def is_pw_valid(self, password):
+        # Just check to make sure no characters that might affect the bash script
         forbidden = [" ", "\\", "\"", "'"]
         if password == "":
             return False
@@ -51,6 +52,7 @@ class VncDialog(Gtk.Dialog):
         return True
 
     def on_enter_press(self, entry, pw):
+        # On enter press, move to next field, or activate dialog box if password is ok
         if pw == 0:
             self.passwds[1].grab_focus()
         elif (self.passwds[0].get_text() == self.passwds[1].get_text() and self.is_pw_valid(self.passwds[0].get_text())):

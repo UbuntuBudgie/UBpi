@@ -85,6 +85,7 @@ class Remote:
             args = [connection, param]
 
         if alt_param != []:
+            # VNC setup needs extra params, probably rework this in the future
             args += (alt_param)
 
         try:
@@ -132,24 +133,30 @@ class Remote:
         except subprocess.CalledProcessError:
             pass
 
-    def activate_vnc(self, password):
-        self.run_remote(self.vncstatuslabel, self.VNC, 'setup', root=True, alt_param=password)
+    def activate_vnc(self, extra_args=[], disable=False):
+        if disable:
+            self.run_remote(self.vncstatuslabel, self.VNC, 'disable', root=True)
+        else:
+            self.run_remote(self.vncstatuslabel, self.VNC, 'setup', root=True, alt_param=extra_args)
         self.run_remote(self.vncstatuslabel,self.VNC,'status')
         return False
 
     def vncbuttonclicked(self, *args):
-        if 'vnc service is active' in self.vncstatuslabel.get_text():
-            self.run_remote(self.vncstatuslabel, self.VNC, 'disable', root=True)
-            self.run_remote(self.vncstatuslabel, self.VNC, 'status')
+        stopservice = 'vnc service is active' in self.vncstatuslabel.get_text()
+        self.vncstatuslabel.set_text("Please wait...")
+        if stopservice:
+            # Sometimes, x11vnc takes a while to stop, making app seem unresponsive
+            # Timeout allows the "please wait" message to appear
+            GLib.timeout_add(10,self.activate_vnc, [], True)
         else:
+            # get the ip (needed to restrict VNC to local subnet)
             subnet =".".join(self.get_ip().split(".", 3)[:-1]) + "."
-            self.vncstatuslabel.set_text("Please wait...")
             pwdialog = vncdialog.VncDialog()
             response = pwdialog.run()
             if response == Gtk.ResponseType.OK:
                 password = pwdialog.get_result()
                 pwdialog.destroy()
-                GLib.idle_add(self.activate_vnc, [password, subnet])
+                GLib.idle_add(self.activate_vnc, [password, subnet], False)
             else:
                 self.run_remote(self.vncstatuslabel, self.VNC, 'status')
                 pwdialog.destroy()

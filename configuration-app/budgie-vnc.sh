@@ -45,7 +45,7 @@ function setup_vnc() {
     systemctl disable x11vnc --now
   fi
   cp /usr/lib/budgie-desktop/arm/x11vnc.service /etc/systemd/system/
-  sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc -forever -display :0 $SUBNET -rfbauth /etc/x11vnc.pwd" /etc/systemd/system/x11vnc.service
+  sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc -repeat -forever -display :0 $SUBNET -rfbauth /etc/x11vnc.pwd" /etc/systemd/system/x11vnc.service
   x11vnc -storepasswd $3 /etc/x11vnc.pwd
   chmod a+r /etc/x11vnc.pwd
   systemctl daemon-reload
