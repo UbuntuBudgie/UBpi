@@ -27,11 +27,6 @@ class Remote:
         self.run_findmypi = self.gsettings.get_boolean('enableserver')
         app_statuslabel = builder.get_object("AppStatusLabel")
 
-        if GLib.find_program_in_path("pipewire") == None:
-            self.found_grd = False
-        else:
-            self.found_grd = True
-
         self.vncbutton = builder.get_object("VNCButton")
         self.vncbutton.connect('clicked', self.vncbuttonclicked)
 
@@ -72,8 +67,7 @@ class Remote:
             self.findmypistatuslabel.set_text("Server is inactive")
 
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
-        if not self.found_grd:
-            self.run_remote(self.sshstatuslabel, self.SSH, 'status')
+        self.run_remote(self.sshstatuslabel, self.SSH, 'status')
 
         self.run_remote(self.vncstatuslabel, self.VNC, 'status')
 
@@ -107,11 +101,6 @@ class Remote:
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'enable')
 
     def sshbuttonclicked(self, *args):
-        if self.found_grd:
-            # with gnome-remote-desktop ssh is provided
-            self.open_sharing()
-            return
-
         if 'service is active' in self.sshstatuslabel.get_text():
             self.run_remote(self.sshstatuslabel, self.SSH, 'disable')
         else:

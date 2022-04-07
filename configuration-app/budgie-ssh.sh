@@ -8,7 +8,7 @@
 function disable_ssh() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
     echo 'Disabling ssh service'
-    systemctl stop ssh
+    systemctl disable ssh --now
   else
     echo 'ssh already disabled'
   fi
@@ -19,6 +19,7 @@ function enable_ssh() {
   if [ $(dpkg-query -W -f='${Status}' openssh-server 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo 'ssh not found. Installing...'
     apt install -y openssh-server
+    systemctl enable ssh --now
   else
     echo 'ssh already installed!'
     echo 'Checking if ssh is enabled'
@@ -26,7 +27,7 @@ function enable_ssh() {
       echo 'ssh already enabled!'
     else
       echo 'Enabling ssh'
-      systemctl start ssh
+      systemctl enable ssh --now
     fi
   fi
 
