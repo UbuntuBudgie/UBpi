@@ -1,11 +1,11 @@
-# Ubuntu Budgie Pi4 22.04
+# Ubuntu Budgie Pi4 22.04.1
 
-Date 21st April 2022
+Date 4th August 2022
 
 Hi folks,
 
 
-This is our raspberry pi build based upon 22.04LTS
+This is our raspberry pi build based upon 22.04.1LTS
 
 **This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
