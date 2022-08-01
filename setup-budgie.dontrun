@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-snap download ubuntu-budgie-welcome --channel=latest/stable/ubuntu-22.04
+snap download ubuntu-budgie-welcome --channel=latest/stable/ubuntu-22.10
 mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
 mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
 rm /var/lib/snapd/seed/snaps/snap-store*.snap
@@ -62,7 +62,8 @@ apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubu
   gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock \
   gnome-shell-extension-appindicator systemd-oomd nautilus-sendto nautilus-share \
   xdg-desktop-portal-gnome plymouth-theme-spinner gstreamer1.0-plugins-base-apps \
-  libpam-fprintd libpam-sss usb-creator-gtk branding-ubuntu libreoffice-style-breeze 
+  libpam-fprintd libpam-sss usb-creator-gtk branding-ubuntu libreoffice-style-breeze \
+  gnome-calculator gnome-font-viewer gnome-calendar gnome-system-monitor rhythmbox
 
 apt upgrade -y
 

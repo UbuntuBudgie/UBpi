@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-IMAGE="jammy-preinstalled-desktop-arm64+raspi.img"
+IMAGE="kinetic-preinstalled-desktop-arm64+raspi.img"
 RELEASE="https://cdimage.ubuntu.com/daily-preinstalled/current"
-RELEASEIMAGE="jammy-budgie-preinstalled-desktop-arm64+raspi.img"
+RELEASEIMAGE="kinetic-budgie-preinstalled-desktop-arm64+raspi.img"
 MOUNT="/mnt/pi"
 NAMESERVER=1.1.1.1
 

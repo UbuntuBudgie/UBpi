@@ -1,13 +1,17 @@
-# Ubuntu Budgie Pi4 21.10.1
+# Ubuntu Budgie Pi4 22.10
 
-Date 7th Nov 2021
+Date 1st August 2022
 
 Hi folks,
 
 
-This is our raspberry pi build based upon 21.10.  Importantly, this is a rebuild from the original 21.10 release image that incorporates a critical fix to prevent freezing when playing videos together with all software updates since launch day.
+This is our raspberry pi build based upon 22.10 - it is of alpha quality to be used for feedback and testing
 
-**This image is recommended only for a Pi4B or Pi400 with 4Gb/8Gb RAM.**
+https://discourse.ubuntubudgie.org/t/testing-22-10-are-you-brave-enough/5975
+
+
+
+**This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
 Just download and write to a SD Card via Gnome Disks or raspi-imager.
 
@@ -76,6 +80,8 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 # Known issues
 
 1. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
-2. Please feedback via our discourse forum https://discourse.ubuntubudgie.org
+
+
+Please feedback via our discourse forum https://discourse.ubuntubudgie.org
 
 ----
