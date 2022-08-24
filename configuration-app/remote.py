@@ -68,7 +68,6 @@ class Remote:
 
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
         self.run_remote(self.sshstatuslabel, self.SSH, 'status')
-
         self.run_remote(self.vncstatuslabel, self.VNC, 'status')
 
     def run_remote(self, label, connection, param, root=False, alt_param = []):
@@ -101,8 +100,9 @@ class Remote:
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'enable')
 
     def sshbuttonclicked(self, *args):
-        if 'service is active' in self.sshstatuslabel.get_text():
-            self.run_remote(self.sshstatuslabel, self.SSH, 'disable')
+        if 'ssh is installed' in self.sshstatuslabel.get_text():
+            self.open_sharing()
+            self.run_remote(self.sshstatuslabel, self.SSH, 'status')
         else:
             self.run_remote(self.sshstatuslabel, self.SSH, 'enable')
 

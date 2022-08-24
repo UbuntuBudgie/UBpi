@@ -53,17 +53,20 @@ apt remove -y gdm3 gnome-shell
 
 apt install -y ubuntu-budgie-desktop-raspi
 
-apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubuntu-report \
-  eog gnome-terminal nautilus apt-config-icons-hidpi gamemode \
-  seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound \
-  ubuntu-wallpapers gnome-session-canberra ubuntu-settings gsettings-ubuntu-schemas \
-  xcursor-themes realmd adcli shotwell remmina totem \
-  gir1.2-totem-1.0 libtotem0 totem-common gnome-todo gnome-control-center \
-  gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock \
-  gnome-shell-extension-appindicator systemd-oomd nautilus-sendto nautilus-share \
-  xdg-desktop-portal-gnome plymouth-theme-spinner gstreamer1.0-plugins-base-apps \
-  libpam-fprintd libpam-sss usb-creator-gtk branding-ubuntu libreoffice-style-breeze \
-  gnome-calculator gnome-font-viewer gnome-calendar gnome-system-monitor rhythmbox
+apt remove -y apt-config-icons-hidpi branding-ubuntu cheese eog evince evince-common evolution-data-server \
+evolution-data-server-common fprintd gamemode gamemode-daemon gnome-calculator gnome-calendar \
+gnome-font-viewer gnome-initial-setup gnome-session-canberra gnome-shell-common gnome-system-monitor \
+gnome-terminal gnome-terminal-data gnome-text-editor gnome-video-effects grilo-plugins-0.3-base \
+gsettings-ubuntu-schemas gstreamer1.0-plugins-base-apps gstreamer1.0-tools ibus-table ldap-utils \
+media-player-info nautilus nautilus-data nautilus-extension-gnome-terminal nautilus-sendto \
+network-manager-config-connectivity-ubuntu plymouth-theme-spinner python3-mako python3-markupsafe \
+python3-sss remmina remmina-common remmina-plugin-rdp remmina-plugin-secret remmina-plugin-vnc rhythmbox \
+rhythmbox-data rhythmbox-plugin-alternative-toolbar rhythmbox-plugins seahorse shotwell shotwell-common sssd \
+sssd-ad sssd-ad-common sssd-common sssd-ipa sssd-krb5 sssd-krb5-common sssd-ldap sssd-proxy systemd-oomd \
+totem totem-common totem-plugins tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu \
+ubuntu-report ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-jammy xcursor-themes xdg-desktop-portal-gnome\
+xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom xwayland yaru-theme-gnome-shell yaru-theme-gtk \
+yaru-theme-icon yaru-theme-sound metacity metacity-common
 
 apt upgrade -y
 
