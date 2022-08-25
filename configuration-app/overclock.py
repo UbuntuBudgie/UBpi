@@ -45,6 +45,8 @@ class Overclock:
     def _setup_overclock(self, builder):
         self.cputemp_label = builder.get_object("cpuTempLabel")
         self.overclockbutton = builder.get_object("OverclockButton")
+        self.model_label = builder.get_object("ModelLabel")
+        self.memory_label = builder.get_object("MemoryLabel")
         self.speedlabel = builder.get_object("SpeedLabel")
         self.speed_radiobuttons = [
                 builder.get_object("Default_Speed_radiobutton"),
@@ -58,6 +60,10 @@ class Overclock:
         if self.pi_model in self.PI_1800_MODELS:
             # if Pi is Model 400, disable 1.5GHz, since its default is 1.8GHz
             self.speed_radiobuttons[0].set_sensitive(False)
+        model = self.get_pimodel_line().split(':')
+        if len(model) > 1:
+            self.model_label.set_text(model[1])
+        self.memory_label.set_text(self.get_model_memory())
 
         app_statuslabel = builder.get_object("AppStatusLabel")
         tab = builder.get_object("OverclockTab")
@@ -84,7 +90,7 @@ class Overclock:
             lines = cpufile.readlines()
             for line in lines:
                 if line.split(':')[0].rstrip(' \t\n') in ["Model", "model name"]:
-                    model_line = line
+                    model_line = line.strip()
                     break
         return model_line
 
