@@ -6,6 +6,7 @@ import dbus
 import subprocess
 import time
 import os
+import sys
 import hint
 import argparse
 from remote import Remote
@@ -40,9 +41,14 @@ def check_args():
                         help="Start up in FindMyPi mode")
     parser.add_argument("--force-arm-mode", action="store_true",
                         help="Start in Config App mode")
-    parser.add_argument("--force-model", choices=['CM4', '4', '400'])
+    parser.add_argument("--get-model-info", action="store_true",
+                        help="Display the model information")
+    parser.add_argument("--force-model", choices=['CM4', '4', '400'],
+                        help="Recognize this machine as the specifed model")
     parser.add_argument("--model", action='append')
-    cpu_arg = parser.add_argument("--cpuinfo", action='append')
+    cpu_arg = parser.add_argument("--cpuinfo", action='append',
+                        help="When --cpuinfo is used with --model, a matching CPU" +
+                             " will be recognized as the specified model")
     args = parser.parse_args()
     model_list = []
     models = args.model if args.model is not None else []
@@ -78,6 +84,13 @@ overclock = Overclock(builder, args.force_model, model_list)
 builder.connect_signals(Handler)
 app_statuslabel = builder.get_object("AppStatusLabel")
 hint.add(startlogincheckbutton, app_statuslabel, hint.AUTOSTART)
+
+if args.get_model_info:
+    pimodel = overclock.get_pimodel_line().split(':')
+    if len(pimodel) > 1:
+        sys.exit(pimodel[1].strip() + " " + overclock.get_model_memory())
+    else:
+        sys.exit("Unable to get Pi model info.  Is this a Raspberry Pi?")
 
 if ((overclock.pi_model is None and not args.force_arm_mode)
         or args.force_findpi_mode):

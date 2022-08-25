@@ -78,7 +78,7 @@ class Overclock:
     def start_tempmonitor(self):
         GLib.timeout_add_seconds(1, self._temp_monitor)
 
-    def get_pimodel(self):
+    def get_pimodel_line(self):
         model_line = ''
         with open('/proc/cpuinfo', 'r') as cpufile:
             lines = cpufile.readlines()
@@ -86,7 +86,10 @@ class Overclock:
                 if line.split(':')[0].rstrip(' \t\n') in ["Model", "model name"]:
                     model_line = line
                     break
-        # Scan through model/cpu arguments
+        return model_line
+
+    def get_pimodel(self):
+        model_line = self.get_pimodel_line()
         for i in range(len(self.model_list)):
             if self.model_list[i][1] in model_line:
                 return self.model_list[i][0]
@@ -100,6 +103,21 @@ class Overclock:
         elif "Raspberry Pi" in model_line:
             return 'Pi'
         return None
+
+    def get_model_memory(self):
+        with open('/proc/meminfo', 'r') as memfile:
+            lines = memfile.readlines()
+            for line in lines:
+                if line.split(':')[0].rstrip(' \t\n') == "MemTotal":
+                    mem_line = line.split()
+                    break
+        if len(mem_line) > 1:
+            try:
+               memory = int(round(float(mem_line[1]) / 976600))
+               return str(memory) + "GB"
+            except:
+               pass
+        return "unknown"
 
     def _set_currentspeed(self):
         if self.currentspeed == 'error' or self.currentspeed == '1500':
