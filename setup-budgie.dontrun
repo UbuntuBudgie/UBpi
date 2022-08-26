@@ -64,11 +64,11 @@ python3-sss remmina remmina-common remmina-plugin-rdp remmina-plugin-secret remm
 rhythmbox-data rhythmbox-plugin-alternative-toolbar rhythmbox-plugins seahorse shotwell shotwell-common sssd \
 sssd-ad sssd-ad-common sssd-common sssd-ipa sssd-krb5 sssd-krb5-common sssd-ldap sssd-proxy systemd-oomd \
 totem totem-common totem-plugins tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu \
-ubuntu-report ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-jammy xcursor-themes xdg-desktop-portal-gnome\
+ubuntu-report ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-jammy xcursor-themes xdg-desktop-portal-gnome \
 xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom xwayland yaru-theme-gnome-shell yaru-theme-gtk \
 yaru-theme-icon yaru-theme-sound metacity metacity-common
 
-apt upgrade -y
+DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt upgrade -y
 
 apt-get -y install --no-install-recommends oem-config-slideshow-ubuntu-budgie
 

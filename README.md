@@ -80,6 +80,7 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 # Known issues
 
 1. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
+2. After the initial setup is complete, if you immediately log in, some of the snaps (Firefox / Budgie Welcome) may not be immediately available. The icons will automatically appear in the menu after the first couple of minutes, however, Firefox will have to be manually added to the Plank dock if desired. You can avoid this by allowing about a minute between the completion of the setup and the first login.
 
 
 Please feedback via our discourse forum https://discourse.ubuntubudgie.org
