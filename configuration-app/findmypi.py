@@ -3,9 +3,8 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib, Gio
 from findmypiclient import FindMyPiTreeView
 import time
-import subprocess
-from threading import Thread
 import hint
+import apthelper
 
 
 class FindMyPi:
@@ -138,24 +137,29 @@ class FindMyPi:
 
     def _install_nmap(self):
 
-        def performinstall():
-            self.change_label("Installing...")
-            args = ['pkexec', '/usr/bin/apt', 'install', '-y', 'nmap']
-            try:
-                subprocess.check_output(args)
-            except subprocess.CalledProcessError as e:
-                print("Error",e.output.decode("utf-8"))
-                self.change_label("")
-                return False
+        def reenable():
+            self.nmap_button.set_sensitive(True)
+            self.change_label("")
 
+        def postinstall():
             if self._has_nmap():  #  just to be 100% sure 
                 self.nmap_button.set_label("Disable nmap")
                 self.findpi_treeview.use_arp = True
                 self.gsettings.set_boolean('nmapscan', True)
                 self.findpi_treeview.refresh_list()
+            reenable()
 
-            self.change_label("")
-            return False
+        def failedinstall():
+            dialog = Gtk.MessageDialog(None, flags=0,
+                                       message_type=Gtk.MessageType.ERROR,
+                                       buttons=Gtk.ButtonsType.CLOSE,
+                                       text="Could not install nmap")
+            dialog.run()
+            dialog.destroy()
+            reenable()
 
-        thread = Thread(target=performinstall)
-        thread.start()
+        self.change_label("Installing...")
+        apt = apthelper.AptHelper()
+        apt.install(['nmap'], success_callback=postinstall,
+                              failed_callback=failedinstall,
+                              cancelled_callback=reenable)
