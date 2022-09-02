@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="ConfigWindow">
@@ -1004,10 +1004,12 @@
             <child>
               <object class="GtkCheckButton" id="StartLoginCheckButton">
                 <property name="label" translatable="yes">Start on login</property>
+                <property name="name">busyspinner</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="halign">start</property>
+                <property name="hexpand">False</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -1024,6 +1026,7 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -1043,16 +1046,19 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">1</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkSpinner" id="StatusSpinner">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
             </child>
             <child>
               <placeholder/>

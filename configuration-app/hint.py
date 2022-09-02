@@ -21,7 +21,8 @@ REFRESH_IP = "Updates the IP if you have changed connection\nmethod, or connecte
 FINDMYPI_SERVER = "Enable FindMyPi UDP server on app startup. This is not needed when using nmap on the client"
 AUTOLOGIN = "Enable automatic login, and disable the lock screen to prevent issues accessing this device through VNC"
 XRDP_BUTTON = "Enable / disable XRDP access.\nThis will install the xrdp package if necessary."
-SSH_BUTTON = "Enable SSH access to this device, using Gnome Remote Desktop settings."
+SSH_BUTTON = "Enable SSH access to this device, using Budgie Remote Desktop settings."
+SSH_NOT_INSTALLED ="SSH access is not currently available. This will install OpenSSH to enable this option in Budgie Desktop Settings."
 VNC_BUTTON = "Enable VNC access to this device, VNC allows screen sharing. Enabling / Disabling VNC may take a minute to complete."
 
 #Display Tab

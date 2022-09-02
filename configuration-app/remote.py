@@ -8,7 +8,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio, Gtk
 import hint
 import vncdialog
-
+import apthelper
 
 class Remote:
 
@@ -20,12 +20,16 @@ class Remote:
     VNC = "/usr/lib/budgie-desktop/arm/budgie-vnc.sh"
 
     def __init__(self, builder, device):
+
+        self.window = builder.get_object("ConfigWindow")
+        self.spinner = builder.get_object("StatusSpinner")
+
         self.iplabel = builder.get_object("IPLabel")
         self.refresh_ip()
         self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
         self.locksetting = Gio.Settings.new('org.gnome.desktop.screensaver')
         self.run_findmypi = self.gsettings.get_boolean('enableserver')
-        app_statuslabel = builder.get_object("AppStatusLabel")
+        self.app_statuslabel = builder.get_object("AppStatusLabel")
 
         self.vncbutton = builder.get_object("VNCButton")
         self.vncbutton.connect('clicked', self.vncbuttonclicked)
@@ -51,13 +55,13 @@ class Remote:
         tab = builder.get_object("RemoteTab")
         refresh_ip_button = builder.get_object("RefreshIPButton")
 
-        hint.add(refresh_ip_button, app_statuslabel, hint.REFRESH_IP)
-        hint.add(self.autologincheck, app_statuslabel, hint.AUTOLOGIN)
-        hint.add(self.findmypibutton, app_statuslabel, hint.FINDMYPI_SERVER)
-        hint.add(self.sshbutton, app_statuslabel, hint.SSH_BUTTON)
-        hint.add(self.xrdpbutton, app_statuslabel, hint.XRDP_BUTTON)
-        hint.add(self.vncbutton, app_statuslabel, hint.VNC_BUTTON)
-        hint.add(tab, app_statuslabel, hint.REMOTE_TAB)
+        hint.add(refresh_ip_button, self.app_statuslabel, hint.REFRESH_IP)
+        hint.add(self.autologincheck, self.app_statuslabel, hint.AUTOLOGIN)
+        hint.add(self.findmypibutton, self.app_statuslabel, hint.FINDMYPI_SERVER)
+        hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_NOT_INSTALLED)
+        hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
+        hint.add(self.vncbutton, self.app_statuslabel, hint.VNC_BUTTON)
+        hint.add(tab, self.app_statuslabel, hint.REMOTE_TAB)
 
         if self.run_findmypi:
             if not self.findmypi_server():
@@ -69,6 +73,10 @@ class Remote:
         self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
         self.run_remote(self.sshstatuslabel, self.SSH, 'status')
         self.run_remote(self.vncstatuslabel, self.VNC, 'status')
+
+        if "is installed" in self.sshstatuslabel.get_text():
+            hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_BUTTON)
+
 
     def run_remote(self, label, connection, param, root=False, alt_param = []):
 
@@ -100,11 +108,26 @@ class Remote:
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'enable')
 
     def sshbuttonclicked(self, *args):
+        def enablegui():
+            self.run_remote(self.sshstatuslabel, self.SSH, 'status')
+            if "is installed" in self.sshstatuslabel.get_text():
+                hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_BUTTON)
+            self.sshbutton.set_sensitive(True)
+            self.spinner.stop()
+
         if 'ssh is installed' in self.sshstatuslabel.get_text():
             self.open_sharing()
             self.run_remote(self.sshstatuslabel, self.SSH, 'status')
+
         else:
-            self.run_remote(self.sshstatuslabel, self.SSH, 'enable')
+            self.spinner.start()
+            self.sshbutton.set_sensitive(False)
+            self.sshstatuslabel.set_text("Installing\nPlease Wait...")
+            # modal should prevent most issues such as closing the app during install
+            apt = apthelper.AptHelper(transient_for=self.window, modal=True)
+            apt.install(packages=['openssh-server'], success_callback=enablegui,
+                                                     failed_callback=enablegui,
+                                                     cancelled_callback=enablegui)
 
     def findmypibuttonclicked(self, *args):
         if self.findmypi_server():
