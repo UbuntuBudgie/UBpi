@@ -32,8 +32,9 @@ function enable_xrdp() {
   fi
 
   echo 'Checking configuration file'
+  echo $FILE
   sed -e '/\/etc\/X11\/Xsession/ s/^#*/#/g' -i $FILE
-  if ! grep -Fxq "budgie-desktop" $FILE; then 
+  if ! grep -Fxq "budgie-desktop" $FILE; then
     echo 'budgie-desktop' >> $FILE
     echo 'Restarting xrdp service'
     systemctl restart xrdp
@@ -69,6 +70,10 @@ FILE='/etc/xrdp/startwm.sh'
 
 systemctl is-active xrdp > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
 systemctl is-enabled xrdp > /dev/null 2>&1 && ENABLED=1 || ENABLED=0
+
+if ! grep -q budgie $FILE; then
+  ENABLED=0
+fi
 
 if [ "$1" = "enable" ]; then
   enable_xrdp $ACTIVE $ENABLED

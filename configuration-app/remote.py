@@ -59,7 +59,7 @@ class Remote:
         hint.add(self.autologincheck, self.app_statuslabel, hint.AUTOLOGIN)
         hint.add(self.findmypibutton, self.app_statuslabel, hint.FINDMYPI_SERVER)
         hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_NOT_INSTALLED)
-        hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
+        hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_NOT_INSTALLED)
         hint.add(self.vncbutton, self.app_statuslabel, hint.VNC_BUTTON)
         hint.add(tab, self.app_statuslabel, hint.REMOTE_TAB)
 
@@ -76,6 +76,9 @@ class Remote:
 
         if "is installed" in self.sshstatuslabel.get_text():
             hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_BUTTON)
+        if "is installed" in self.xrdpstatuslabel.get_text():
+            hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
+
 
 
     def run_remote(self, label, connection, param, root=False, alt_param = []):
@@ -102,8 +105,24 @@ class Remote:
             label.set_text(output[0:50].rstrip('\n'))
 
     def xrdpbuttonclicked(self, *args):
+        def enablegui():
+            self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
+            if "is installed" in self.sshstatuslabel.get_text():
+                hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
+            self.xrdpbutton.set_sensitive(True)
+            self.spinner.stop()
+
         if 'service is ok' in self.xrdpstatuslabel.get_text():
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'disable')
+        elif 'not installed' in self.xrdpstatuslabel.get_text():
+            self.spinner.start()
+            self.xrdpbutton.set_sensitive(False)
+            self.xrdpstatuslabel.set_text("Installing\nPlease wait...")
+             # modal should prevent most issues such as closing the app during install
+            apt = apthelper.AptHelper(transient_for=self.window, modal=True)
+            apt.install(packages=['xrdp'], success_callback=enablegui,
+                                                     failed_callback=enablegui,
+                                                     cancelled_callback=enablegui)
         else:
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'enable')
 
