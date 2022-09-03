@@ -79,8 +79,6 @@ class Remote:
         if "is installed" in self.xrdpstatuslabel.get_text():
             hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
 
-
-
     def run_remote(self, label, connection, param, root=False, alt_param = []):
 
         if root:
@@ -104,14 +102,16 @@ class Remote:
         else:
             label.set_text(output[0:50].rstrip('\n'))
 
-    def xrdpbuttonclicked(self, *args):
-        def enablegui():
-            self.run_remote(self.xrdpstatuslabel, self.XRDP, 'status')
-            if "is installed" in self.sshstatuslabel.get_text():
-                hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
-            self.xrdpbutton.set_sensitive(True)
-            self.spinner.stop()
+    def _post_install(self, service, button, label, new_hint):
+        self.run_remote(label, service, 'status')
+        if "is installed" in label.get_text():
+            hint.add(button, self.app_statuslabel, new_hint)
+        button.set_sensitive(True)
+        self.spinner.stop()
 
+    def xrdpbuttonclicked(self, *args):
+        enablegui = lambda: self._post_install(self.XRDP, self.xrdpbutton,
+                                               self.xrdpstatuslabel, hint.XRDP_BUTTON)
         if 'service is ok' in self.xrdpstatuslabel.get_text():
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'disable')
         elif 'not installed' in self.xrdpstatuslabel.get_text():
@@ -127,17 +127,11 @@ class Remote:
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'enable')
 
     def sshbuttonclicked(self, *args):
-        def enablegui():
-            self.run_remote(self.sshstatuslabel, self.SSH, 'status')
-            if "is installed" in self.sshstatuslabel.get_text():
-                hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_BUTTON)
-            self.sshbutton.set_sensitive(True)
-            self.spinner.stop()
-
+        enablegui = lambda: self._post_install(self.SSH, self.sshbutton,
+                                               self.sshstatuslabel, hint.SSH_BUTTON)
         if 'ssh is installed' in self.sshstatuslabel.get_text():
             self.open_sharing()
             self.run_remote(self.sshstatuslabel, self.SSH, 'status')
-
         else:
             self.spinner.start()
             self.sshbutton.set_sensitive(False)
