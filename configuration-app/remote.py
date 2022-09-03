@@ -167,8 +167,20 @@ class Remote:
         return False
 
     def vncbuttonclicked(self, *args):
+        if not "is installed" in self.vncstatuslabel.get_text():
+            enablegui = lambda: self._post_install(self.VNC, self.vncbutton,
+                                                  self.vncstatuslabel, hint.VNC_BUTTON)
+            self.spinner.start()
+            self.vncbutton.set_sensitive(False)
+            self.vncstatuslabel.set_text("Installing\nPlease Wait...")
+            # modal should prevent most issues such as closing the app during install
+            apt = apthelper.AptHelper(transient_for=self.window, modal=True)
+            apt.install(packages=['x11vnc'], success_callback=enablegui,
+                                             failed_callback=enablegui,
+                                             cancelled_callback=enablegui)
+            return
         stopservice = 'vnc service is active' in self.vncstatuslabel.get_text()
-        self.vncstatuslabel.set_text("Please wait...")
+        self.vncstatuslabel.set_text("Processing request\nPlease wait...")
         if stopservice:
             # Sometimes, x11vnc takes a while to stop, making app seem unresponsive
             # Timeout allows the "please wait" message to appear
