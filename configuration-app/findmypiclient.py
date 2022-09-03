@@ -6,7 +6,6 @@ import threading
 import time
 import queue
 import subprocess
-import re
 
 
 class FindMyPIClient:
@@ -50,8 +49,8 @@ class FindMyPIClient:
         try:
             subprocess.check_output(nmap,
                                     stderr=subprocess.STDOUT).decode("utf-8")
-        except subprocess.CalledProcessError as e:
-            print(e.output.decode("utf-8"))
+        except Exception as e:
+            print(e)
 
     def _run_arp(self):
         # Look at /proc/net/arp for the list of mac addresses for IPs
