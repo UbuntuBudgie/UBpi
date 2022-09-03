@@ -21,6 +21,7 @@ class FindMyPi:
         self.refresh_button = builder.get_object("PiRefreshButton")
         self.copyip_button = builder.get_object("PiCopyIpButton")
         self.nmap_button = builder.get_object("NmapButton")
+        self.spinner = builder.get_object("StatusSpinner")
         self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
 
         if self._has_nmap() and self.gsettings.get_boolean('nmapscan'):
@@ -73,9 +74,14 @@ class FindMyPi:
 
     def on_nmap_button_clicked(self, button):
         if not self._has_nmap():
+            self.spinner.start()
+            button.set_sensitive(False)
             if self._ask_install_nmap():
                 self.change_label("Installing...")
                 self._install_nmap()
+            else:
+                button.set_sensitive(True)
+                self.spinner.stop()
         elif self.findpi_treeview.use_arp:
             button.set_label("Enable nmap")
             self.findpi_treeview.use_arp = False
@@ -140,6 +146,7 @@ class FindMyPi:
         def reenable():
             self.nmap_button.set_sensitive(True)
             self.change_label("")
+            self.spinner.stop()
 
         def postinstall():
             if self._has_nmap():  #  just to be 100% sure 
