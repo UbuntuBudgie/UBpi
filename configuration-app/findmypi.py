@@ -2,6 +2,8 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib, Gio
 from findmypiclient import FindMyPiTreeView
+import getpass
+import re
 import time
 import hint
 import apthelper
@@ -20,7 +22,9 @@ class FindMyPi:
         self.app_statuslabel = builder.get_object("AppStatusLabel")
         self.refresh_button = builder.get_object("PiRefreshButton")
         self.copyip_button = builder.get_object("PiCopyIpButton")
+        self.ssh_button = builder.get_object("PiSSHButton")
         self.nmap_button = builder.get_object("NmapButton")
+        self.sshuser_entry = builder.get_object("SSHUserEntry")
         self.spinner = builder.get_object("StatusSpinner")
         self.gsettings = Gio.Settings.new('org.ubuntubudgie.armconfig')
 
@@ -42,6 +46,11 @@ class FindMyPi:
         hint.add(self.refresh_button, self.app_statuslabel, hint.REFRESH_BUTTON)
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
         hint.add(self.copyip_button, self.app_statuslabel, hint.COPYIP_BUTTON)
+        self.ssh_button.connect("clicked", self.on_ssh_clicked)
+        hint.add(self.ssh_button, self.app_statuslabel, hint.SSH_BUTTON)
+
+        self.sshuser_entry.set_text(getpass.getuser())
+        hint.add(self.sshuser_entry, self.app_statuslabel, hint.SSH_ENTRY)
         self.findpi_treeview.start()
 
     def replace_gui(self, builder):
@@ -93,6 +102,31 @@ class FindMyPi:
             self.findpi_treeview.refresh_list()
             self.gsettings.set_boolean('nmapscan', True)
 
+    def on_ssh_clicked(self, button):
+        ip = self.findpi_treeview.get_value_at_col(0)
+        if ip == "" or ip == "Searching":
+            return
+        command = ip
+        username = self.sshuser_entry.get_text().strip()
+        if username != "":
+            sshuser = re.sub('[^A-Za-z0-9_$-]', '', username)
+            if sshuser != username:
+                # Don't spawn ssh if there are bad characters in username
+                return
+            command = sshuser + "@" + ip
+        preferred_terminal = GLib.find_program_in_path("x-terminal-emulator")
+        try:
+            if preferred_terminal is not None:
+                command_line = " ".join([preferred_terminal,"-e","ssh",command])
+                ssh_app = Gio.AppInfo.create_from_commandline (command_line, preferred_terminal,
+                                                            Gio.AppInfoCreateFlags.NONE)
+            else:
+                ssh_app = Gio.AppInfo.create_from_commandline ("ssh " + command, "ssh",
+                                                            Gio.AppInfoCreateFlags.NEEDS_TERMINAL)
+            ssh_app.launch(None, None)
+        except Exception as e:
+            print(e.message)
+
     def change_label(self, new_text):
         self.findpi_statuslabel.set_text(new_text)
         return False
@@ -132,7 +166,7 @@ class FindMyPi:
         nmap_dialog.format_secondary_text(
               "Nmap not installed.  Before installing nmap, please ensure "
             + "there are no legality issues with installing and using nmap "
-            + "on this network.  If you are unsure, please select NO.\n" 
+            + "on this network.  If you are unsure, please select NO.\n"
             + "Install nmap?")
         response = nmap_dialog.run()
         nmap_dialog.destroy()
@@ -149,7 +183,7 @@ class FindMyPi:
             self.spinner.stop()
 
         def postinstall():
-            if self._has_nmap():  #  just to be 100% sure 
+            if self._has_nmap():  #  just to be 100% sure
                 self.nmap_button.set_label("Disable nmap")
                 self.findpi_treeview.use_arp = True
                 self.gsettings.set_boolean('nmapscan', True)

@@ -1123,7 +1123,12 @@
     <property name="can-focus">False</property>
     <property name="icon-name">view-refresh</property>
   </object>
-  <!-- n-columns=4 n-rows=3 -->
+  <object class="GtkImage" id="SSHImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">go-next</property>
+  </object>
+  <!-- n-columns=6 n-rows=3 -->
   <object class="GtkGrid" id="FindMyPiGrid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -1142,7 +1147,7 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
-        <property name="width">4</property>
+        <property name="width">6</property>
       </packing>
     </child>
     <child>
@@ -1183,15 +1188,41 @@
         <property name="hexpand">True</property>
       </object>
       <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+        <property name="width">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="NmapButton">
+        <property name="width-request">130</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="halign">end</property>
+      </object>
+      <packing>
+        <property name="left-attach">5</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">  SSH user:</property>
+      </object>
+      <packing>
         <property name="left-attach">2</property>
         <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="NmapButton">
+      <object class="GtkEntry" id="SSHUserEntry">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
+        <property name="halign">start</property>
+        <property name="width-chars">11</property>
       </object>
       <packing>
         <property name="left-attach">3</property>
@@ -1199,16 +1230,19 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
+      <object class="GtkButton" id="PiSSHButton">
+        <property name="label" translatable="yes">Run SSH</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="image">SSHImage</property>
+        <property name="image-position">right</property>
+        <property name="always-show-image">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">4</property>
+        <property name="top-attach">1</property>
+      </packing>
     </child>
   </object>
 </interface>
