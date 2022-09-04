@@ -47,7 +47,7 @@ class FindMyPi:
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
         hint.add(self.copyip_button, self.app_statuslabel, hint.COPYIP_BUTTON)
         self.ssh_button.connect("clicked", self.on_ssh_clicked)
-        hint.add(self.ssh_button, self.app_statuslabel, hint.SSH_BUTTON)
+        hint.add(self.ssh_button, self.app_statuslabel, hint.SSH_FINDPI)
 
         self.sshuser_entry.set_text(getpass.getuser())
         hint.add(self.sshuser_entry, self.app_statuslabel, hint.SSH_ENTRY)

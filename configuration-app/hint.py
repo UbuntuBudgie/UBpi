@@ -39,7 +39,7 @@ NO_PIBOOTCTL = "Unable to make changes to the Display options.\nThis is not a Pi
 NMAP_BUTTON = "When enabled, nmap is used to scan the network for Pis.\nIf disabled, it scans for Pis running the FindMyPi server."
 REFRESH_BUTTON = "Rescan the network for Raspberry Pis"
 COPYIP_BUTTON = "Copy the currently selected IP address to the clipboard"
-SSH_BUTTON = "Open a SSH connection to the selected machine"
+SSH_FINDPI = "Open a SSH connection to the selected machine"
 SSH_ENTRY = "Enter the username you wish to use for the SSH session"
 
 def add(widget, label, status):

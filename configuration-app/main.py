@@ -96,7 +96,7 @@ if ((overclock.pi_model is None and not args.force_arm_mode)
         or args.force_findpi_mode):
     findmypi = FindMyPi(builder)
 else:
-    remote = Remote(builder, overclock)
+    remote = Remote(builder)
     display = Display(builder, overclock)
 
 Gtk.main()
