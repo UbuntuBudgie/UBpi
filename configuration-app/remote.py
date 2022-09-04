@@ -60,7 +60,7 @@ class Remote:
         hint.add(self.findmypibutton, self.app_statuslabel, hint.FINDMYPI_SERVER)
         hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_NOT_INSTALLED)
         hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_NOT_INSTALLED)
-        hint.add(self.vncbutton, self.app_statuslabel, hint.VNC_BUTTON)
+        hint.add(self.vncbutton, self.app_statuslabel, hint.VNC_NOT_INSTALLED)
         hint.add(tab, self.app_statuslabel, hint.REMOTE_TAB)
 
         if self.run_findmypi:
@@ -74,10 +74,12 @@ class Remote:
         self.run_remote(self.sshstatuslabel, self.SSH, 'status')
         self.run_remote(self.vncstatuslabel, self.VNC, 'status')
 
-        if "is installed" in self.sshstatuslabel.get_text():
+        if "abled" in self.sshstatuslabel.get_text():
             hint.add(self.sshbutton, self.app_statuslabel, hint.SSH_BUTTON)
-        if "is installed" in self.xrdpstatuslabel.get_text():
+        if "abled" in self.xrdpstatuslabel.get_text():
             hint.add(self.xrdpbutton, self.app_statuslabel, hint.XRDP_BUTTON)
+        if "abled" in self.vncstatuslabel.get_text():
+            hint.add(self.vncbutton, self.app_statuslabel, hint.VNC_BUTTON)
 
     def run_remote(self, label, connection, param, root=False, alt_param = []):
 
@@ -102,6 +104,11 @@ class Remote:
         else:
             label.set_text(output[0:50].rstrip('\n'))
 
+    def _pre_install(self, button, label):
+        button.set_sensitive(False)
+        label.set_text("Installing - Please Wait")
+        self.spinner.start()
+
     def _post_install(self, service, button, label, new_hint):
         self.run_remote(label, service, 'status')
         if "is installed" in label.get_text():
@@ -112,12 +119,10 @@ class Remote:
     def xrdpbuttonclicked(self, *args):
         enablegui = lambda: self._post_install(self.XRDP, self.xrdpbutton,
                                                self.xrdpstatuslabel, hint.XRDP_BUTTON)
-        if 'service is ok' in self.xrdpstatuslabel.get_text():
+        if 'Enabled' in self.xrdpstatuslabel.get_text():
             self.run_remote(self.xrdpstatuslabel, self.XRDP, 'disable')
-        elif 'not installed' in self.xrdpstatuslabel.get_text():
-            self.spinner.start()
-            self.xrdpbutton.set_sensitive(False)
-            self.xrdpstatuslabel.set_text("Installing\nPlease wait...")
+        elif 'Not Installed' in self.xrdpstatuslabel.get_text():
+            self._pre_install(self.xrdpbutton, self.xrdpstatuslabel)
              # modal should prevent most issues such as closing the app during install
             apt = apthelper.AptHelper(transient_for=self.window, modal=True)
             apt.install(packages=['xrdp'], success_callback=enablegui,
@@ -129,13 +134,11 @@ class Remote:
     def sshbuttonclicked(self, *args):
         enablegui = lambda: self._post_install(self.SSH, self.sshbutton,
                                                self.sshstatuslabel, hint.SSH_BUTTON)
-        if 'ssh is installed' in self.sshstatuslabel.get_text():
+        if not 'Not Installed' in self.sshstatuslabel.get_text():
             self.open_sharing()
             self.run_remote(self.sshstatuslabel, self.SSH, 'status')
         else:
-            self.spinner.start()
-            self.sshbutton.set_sensitive(False)
-            self.sshstatuslabel.set_text("Installing\nPlease Wait...")
+            self._pre_install(self.sshbutton, self.sshstatuslabel)
             # modal should prevent most issues such as closing the app during install
             apt = apthelper.AptHelper(transient_for=self.window, modal=True)
             apt.install(packages=['openssh-server'], success_callback=enablegui,
@@ -167,33 +170,36 @@ class Remote:
         return False
 
     def vncbuttonclicked(self, *args):
-        if not "is installed" in self.vncstatuslabel.get_text():
+        if "Not Installed" in self.vncstatuslabel.get_text():
             enablegui = lambda: self._post_install(self.VNC, self.vncbutton,
                                                   self.vncstatuslabel, hint.VNC_BUTTON)
-            self.spinner.start()
-            self.vncbutton.set_sensitive(False)
-            self.vncstatuslabel.set_text("Installing\nPlease Wait...")
+            self._pre_install(self.vncbutton, self.vncstatuslabel)
+
             # modal should prevent most issues such as closing the app during install
             apt = apthelper.AptHelper(transient_for=self.window, modal=True)
             apt.install(packages=['x11vnc'], success_callback=enablegui,
                                              failed_callback=enablegui,
                                              cancelled_callback=enablegui)
             return
-        stopservice = 'vnc service is active' in self.vncstatuslabel.get_text()
-        self.vncstatuslabel.set_text("Processing request\nPlease wait...")
+        stopservice = 'Enabled' in self.vncstatuslabel.get_text()
+        self.vncstatuslabel.set_text("Please wait...")
         if stopservice:
             # Sometimes, x11vnc takes a while to stop, making app seem unresponsive
             # Timeout allows the "please wait" message to appear
             GLib.timeout_add(10,self.activate_vnc, [], True)
         else:
-            # get the ip (needed to restrict VNC to local subnet)
-            subnet =".".join(self.get_ip().split(".", 3)[:-1]) + "."
+            vnc_args = []
             pwdialog = vncdialog.VncDialog()
             response = pwdialog.run()
             if response == Gtk.ResponseType.OK:
                 password = pwdialog.get_result()
+                vnc_args.append(password)
+                if pwdialog.get_restrict():
+                    # get the ip (needed to restrict VNC to local subnet)
+                    subnet =".".join(self.get_ip().split(".", 3)[:-1]) + "."
+                    vnc_args.append(subnet)
                 pwdialog.destroy()
-                GLib.idle_add(self.activate_vnc, [password, subnet], False)
+                GLib.idle_add(self.activate_vnc, vnc_args, False)
             else:
                 self.run_remote(self.vncstatuslabel, self.VNC, 'status')
                 pwdialog.destroy()
@@ -207,10 +213,9 @@ class Remote:
         if self.get_current_autologin() != user:
             args = ['pkexec', self.AUTOLOGIN, user]
             try:
-                output = subprocess.check_output(args,
-                        stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
+                subprocess.check_output(args,stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
             except subprocess.CalledProcessError as e:
-                output = e.output.decode("utf-8")
+                print(e.output.decode("utf-8"))
                 self.autologincheck.handler_block(self.autologin_handler)
                 self.autologincheck.set_active(not should_enable)
                 self.autologincheck.handler_unblock(self.autologin_handler)

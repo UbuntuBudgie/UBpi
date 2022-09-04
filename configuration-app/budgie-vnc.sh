@@ -4,10 +4,10 @@
 #        budgie-vnc.sh <setup> <password> [subnet]
 #
 # setup will install service or change to the provided password
-# password is required with setup parameter 
+# password is required with setup parameter
 #
 # enable / disable require sudo privileges
-# status does NOT require sudo privileges 
+# status does NOT require sudo privileges
 
 function disable_vnc() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
@@ -61,19 +61,16 @@ function setup_vnc() {
 function vnc_status() {
   EXIT=0
   if [[ $1 -eq 1 &&  $2 -eq 1 ]]; then
-    SERVICE="active"
+    SERVICE="Enabled"
   else
-    SERVICE="inactive"
+    SERVICE="Disabled"
     EXIT=1
   fi
   if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    INSTALLED="not installed"
-    EXIT=1
-  else
-    INSTALLED="installed"
+    SERVICE="Not Installed"
+    EXIT=2
   fi
-  echo "vnc is $INSTALLED"
-  echo "vnc service is $SERVICE"
+  echo "VNC service: $SERVICE"
   exit $EXIT
 }
 

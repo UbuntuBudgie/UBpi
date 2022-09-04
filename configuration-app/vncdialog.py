@@ -16,7 +16,7 @@ class VncDialog(Gtk.Dialog):
         grid = Gtk.Grid()
         self.passwds = []
         self.icons = []
-        grid.attach(Gtk.Label(label=""),0,0,3,1)
+        grid.attach(Gtk.Label(label=""),0,1,3,1)
         for i in range(2):
             pw = Gtk.Entry()
             pw.set_visibility(False)
@@ -29,13 +29,16 @@ class VncDialog(Gtk.Dialog):
             grid.attach(pwlabels[i],0,1+i,1,1)
             grid.attach(self.passwds[i],1,1+i,1,1)
             grid.attach(self.icons[i],2,1+i,1,1)
+        self.restrict_checkbutton = Gtk.CheckButton(label="Restrict to local network")
+        self.restrict_checkbutton.set_active(True)
+        grid.attach(self.restrict_checkbutton,1  ,3,3,1)
         box = self.get_content_area()
         warning_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         for x in range(len(warnings)):
             label = Gtk.Label(label=warnings[x])
             label.set_halign(Gtk.Align.START)
             warning_box.pack_start(label, False, False, 0)
-        grid.attach(warning_box, 0, 3, 3, 1)
+        grid.attach(warning_box, 0, 4, 3, 1)
         box.add(grid)
         self.set_response_sensitive(Gtk.ResponseType.OK, False)
         self.connect("response", self.on_response)
@@ -63,6 +66,9 @@ class VncDialog(Gtk.Dialog):
 
     def get_result(self):
         return self.result
+
+    def get_restrict(self):
+        return self.restrict_checkbutton.get_active()
 
     def change_mark(self, icon, status):
         if status:

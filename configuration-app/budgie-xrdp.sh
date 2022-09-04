@@ -45,19 +45,16 @@ function enable_xrdp() {
 function xrdp_status() {
   EXIT=0
   if [[ $1 -eq 1 &&  $2 -eq 1 ]]; then
-    SERVICE="ok"
+    SERVICE="Enabled"
   else
-    SERVICE="stopped"
+    SERVICE="Disabled"
     EXIT=1
   fi
   if [ $(dpkg-query -W -f='${Status}' xrdp 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    INSTALLED="not installed"
-    EXIT=1
-  else
-    INSTALLED="installed"
+    SERVICE="Not Installed"
+    EXIT=2
   fi
-  echo "xrdp is $INSTALLED"
-  echo "xrdp service is $SERVICE"
+  echo "XRDP service: $SERVICE"
   exit $EXIT
 }
 

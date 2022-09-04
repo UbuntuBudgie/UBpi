@@ -562,9 +562,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">center</property>
-                        <property name="margin-right">5</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
+                        <property name="xpad">10</property>
                         <property name="label" translatable="yes">0.0.0.0</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -574,12 +575,13 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="RefreshIPButton">
-                        <property name="label">gtk-refresh</property>
+                        <property name="label" translatable="yes">Refresh</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="halign">start</property>
-                        <property name="use-stock">True</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
                         <property name="image-position">right</property>
                         <property name="always-show-image">True</property>
                         <signal name="clicked" handler="on_RefreshIP_clicked" swapped="no"/>
@@ -601,7 +603,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
-                    <property name="margin-right">5</property>
+                    <property name="margin-top">4</property>
+                    <property name="margin-bottom">3</property>
+                    <property name="xpad">6</property>
                     <property name="label" translatable="yes">IP Address</property>
                   </object>
                   <packing>
@@ -616,8 +620,8 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="valign">center</property>
-                    <property name="margin-top">2</property>
-                    <property name="margin-bottom">2</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
@@ -632,8 +636,8 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="valign">center</property>
-                    <property name="margin-top">2</property>
-                    <property name="margin-bottom">2</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
@@ -645,13 +649,14 @@
                   <object class="GtkLabel" id="XRDPStatusLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="margin-left">5</property>
-                    <property name="wrap">True</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="xpad">5</property>
                     <property name="ellipsize">end</property>
                     <property name="width-chars">25</property>
                     <property name="max-width-chars">25</property>
                     <property name="lines">2</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -665,8 +670,8 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="valign">center</property>
-                    <property name="margin-top">2</property>
-                    <property name="margin-bottom">2</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
@@ -678,8 +683,13 @@
                   <object class="GtkLabel" id="SSHStatusLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="margin-left">5</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="xpad">5</property>
+                    <property name="ellipsize">end</property>
+                    <property name="width-chars">25</property>
+                    <property name="max-width-chars">25</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -693,8 +703,8 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="valign">center</property>
-                    <property name="margin-top">4</property>
-                    <property name="margin-bottom">2</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
@@ -708,8 +718,10 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="margin-left">10</property>
-                    <property name="wrap">True</property>
+                    <property name="xpad">5</property>
+                    <property name="width-chars">25</property>
+                    <property name="max-width-chars">25</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -723,6 +735,7 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="halign">center</property>
+                    <property name="margin-top">4</property>
                     <property name="draw-indicator">True</property>
                   </object>
                   <packing>
@@ -737,11 +750,13 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
+                    <property name="xpad">5</property>
                     <property name="wrap">True</property>
                     <property name="ellipsize">end</property>
                     <property name="width-chars">25</property>
                     <property name="max-width-chars">25</property>
                     <property name="lines">2</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -799,7 +814,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-left">4</property>
                     <property name="label" translatable="yes">Video Mode</property>
                   </object>
                   <packing>
@@ -1102,7 +1116,12 @@
   <object class="GtkImage" id="CopyImage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-copy</property>
+    <property name="icon-name">edit-copy</property>
+  </object>
+  <object class="GtkImage" id="RefreshImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">view-refresh</property>
   </object>
   <!-- n-columns=4 n-rows=3 -->
   <object class="GtkGrid" id="FindMyPiGrid">
@@ -1128,11 +1147,11 @@
     </child>
     <child>
       <object class="GtkButton" id="PiRefreshButton">
-        <property name="label">gtk-refresh</property>
+        <property name="label" translatable="yes">Refresh</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
-        <property name="use-stock">True</property>
+        <property name="image">RefreshImage</property>
         <property name="image-position">right</property>
         <property name="always-show-image">True</property>
       </object>
