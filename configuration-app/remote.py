@@ -122,7 +122,7 @@ class Remote:
         self.service_buttons[service].set_sensitive(True)
         self.spinner.stop()
 
-    def xrdpbuttonclicked(self):
+    def xrdpbuttonclicked(self, button):
         """ Enable / Disable xrdp or install xrdp if needed"""
         enablegui = lambda: self._post_install(XRDP)
         if 'Enabled' in self.service_labels[XRDP].get_text():
@@ -137,7 +137,7 @@ class Remote:
         else:
             self.run_remote(self.service_labels[XRDP], self.SERVICES[XRDP], 'enable')
 
-    def sshbuttonclicked(self):
+    def sshbuttonclicked(self, button):
         """ Toggle the SSH service """
         enablegui = lambda: self._post_install(SSH)
         if not 'Not Installed' in self.service_labels[SSH].get_text():
@@ -151,7 +151,7 @@ class Remote:
                                                      failed_callback=enablegui,
                                                      cancelled_callback=enablegui)
 
-    def findmypibuttonclicked(self):
+    def findmypibuttonclicked(self, button):
         """ Toggle the FindMyPi server """
         if self.findmypi_server():
             self.findmypi_server(kill=True)
@@ -184,7 +184,7 @@ class Remote:
         self.run_remote(self.service_labels[VNC],self.SERVICES[VNC],'status')
         return False
 
-    def vncbuttonclicked(self):
+    def vncbuttonclicked(self, button):
         """ Install VNC if not present, or set up the VNC service if it is """
         if "Not Installed" in self.service_labels[VNC].get_text():
             enablegui = lambda: self._post_install(VNC)
