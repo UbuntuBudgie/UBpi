@@ -197,6 +197,7 @@ class FindMyPiTreeView (Gtk.TreeView):
         self.fields = ['IP Address', 'Host ID', 'Model']
         self.frequency = frequency
         self.started = False
+        self.method_changed = False
 
         for i, field in enumerate(self.fields):
             cell = Gtk.CellRendererText()
@@ -230,6 +231,12 @@ class FindMyPiTreeView (Gtk.TreeView):
 
     def _update_list(self, pi_list):
         to_remove = []
+        # If we switch methods we need to clear the list or else they will
+        # display with the old information from the previous scans
+        if self.method_changed:
+            self.method_changed = False
+            self.pi_liststore.clear()
+
         # Search liststore, generate list of iterations to be removed
         # Also removes existing PIs from the list of PIs to add
         iter_child = self.pi_liststore.get_iter_first()

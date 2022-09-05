@@ -2,6 +2,16 @@
 <!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="CopyImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">edit-copy</property>
+  </object>
+  <object class="GtkImage" id="RefreshIcon">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">view-refresh</property>
+  </object>
   <object class="GtkWindow" id="ConfigWindow">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Budgie ARM TweakTool</property>
@@ -755,6 +765,7 @@
                     <property name="halign">start</property>
                     <property name="margin-top">4</property>
                     <property name="margin-bottom">4</property>
+                    <property name="image">RefreshIcon</property>
                     <property name="image-position">right</property>
                     <property name="always-show-image">True</property>
                     <signal name="clicked" handler="on_RefreshIP_clicked" swapped="no"/>
@@ -1140,11 +1151,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkImage" id="CopyImage">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">edit-copy</property>
-  </object>
   <object class="GtkImage" id="RefreshImage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -1183,6 +1189,8 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
         <property name="image">RefreshImage</property>
         <property name="image-position">right</property>
         <property name="always-show-image">True</property>
@@ -1198,6 +1206,8 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
         <property name="image">CopyImage</property>
         <property name="image-position">right</property>
         <property name="always-show-image">True</property>
@@ -1227,6 +1237,8 @@
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
         <property name="halign">end</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
       </object>
       <packing>
         <property name="left-attach">5</property>
@@ -1250,6 +1262,7 @@
         <property name="can-focus">True</property>
         <property name="halign">start</property>
         <property name="width-chars">11</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left-attach">3</property>
@@ -1262,6 +1275,8 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
         <property name="image">SSHImage</property>
         <property name="image-position">right</property>
         <property name="always-show-image">True</property>

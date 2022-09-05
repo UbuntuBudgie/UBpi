@@ -94,10 +94,12 @@ class FindMyPi:
         elif self.findpi_treeview.use_arp:
             button.set_label("Enable nmap")
             self.findpi_treeview.use_arp = False
+            self.findpi_treeview.method_changed = True
             self.findpi_treeview.refresh_list()
             self.gsettings.set_boolean('nmapscan', False)
         else:
             self.findpi_treeview.use_arp = True
+            self.findpi_treeview.method_changed = True
             button.set_label("Disable nmap")
             self.findpi_treeview.refresh_list()
             self.gsettings.set_boolean('nmapscan', True)
@@ -186,6 +188,7 @@ class FindMyPi:
             if self._has_nmap():  #  just to be 100% sure
                 self.nmap_button.set_label("Disable nmap")
                 self.findpi_treeview.use_arp = True
+                self.findpi_treeview.method_changed = True
                 self.gsettings.set_boolean('nmapscan', True)
                 self.findpi_treeview.refresh_list()
             reenable()
