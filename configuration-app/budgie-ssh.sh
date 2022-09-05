@@ -3,7 +3,7 @@
 # Usage: budgie-ssh.sh [enable|disable|status]
 #
 # enable / disable require sudo privileges
-# status does NOT require sudo privileges 
+# status does NOT require sudo privileges
 
 function disable_ssh() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
@@ -47,7 +47,7 @@ function ssh_status() {
     SERVICE="Not Installed"
     EXIT=2
   fi
-  echo "SSH service: $SERVICE"
+  echo "SSH is $SERVICE"
   exit $EXIT
 }
 

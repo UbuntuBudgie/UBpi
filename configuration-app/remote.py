@@ -40,9 +40,9 @@ class Remote:
         if self.run_findmypi:
             if not self.findmypi_server():
                 self.start_findmypi()
-            self.service_labels[FINDPI].set_text("FindMyPi: Enabled")
+            self.service_labels[FINDPI].set_text("FindMyPi is Enabled")
         else:
-            self.service_labels[FINDPI].set_text("FindMyPi: Disabled")
+            self.service_labels[FINDPI].set_text("FindMyPi is Disabled")
 
         self.remote_hints = [hint.VNC_BUTTON, hint.XRDP_BUTTON, hint.SSH_BUTTON]
         for service in [VNC, XRDP, SSH]:
@@ -156,11 +156,11 @@ class Remote:
         if self.findmypi_server():
             self.findmypi_server(kill=True)
             self.gsettings.set_boolean('enableserver', False)
-            self.service_labels[FINDPI].set_text("FindMyPi: Disabled")
+            self.service_labels[FINDPI].set_text("FindMyPi is Disabled")
         else:
             self.start_findmypi()
             self.gsettings.set_boolean('enableserver', True)
-            self.service_labels[FINDPI].set_text("FindMyPi: Enabled")
+            self.service_labels[FINDPI].set_text("FindMyPi is Enabled")
 
     @staticmethod
     def open_sharing():

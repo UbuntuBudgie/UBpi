@@ -3,7 +3,7 @@
 # Usage: budgie-xrdp.sh [enable|disable|status]
 #
 # enable / disable require sudo priveleges
-# status does NOT require sudo priveleges 
+# status does NOT require sudo priveleges
 
 function disable_xrdp() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
@@ -54,7 +54,7 @@ function xrdp_status() {
     SERVICE="Not Installed"
     EXIT=2
   fi
-  echo "XRDP service: $SERVICE"
+  echo "XRDP is $SERVICE"
   exit $EXIT
 }
 

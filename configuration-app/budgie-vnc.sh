@@ -70,7 +70,7 @@ function vnc_status() {
     SERVICE="Not Installed"
     EXIT=2
   fi
-  echo "VNC service: $SERVICE"
+  echo "VNC is $SERVICE"
   exit $EXIT
 }
 
