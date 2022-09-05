@@ -68,7 +68,9 @@ FILE='/etc/xrdp/startwm.sh'
 systemctl is-active xrdp > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
 systemctl is-enabled xrdp > /dev/null 2>&1 && ENABLED=1 || ENABLED=0
 
-if ! grep -q budgie $FILE; then
+if [ ! -f "$FILE" ]; then
+  ENABLED=0
+elif ! grep -q budgie $FILE; then
   ENABLED=0
 fi
 
