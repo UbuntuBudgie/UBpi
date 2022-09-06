@@ -197,7 +197,6 @@ class FindMyPiTreeView (Gtk.TreeView):
         self.fields = ['IP Address', 'Host ID', 'Model']
         self.frequency = frequency
         self.started = False
-        self.method_changed = False
 
         for i, field in enumerate(self.fields):
             cell = Gtk.CellRendererText()
@@ -214,6 +213,7 @@ class FindMyPiTreeView (Gtk.TreeView):
 
     def set_method(self, method='server'):
         self.use_arp = True if method == 'mac' else False
+        self.method_changed = True
 
     def start(self):
         # Starts the thread that updates the treeview
