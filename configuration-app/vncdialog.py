@@ -31,14 +31,21 @@ class VncDialog(Gtk.Dialog):
             grid.attach(self.icons[i],2,1+i,1,1)
         self.restrict_checkbutton = Gtk.CheckButton(label="Restrict to local network")
         self.restrict_checkbutton.set_active(True)
-        grid.attach(self.restrict_checkbutton,1  ,3,3,1)
+        self.prompt_checkbutton = Gtk.CheckButton(label="Prompt to allow connection")
+        self.prompt_checkbutton.set_active(False)
+        self.prompt_checkbutton.connect("toggled", self.on_prompt_toggled)
+        self.viewonly_checkbutton = Gtk.CheckButton(label="Allow remote to view only")
+        self.viewonly_checkbutton.set_active(False)
+        grid.attach(self.restrict_checkbutton,1,3,3,1)
+        grid.attach(self.prompt_checkbutton,1,4,3,1)
+        grid.attach(self.viewonly_checkbutton,1,5,3,1)
         box = self.get_content_area()
         warning_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         for x in range(len(warnings)):
             label = Gtk.Label(label=warnings[x])
             label.set_halign(Gtk.Align.START)
             warning_box.pack_start(label, False, False, 0)
-        grid.attach(warning_box, 0, 4, 3, 1)
+        grid.attach(warning_box, 0, 6, 3, 1)
         box.add(grid)
         self.set_response_sensitive(Gtk.ResponseType.OK, False)
         self.connect("response", self.on_response)
@@ -65,10 +72,15 @@ class VncDialog(Gtk.Dialog):
         self.result = self.passwds[0].get_text()
 
     def get_result(self):
+        if self.prompt_checkbutton.get_active():
+            return "--accept--"
         return self.result
 
     def get_restrict(self):
         return self.restrict_checkbutton.get_active()
+
+    def get_viewonly(self):
+        return self.viewonly_checkbutton.get_active()
 
     def change_mark(self, icon, status):
         if status:
@@ -116,4 +128,14 @@ class VncDialog(Gtk.Dialog):
             self.button_enabled(True)
         else:
             self.change_mark(self.icons[1], False)
+            self.button_enabled(False)
+
+    def on_prompt_toggled(self, box):
+        self.passwds[0].set_sensitive(not box.get_active())
+        self.passwds[1].set_sensitive(not box.get_active())
+        if box.get_active():
+            self.button_enabled(True)
+        elif self.passwds[0].get_text() != "" and self.passwds[0].get_text() == self.passwds[1].get_text():
+            self.button_enabled(True)
+        else:
             self.button_enabled(False)

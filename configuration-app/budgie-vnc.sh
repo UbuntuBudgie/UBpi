@@ -29,12 +29,20 @@ function enable_vnc() {
 }
 
 function setup_vnc() {
+  PWOPTION="-rfbauth /etc/x11vnc.pwd"
   if [ "$3" = "" ]; then
     echo "no password specified"
     exit 1
   fi
-  if [ "$4" != "" ]; then
-    SUBNET="-allow $4"
+  if [[ "$3" == "--accept--" ]]; then
+    PWOPTION="-accept popupmouse"
+  fi
+  if [[ "$4" == "viewonly" ]]; then
+    VIEWONLY="-viewonly"
+  fi
+  if [[ "$5" != "" ]]; then
+    SUBNET="-allow $5"
+    echo $SUBNET > /home/sam/output
   fi
   echo "Checking for vnc"
   if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
@@ -49,7 +57,7 @@ function setup_vnc() {
     systemctl disable x11vnc --now
   fi
   cp /usr/lib/budgie-desktop/arm/x11vnc.service /etc/systemd/system/
-  sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc -repeat -forever -display :0 $SUBNET -rfbauth /etc/x11vnc.pwd" /etc/systemd/system/x11vnc.service
+  sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc -repeat -forever -display :0 $VIEWONLY $SUBNET $PWOPTION" /etc/systemd/system/x11vnc.service
   x11vnc -storepasswd $3 /etc/x11vnc.pwd
   chmod a+r /etc/x11vnc.pwd
   systemctl daemon-reload
@@ -83,7 +91,7 @@ systemctl is-active x11vnc > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
 systemctl is-enabled x11vnc > /dev/null 2>&1 && ENABLED=1 || ENABLED=0
 
 if [ "$1" = "setup" ]; then
-  setup_vnc $ACTIVE $ENABLED $2 $3
+  setup_vnc $ACTIVE $ENABLED $2 $3 $4
   exit 0
 elif [ "$1" = "enable" ]; then
   enable_vnc $ACTIVE $ENABLED

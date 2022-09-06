@@ -208,12 +208,17 @@ class Remote:
             if response == Gtk.ResponseType.OK:
                 password = pwdialog.get_result()
                 vnc_args.append(password)
+                if pwdialog.get_viewonly():
+                    vnc_args.append("viewonly")
+                else:
+                    vnc_args.append("control")
                 if pwdialog.get_restrict():
                     # get the ip (needed to restrict VNC to local subnet)
                     subnet =".".join(self.get_ip().split(".", 3)[:-1]) + "."
                     vnc_args.append(subnet)
                 pwdialog.destroy()
                 GLib.idle_add(self.activate_vnc, vnc_args, False)
+                print(vnc_args)
             else:
                 self.run_remote(self.service_labels[VNC], self.SERVICES[VNC], 'status')
                 pwdialog.destroy()
