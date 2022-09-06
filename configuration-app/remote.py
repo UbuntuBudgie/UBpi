@@ -218,7 +218,6 @@ class Remote:
                     vnc_args.append(subnet)
                 pwdialog.destroy()
                 GLib.idle_add(self.activate_vnc, vnc_args, False)
-                print(vnc_args)
             else:
                 self.run_remote(self.service_labels[VNC], self.SERVICES[VNC], 'status')
                 pwdialog.destroy()
