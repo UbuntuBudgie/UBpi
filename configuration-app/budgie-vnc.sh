@@ -36,7 +36,7 @@ function setup_vnc() {
     exit 1
   fi
   if [[ "$3" == "--accept--" ]]; then
-    PWOPTION="-accept popupmouse"
+   PWOPTION="--accept 'zenity --question --text=\"Incoming VNC connection request. Accept?\" --title=\"VNC Connection\"'"
   fi
   if [[ "$4" == "viewonly" ]]; then
     VIEWONLY="-viewonly"
