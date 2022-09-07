@@ -4,7 +4,7 @@ from gi.repository import GLib, Gtk
 
 class VncDialog(Gtk.Dialog):
     def __init__(self):
-        super().__init__(title="Configure VNC Password", flags=0)
+        super().__init__(title="Configure VNC Server", flags=0)
         self.add_buttons(
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
         )

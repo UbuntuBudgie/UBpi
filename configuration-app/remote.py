@@ -177,10 +177,10 @@ class Remote:
         """ Toggle the VNC service """
         if disable:
             self.run_remote(self.service_labels[VNC], self.SERVICES[VNC],
-                            'disable', root=True)
+                            'disable')
         else:
             self.run_remote(self.service_labels[VNC], self.SERVICES[VNC],
-                            'setup', root=True, alt_param=extra_args)
+                            'setup', alt_param=extra_args)
         self.run_remote(self.service_labels[VNC],self.SERVICES[VNC],'status')
         return False
 
