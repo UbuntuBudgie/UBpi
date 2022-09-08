@@ -7,28 +7,29 @@
 import getpass
 import socket
 import subprocess
-import gi
-gi.require_version("Gtk", "3.0")
-from gi.repository import GLib, Gio, Gtk
 import psutil
 import hint
 import vncdialog
 import apthelper
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import GLib, Gio, Gtk
 
 VNC = 0
 XRDP = 1
 SSH = 2
 FINDPI = 3
 
+
 class Remote:
     """ Handle the installation, enabling and disabling of the various remote
         services: vnc, xrdp, ssh, and FindMyPi server. Remote options will be
         handled through Budgie Control Center when possible
     """
-    SERVICES = [ "/usr/lib/budgie-desktop/arm/budgie-vnc.sh",
-                 "/usr/lib/budgie-desktop/arm/budgie-xrdp.sh",
-                 "/usr/lib/budgie-desktop/arm/budgie-ssh.sh",
-                 "/usr/lib/budgie-desktop/arm/findmypiserver.py" ]
+    SERVICES = ["/usr/lib/budgie-desktop/arm/budgie-vnc.sh",
+                "/usr/lib/budgie-desktop/arm/budgie-xrdp.sh",
+                "/usr/lib/budgie-desktop/arm/budgie-ssh.sh",
+                "/usr/lib/budgie-desktop/arm/findmypiserver.py"]
     AUTOLOGIN = "/usr/lib/budgie-desktop/arm/budgie-autologin.sh"
     LIGHTDMCONF = "/etc/lightdm/lightdm.conf"
 
@@ -61,18 +62,18 @@ class Remote:
         self.run_findmypi = self.gsettings.get_boolean('enableserver')
         self.app_statuslabel = builder.get_object("AppStatusLabel")
 
-        self.service_buttons = [ builder.get_object("VNCButton"),
-                                 builder.get_object("XRDPButton"),
-                                 builder.get_object("SSHButton"),
-                                builder.get_object("FindMyPiButton") ]
-        self.service_labels = [ builder.get_object("VNCStatusLabel"),
-                                builder.get_object("XRDPStatusLabel"),
-                                builder.get_object("SSHStatusLabel"),
-                                builder.get_object("FindMyPiStatusLabel") ]
-        connect = [ self.vncbuttonclicked, self.xrdpbuttonclicked,
-                    self.sshbuttonclicked, self.findmypibuttonclicked ]
+        self.service_buttons = [builder.get_object("VNCButton"),
+                                builder.get_object("XRDPButton"),
+                                builder.get_object("SSHButton"),
+                                builder.get_object("FindMyPiButton")]
+        self.service_labels = [builder.get_object("VNCStatusLabel"),
+                               builder.get_object("XRDPStatusLabel"),
+                               builder.get_object("SSHStatusLabel"),
+                               builder.get_object("FindMyPiStatusLabel")]
+        connect = [self.vncbuttonclicked, self.xrdpbuttonclicked,
+                   self.sshbuttonclicked, self.findmypibuttonclicked]
         initial_hints = [hint.VNC_NOT_INSTALLED, hint.XRDP_NOT_INSTALLED,
-                         hint.SSH_NOT_INSTALLED, hint.FINDMYPI_SERVER ]
+                         hint.SSH_NOT_INSTALLED, hint.FINDMYPI_SERVER]
 
         for index, button in enumerate(self.service_buttons):
             button.connect("clicked", connect[index])
@@ -87,7 +88,7 @@ class Remote:
         hint.add(self.autologincheck, self.app_statuslabel, hint.AUTOLOGIN)
         hint.add(tab, self.app_statuslabel, hint.REMOTE_TAB)
 
-    def run_remote(self, label, connection, param, root=False, alt_param = []):
+    def run_remote(self, label, connection, param, root=False, alt_param=[]):
         """ run the remote service scripts to enable / disable / check status """
         if root:
             args = ['pkexec', connection, param]
@@ -98,7 +99,7 @@ class Remote:
             args += (alt_param)
         try:
             output = subprocess.check_output(args,
-                stderr=subprocess.STDOUT).decode("utf-8")
+                                             stderr=subprocess.STDOUT).decode("utf-8")
         except subprocess.CalledProcessError as e:
             output = e.output.decode("utf-8")
         if 'root' in output:
@@ -124,23 +125,22 @@ class Remote:
 
     def xrdpbuttonclicked(self, button):
         """ Enable / Disable xrdp or install xrdp if needed"""
-        enablegui = lambda: self._post_install(XRDP)
+        def enablegui(): return self._post_install(XRDP)
         if 'Enabled' in self.service_labels[XRDP].get_text():
             self.run_remote(self.service_labels[XRDP], self.SERVICES[XRDP], 'disable')
         elif 'Not Installed' in self.service_labels[XRDP].get_text():
             self._pre_install(XRDP)
-             # modal should prevent most issues such as closing the app during install
+            # modal should prevent most issues such as closing the app during install
             apt = apthelper.AptHelper(transient_for=self.window, modal=True)
             apt.install(packages=['xrdp'], success_callback=enablegui,
-                                                     failed_callback=enablegui,
-                                                     cancelled_callback=enablegui)
+                        failed_callback=enablegui, cancelled_callback=enablegui)
         else:
             self.run_remote(self.service_labels[XRDP], self.SERVICES[XRDP], 'enable')
 
     def sshbuttonclicked(self, button):
         """ Toggle the SSH service """
-        enablegui = lambda: self._post_install(SSH)
-        if not 'Not Installed' in self.service_labels[SSH].get_text():
+        def enablegui(): return self._post_install(SSH)
+        if 'Not Installed' not in self.service_labels[SSH].get_text():
             self.open_sharing()
             self.run_remote(self.service_labels[SSH], self.SERVICES[SSH], 'status')
         else:
@@ -148,8 +148,7 @@ class Remote:
             # modal should prevent most issues such as closing the app during install
             apt = apthelper.AptHelper(transient_for=self.window, modal=True)
             apt.install(packages=['openssh-server'], success_callback=enablegui,
-                                                     failed_callback=enablegui,
-                                                     cancelled_callback=enablegui)
+                        failed_callback=enablegui, cancelled_callback=enablegui)
 
     def findmypibuttonclicked(self, button):
         """ Toggle the FindMyPi server """
@@ -181,26 +180,25 @@ class Remote:
         else:
             self.run_remote(self.service_labels[VNC], self.SERVICES[VNC],
                             'setup', alt_param=extra_args)
-        self.run_remote(self.service_labels[VNC],self.SERVICES[VNC],'status')
+        self.run_remote(self.service_labels[VNC], self.SERVICES[VNC], 'status')
         return False
 
     def vncbuttonclicked(self, button):
         """ Install VNC if not present, or set up the VNC service if it is """
         if "Not Installed" in self.service_labels[VNC].get_text():
-            enablegui = lambda: self._post_install(VNC)
+            def enablegui(): return self._post_install(VNC)
             self._pre_install(VNC)
             # modal should prevent most issues such as closing the app during install
             apt = apthelper.AptHelper(transient_for=self.window, modal=True)
             apt.install(packages=['x11vnc'], success_callback=enablegui,
-                                             failed_callback=enablegui,
-                                             cancelled_callback=enablegui)
+                        failed_callback=enablegui, cancelled_callback=enablegui)
             return
         stopservice = 'Enabled' in self.service_labels[VNC].get_text()
         self.service_labels[VNC].set_text("Please wait...")
         if stopservice:
             # Sometimes, x11vnc takes a while to stop, making app seem unresponsive
             # Timeout allows the "please wait" message to appear
-            GLib.timeout_add(10,self.activate_vnc, [], True)
+            GLib.timeout_add(10, self.activate_vnc, [], True)
         else:
             vnc_args = []
             pwdialog = vncdialog.VncDialog()
@@ -214,7 +212,7 @@ class Remote:
                     vnc_args.append("control")
                 if pwdialog.get_restrict():
                     # get the ip (needed to restrict VNC to local subnet)
-                    subnet =".".join(self.get_ip().split(".", 3)[:-1]) + "."
+                    subnet = ".".join(self.get_ip().split(".", 3)[:-1]) + "."
                     vnc_args.append(subnet)
                 pwdialog.destroy()
                 GLib.idle_add(self.activate_vnc, vnc_args, False)
@@ -232,13 +230,14 @@ class Remote:
         if self.get_current_autologin() != user:
             args = ['pkexec', self.AUTOLOGIN, user]
             try:
-                subprocess.check_output(args,stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
+                subprocess.check_output(args,
+                                        stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
             except subprocess.CalledProcessError as e:
                 print(e.output.decode("utf-8"))
                 self.autologincheck.handler_block(self.autologin_handler)
                 self.autologincheck.set_active(not should_enable)
                 self.autologincheck.handler_unblock(self.autologin_handler)
-                #pkexec wasn't successful - return without changing screen lock
+                # pkexec wasn't successful - return without changing screen lock
                 return
         self.locksetting.set_boolean('lock-enabled', not should_enable)
 
@@ -292,7 +291,7 @@ class Remote:
         """ Return True if server is running, also will kill server if kill=True """
         for proc in psutil.process_iter():
             if (len(proc.cmdline()) > 1 and "python" in proc.cmdline()[0]
-                                   and "findmypiserver" in proc.cmdline()[1]):
+                    and "findmypiserver" in proc.cmdline()[1]):
                 if kill:
                     proc.terminate()
                     return False

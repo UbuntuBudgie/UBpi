@@ -74,7 +74,8 @@ class Overclock:
             hint.add(button, app_statuslabel, hint.CPU_SPEEDS)
         if os.path.exists('/boot/firmware/config.txt'):
             hint.add(self.overclockbutton, app_statuslabel, hint.SPEED_BUTTON)
-            self.overclockbutton.connect("clicked", self.on_overclockbutton_clicked)
+            self.overclockbutton.connect("clicked",
+                                         self.on_overclockbutton_clicked)
         else:
             for button in self.speed_radiobuttons:
                 button.set_sensitive(False)
@@ -89,7 +90,8 @@ class Overclock:
         with open('/proc/cpuinfo', 'r') as cpufile:
             lines = cpufile.readlines()
             for line in lines:
-                if line.split(':')[0].rstrip(' \t\n') in ["Model", "model name"]:
+                if (line.split(':')[0].rstrip(' \t\n') in
+                        ["Model", "model name"]):
                     model_line = line.strip()
                     break
         return model_line
@@ -119,10 +121,10 @@ class Overclock:
                     break
         if len(mem_line) > 1:
             try:
-               memory = int(round(float(mem_line[1]) / 976600))
-               return str(memory) + "GB"
-            except:
-               pass
+                memory = int(round(float(mem_line[1]) / 976600))
+                return str(memory) + "GB"
+            except Exception as e:
+                pass
         return "unknown"
 
     def _set_currentspeed(self):
@@ -152,8 +154,8 @@ class Overclock:
         for item in params:
             args.append(item)
         try:
-            output = subprocess.check_output(args,
-                stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
+            output = subprocess.check_output(args, stderr=subprocess.STDOUT)
+            output = output.decode("utf-8").strip('\'\n')
         except subprocess.CalledProcessError as e:
             output = e.output.decode("utf-8")
             return 'error'
