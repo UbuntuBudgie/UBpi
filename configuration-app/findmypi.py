@@ -1,12 +1,12 @@
-import gi
-gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, GLib, Gio
-from findmypiclient import FindMyPiTreeView
 import getpass
 import re
 import time
 import hint
 import apthelper
+from findmypiclient import FindMyPiTreeView
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, Gdk, GLib, Gio
 
 
 class FindMyPi:
@@ -58,7 +58,7 @@ class FindMyPi:
         findpi_grid = builder.get_object("FindMyPiGrid")
         notebook = builder.get_object("ConfigNotebook")
         findpi_scrolledwindow = builder.get_object("FindMyPiWindow")
-        findpi_scrolledwindow.set_size_request(480,-1)
+        findpi_scrolledwindow.set_size_request(480, -1)
         main_grid.remove(notebook)
         findpi_scrolledwindow.add(self.findpi_treeview)
         main_grid.attach(findpi_grid, 0, 0, 2, 1)
@@ -117,12 +117,15 @@ class FindMyPi:
         preferred_terminal = GLib.find_program_in_path("x-terminal-emulator")
         try:
             if preferred_terminal is not None:
-                command_line = " ".join([preferred_terminal,"-e","ssh",command])
-                ssh_app = Gio.AppInfo.create_from_commandline (command_line, preferred_terminal,
-                                                            Gio.AppInfoCreateFlags.NONE)
+                command_line = " ".join([preferred_terminal, "-e",
+                                         "ssh", command])
+                ssh_app = Gio.AppInfo.create_from_commandline(
+                          command_line, preferred_terminal,
+                          Gio.AppInfoCreateFlags.NONE)
             else:
-                ssh_app = Gio.AppInfo.create_from_commandline ("ssh " + command, "ssh",
-                                                            Gio.AppInfoCreateFlags.NEEDS_TERMINAL)
+                ssh_app = Gio.AppInfo.create_from_commandline(
+                          "ssh " + command, "ssh",
+                          Gio.AppInfoCreateFlags.NEEDS_TERMINAL)
             ssh_app.launch(None, None)
         except Exception as e:
             print(e.message)
@@ -142,9 +145,9 @@ class FindMyPi:
                                         buttons=Gtk.ButtonsType.OK_CANCEL,
                                         text="Warning - nmap mode!")
         nmap_dialog.format_secondary_text(
-              "FindMyPi will use nmap to search for PIs. Please check that "
+            "FindMyPi will use nmap to search for PIs. Please check that "
             + "there are no legality issues with scanning this network. If "
-            + "you are unsure, please select Cancel to scan by UDP server." )
+            + "you are unsure, please select Cancel to scan by UDP server.")
         warn_checkbutton = Gtk.CheckButton(" Don't show this again")
         warn_checkbutton.show()
         nmap_dialog.action_area.pack_end(warn_checkbutton, True, True, 25)
@@ -152,7 +155,7 @@ class FindMyPi:
         response = nmap_dialog.run()
         nmap_dialog.destroy()
         self.gsettings.set_boolean('disablewarning',
-                                    warn_checkbutton.get_active())
+                                   warn_checkbutton.get_active())
         if response == Gtk.ResponseType.OK:
             return True
         else:
@@ -164,7 +167,7 @@ class FindMyPi:
                                         buttons=Gtk.ButtonsType.YES_NO,
                                         text="Install Nmap?")
         nmap_dialog.format_secondary_text(
-              "Nmap not installed.  Before installing nmap, please ensure "
+            "Nmap not installed.  Before installing nmap, please ensure "
             + "there are no legality issues with installing and using nmap "
             + "on this network.  If you are unsure, please select NO.\n"
             + "Install nmap?")
@@ -183,7 +186,7 @@ class FindMyPi:
             self.spinner.stop()
 
         def postinstall():
-            if self._has_nmap():  #  just to be 100% sure
+            if self._has_nmap():  # just to be 100% sure
                 self.nmap_button.set_label("Disable nmap")
                 self.findpi_treeview.set_method('mac')
                 self.gsettings.set_boolean('nmapscan', True)
@@ -202,5 +205,5 @@ class FindMyPi:
         self.change_label("Installing...")
         apt = apthelper.AptHelper()
         apt.install(['nmap'], success_callback=postinstall,
-                              failed_callback=failedinstall,
-                              cancelled_callback=reenable)
+                    failed_callback=failedinstall,
+                    cancelled_callback=reenable)

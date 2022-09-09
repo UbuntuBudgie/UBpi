@@ -4,17 +4,17 @@ import subprocess
 import time
 import socket
 import hint
-
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
 
+
 class Layout:
-    _fontname="Sawasdee "
+    _fontname = "Sawasdee "
 
     # types of layouts that can be applied
-    MINI=1
-    COMPACT=2
-    STANDARD=3
+    MINI = 1
+    COMPACT = 2
+    STANDARD = 3
 
     def __init__(self, builder):
         self.logoutloginlabel = builder.get_object("LogoutLoginLabel")
@@ -66,7 +66,6 @@ class Layout:
         hint.add(self.compactradiobutton, app_statuslabel, hint.COMPACT_RES)
         hint.add(self.miniradiobutton, app_statuslabel, hint.MINI_RES)
         hint.add(applybutton, app_statuslabel, hint.APPLY_LAYOUT)
-
 
     def apply(self, layouttype):
 
@@ -197,7 +196,7 @@ class Layout:
         settings = Gio.Settings.new("org.gnome.desktop.interface")
         settings.set_string("monospace-font-name", "Ubuntu Mono "+mono_size)
         settings.set_string("font-name", "Noto Sans "+font_size)
-        settings.set_string("document-font-name" , "Noto Sans "+font_size)
+        settings.set_string("document-font-name", "Noto Sans "+font_size)
 
         settings = Gio.Settings.new("org.nemo.desktop")
         settings.set_string("font", "Noto Sans "+font_size)
@@ -229,12 +228,12 @@ class Layout:
         settings.reset("datefont")
         settings.reset("linespacing")
 
-    #def _reset_theme(self):
-    #    settings = Gio.Settings.new("org.gnome.desktop.interface")
-    #    settings.reset("gtk-theme")
+    # def _reset_theme(self):
+    #     settings = Gio.Settings.new("org.gnome.desktop.interface")
+    #     settings.reset("gtk-theme")
 
-    #    settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
-    #    settings.reset("theme")
+    #     settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+    #     settings.reset("theme")
 
     def _set_animation(self):
         # we turn off animations for budgie for improved responsiveness

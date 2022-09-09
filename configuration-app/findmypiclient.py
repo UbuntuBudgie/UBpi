@@ -1,11 +1,11 @@
-import gi
-gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, GLib, Pango
 import socket
 import threading
 import time
 import queue
 import subprocess
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, Gdk, GLib, Pango
 
 
 class FindMyPIClient:
@@ -45,7 +45,8 @@ class FindMyPIClient:
 
     def _run_nmap(self):
         # Run nmap to try to expose all mac addresses on network
-        nmap = [GLib.find_program_in_path('nmap'), '-sn', self.ip_prefix+"0/24"]
+        nmap = [GLib.find_program_in_path('nmap'), '-sn',
+                self.ip_prefix+"0/24"]
         try:
             subprocess.check_output(nmap,
                                     stderr=subprocess.STDOUT).decode("utf-8")

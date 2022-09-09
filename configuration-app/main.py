@@ -1,7 +1,3 @@
-import gi
-gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gio
-
 import dbus
 import subprocess
 import time
@@ -14,11 +10,15 @@ from overclock import Overclock
 from layout import Layout
 from display import Display
 from findmypi import FindMyPi
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, Gio
+
 
 class Handler:
     def on_ConfigWindow_destroy(self, *args):
         gsettings.set_boolean('runarmconfig',
-            startlogincheckbutton.get_active())
+                              startlogincheckbutton.get_active())
         Gtk.main_quit()
 
     def on_ApplyButton_clicked(self):
@@ -35,6 +35,7 @@ class Handler:
     def on_RefreshIP_clicked(self):
         remote.refresh_ip()
 
+
 def check_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--force-findpi-mode", action="store_true",
@@ -46,9 +47,9 @@ def check_args():
     parser.add_argument("--force-model", choices=['CM4', '4', '400'],
                         help="Recognize this machine as the specifed model")
     parser.add_argument("--model", action='append')
-    cpu_arg = parser.add_argument("--cpuinfo", action='append',
+    parser.add_argument("--cpuinfo", action='append',
                         help="When --cpuinfo is used with --model, a matching CPU" +
-                             " will be recognized as the specified model")
+                        " will be recognized as the specified model")
     args = parser.parse_args()
     model_list = []
     models = args.model if args.model is not None else []
@@ -59,6 +60,7 @@ def check_args():
         for i in range(len(models)):
             model_list.append([models[i], cpu_infos[i]])
     return args, model_list
+
 
 args, model_list = check_args()
 path = os.path.dirname(os.path.abspath(__file__))
