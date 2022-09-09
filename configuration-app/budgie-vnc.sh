@@ -29,7 +29,8 @@ function enable_vnc() {
 }
 
 function setup_vnc() {
-  WARNING="--afteraccept '/usr/bin/notify-send \"Incoming VNC Connection\" \"VNC Connection Made\" -i dialog-warning'"
+  WARNING="--afteraccept '/usr/bin/notify-send \"VNC Connection\" \"Remote VNC Client connected\" -i application-x-vnc'"
+  GONE="--gone '/usr/bin/notify-send \"VNC Connection\" \"Remote VNC Client diconnected\" -i application-x-vnc'"
   PWOPTION="-rfbauth $HOME/.config/x11vnc.pwd"
   if [ "$3" = "" ]; then
     echo "no password specified"
@@ -68,7 +69,7 @@ function setup_vnc() {
     mkdir -p $HOME/.config/systemd/user
   fi
   cp /usr/lib/budgie-desktop/arm/x11vnc.service $HOME/.config/systemd/user/
-  sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc $WARNING -repeat -forever -display :0 $VIEWONLY $SUBNET $PWOPTION" $HOME/.config/systemd/user/x11vnc.service
+  sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc $WARNING $GONE -repeat -forever -display :0 $VIEWONLY $SUBNET $PWOPTION" $HOME/.config/systemd/user/x11vnc.service
   x11vnc -storepasswd $3 $HOME/.config/x11vnc.pwd
   systemctl --user daemon-reload
   systemctl --user enable x11vnc
