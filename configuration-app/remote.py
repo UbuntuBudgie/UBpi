@@ -4,6 +4,7 @@
     enabling and disabling of vnc, xrdp, ssh, and FindMyPi services.
 """
 
+from ctypes.wintypes import PDWORD
 import getpass
 import socket
 import subprocess
@@ -210,7 +211,10 @@ class Remote:
                     vnc_args.append("viewonly")
                 else:
                     vnc_args.append("control")
-                if pwdialog.get_restrict():
+                if pwdialog.get_localhost():
+                    subnet = "127.0.0.1"
+                    vnc_args.append(subnet)
+                elif pwdialog.get_restrict():
                     # get the ip (needed to restrict VNC to local subnet)
                     subnet = ".".join(self.get_ip().split(".", 3)[:-1]) + "."
                     vnc_args.append(subnet)

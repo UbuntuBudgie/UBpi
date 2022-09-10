@@ -2,21 +2,22 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gtk
 
+
 class VncDialog(Gtk.Dialog):
     def __init__(self):
         super().__init__(title="Configure VNC Server", flags=0)
         self.add_buttons(
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
         )
-        warnings = ['','- Do not use root / login password for VNC',
+        warnings = ['', '- Do not use root / login password for VNC',
                     '- VNC is restricted to local subnet by default',
-                    '- VNC should only be enabled on trusted networks','']
+                    '- VNC should only be enabled on trusted networks', '']
         self.set_default_size(170, 100)
         pwlabels = [Gtk.Label(label=" Enter a Password:"), Gtk.Label(label="Confirm Password:")]
         grid = Gtk.Grid()
         self.passwds = []
         self.icons = []
-        grid.attach(Gtk.Label(label=""),0,1,3,1)
+        grid.attach(Gtk.Label(label=""), 0, 1, 3, 1)
         for i in range(2):
             pw = Gtk.Entry()
             pw.set_visibility(False)
@@ -26,9 +27,9 @@ class VncDialog(Gtk.Dialog):
             icon = Gtk.Image.new_from_icon_name("button_cancel", Gtk.IconSize.LARGE_TOOLBAR)
             self.passwds.append(pw)
             self.icons.append(icon)
-            grid.attach(pwlabels[i],0,1+i,1,1)
-            grid.attach(self.passwds[i],1,1+i,1,1)
-            grid.attach(self.icons[i],2,1+i,1,1)
+            grid.attach(pwlabels[i], 0, 1+i, 1, 1)
+            grid.attach(self.passwds[i], 1, 1+i, 1, 1)
+            grid.attach(self.icons[i], 2, 1+i, 1, 1)
         self.restrict_checkbutton = Gtk.CheckButton(label="Restrict to local network")
         self.restrict_checkbutton.set_active(True)
         self.prompt_checkbutton = Gtk.CheckButton(label="Prompt to allow connection")
@@ -36,16 +37,20 @@ class VncDialog(Gtk.Dialog):
         self.prompt_checkbutton.connect("toggled", self.on_prompt_toggled)
         self.viewonly_checkbutton = Gtk.CheckButton(label="Allow remote to view only")
         self.viewonly_checkbutton.set_active(False)
-        grid.attach(self.restrict_checkbutton,1,3,3,1)
-        grid.attach(self.prompt_checkbutton,1,4,3,1)
-        grid.attach(self.viewonly_checkbutton,1,5,3,1)
+        self.localonly_checkbutton = Gtk.CheckButton(label="Allow localhost only (for SSH)")
+        self.localonly_checkbutton.set_active(False)
+        self.localonly_checkbutton.connect("toggled", self.on_localonly_toggled)
+        grid.attach(self.restrict_checkbutton, 1, 3, 3, 1)
+        grid.attach(self.prompt_checkbutton, 1, 4, 3, 1)
+        grid.attach(self.viewonly_checkbutton, 1, 5, 3, 1)
+        grid.attach(self.localonly_checkbutton, 1, 6, 3, 1)
         box = self.get_content_area()
         warning_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         for x in range(len(warnings)):
             label = Gtk.Label(label=warnings[x])
             label.set_halign(Gtk.Align.START)
             warning_box.pack_start(label, False, False, 0)
-        grid.attach(warning_box, 0, 6, 3, 1)
+        grid.attach(warning_box, 0, 7, 3, 1)
         box.add(grid)
         self.set_response_sensitive(Gtk.ResponseType.OK, False)
         self.connect("response", self.on_response)
@@ -82,6 +87,9 @@ class VncDialog(Gtk.Dialog):
     def get_viewonly(self):
         return self.viewonly_checkbutton.get_active()
 
+    def get_localhost(self):
+        return self.localonly_checkbutton.get_active()
+
     def change_mark(self, icon, status):
         if status:
             icon.set_from_icon_name("emblem-checked", Gtk.IconSize.LARGE_TOOLBAR)
@@ -91,7 +99,7 @@ class VncDialog(Gtk.Dialog):
     def button_enabled(self, mode):
         self.set_response_sensitive(Gtk.ResponseType.OK, mode)
 
-    def on_entry (self, entry, pw):
+    def on_entry(self, entry, pw):
         if self.passwds[0].get_text() == "":
             self.change_mark(self.icons[0], False)
         if pw == 0 and self.is_pw_valid(self.passwds[0].get_text()):
@@ -101,7 +109,7 @@ class VncDialog(Gtk.Dialog):
             self.change_mark(self.icons[1], False)
         if pw == 1:
             if (self.passwds[1].get_text() == self.passwds[0].get_text()
-                         and self.is_pw_valid(self.passwds[0].get_text())):
+                    and self.is_pw_valid(self.passwds[0].get_text())):
                 self.change_mark(self.icons[1], True)
                 self.button_enabled(True)
             else:
@@ -116,14 +124,14 @@ class VncDialog(Gtk.Dialog):
             self.change_mark(self.icons[1], False)
             self.button_enabled(False)
 
-    def on_field_change (self, entry, data, pw):
+    def on_field_change(self, entry, data, pw):
         if self.passwds[0].get_text() == "":
             self.change_mark(self.icons[0], False)
             self.button_enabled(False)
         if self.passwds[0].get_text() != "" and self.is_pw_valid(self.passwds[0].get_text()):
             self.change_mark(self.icons[0], True)
         if (self.passwds[0].get_text() == self .passwds[1].get_text()
-                     and self.is_pw_valid(self.passwds[0].get_text())):
+                and self.is_pw_valid(self.passwds[0].get_text())):
             self.change_mark(self.icons[1], True)
             self.button_enabled(True)
         else:
@@ -139,3 +147,6 @@ class VncDialog(Gtk.Dialog):
             self.button_enabled(True)
         else:
             self.button_enabled(False)
+
+    def on_localonly_toggled(self, toggle):
+        self.restrict_checkbutton.set_sensitive(not toggle.get_active())
