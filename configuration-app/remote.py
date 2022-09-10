@@ -212,7 +212,7 @@ class Remote:
                 else:
                     vnc_args.append("control")
                 if pwdialog.get_localhost():
-                    subnet = "127.0.0.1"
+                    subnet = "localhost"
                     vnc_args.append(subnet)
                 elif pwdialog.get_restrict():
                     # get the ip (needed to restrict VNC to local subnet)

@@ -42,9 +42,10 @@ function setup_vnc() {
   if [[ "$4" == "viewonly" ]]; then
     VIEWONLY="-viewonly"
   fi
-  if [[ "$5" != "" ]]; then
+  if [[ "$5" == "localhost" ]]; then
+    SUBNET="-localhost"
+  elif [[ "$5" != "" ]]; then
     SUBNET="-allow $5"
-    echo $SUBNET > /home/sam/output
   fi
   echo "Checking for vnc"
   if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
