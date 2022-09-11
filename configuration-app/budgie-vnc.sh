@@ -29,8 +29,8 @@ function enable_vnc() {
 }
 
 function setup_vnc() {
-  WARNING="--afteraccept '/usr/bin/notify-send \"VNC Connection\" \"Remote VNC Client connected\" -i application-x-vnc'"
-  GONE="--gone '/usr/bin/notify-send \"VNC Connection\" \"Remote VNC Client diconnected\" -i application-x-vnc'"
+  WARNING="--afteraccept '/usr/bin/notify-send --app-name=\"VNC Server\" \"VNC Connection\" \"Remote VNC Client connected\" -i application-x-vnc'"
+  GONE="--gone '/usr/bin/notify-send --app-name=\"VNC Server\" \"VNC Connection\" \"Remote VNC Client disconnected\" -i application-x-vnc'"
   PWOPTION="-rfbauth $HOME/.config/x11vnc.pwd"
   if [ "$3" = "" ]; then
     echo "no password specified"
