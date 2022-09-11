@@ -43,5 +43,6 @@ glib-compile-resources org.ubuntubudgie.armconfig.gresource.xml
 cp *.gresource ${PREFIX_DIR}/usr/lib/budgie-desktop/arm
 cp org.ubuntubudgie.armconfig.gschema.xml ${PREFIX_DIR}/usr/share/glib-2.0/schemas/
 glib-compile-schemas ${PREFIX_DIR}/usr/share/glib-2.0/schemas/
+rm ${PREFIX_DIR}/usr/share/glib-2.0/schemas/gschemas.compiled
 cp budgie-armconfig-autostart.desktop ${PREFIX_DIR}/etc/xdg/autostart
 cp budgie-armconfig.desktop ${PREFIX_DIR}/usr/share/applications
