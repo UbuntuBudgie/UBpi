@@ -1,5 +1,4 @@
 from gi.repository import GLib
-from overclock import Overclock
 import subprocess
 import hint
 
@@ -47,7 +46,8 @@ class Display:
         if device.pi_model is not None:
             if self.load_initial():
                 self.modebutton.connect("clicked", self.on_modebutton_clicked)
-                self.memsignal = self.membutton.connect("clicked", self.on_membutton_clicked)
+                self.memsignal = self.membutton.connect(
+                    "clicked", self.on_membutton_clicked)
             if not self.safe_to_change_mode():
                 self.disable_mode_selection()
         else:
@@ -58,14 +58,17 @@ class Display:
         for i in range(len(self.moderadiobuttons)):
             if (self.moderadiobuttons[i].get_active()
                     and self.MODE[i] != self.current_mode):
-                if self.run_pibootctl('set', self.MODE_ARG+'='+self.MODE[i]) != 'error':
+                if (self.run_pibootctl('set', self.MODE_ARG+'='+self.MODE[i])
+                        != 'error'):
                     self.current_mode = self.MODE[i]
                     self.rebootlabel.set_visible(True)
 
     def on_membutton_clicked(self, *args):
         for i in range(len(self.memradiobuttons)):
-            if self.memradiobuttons[i].get_active() and self.MEM[i] != self.current_mem:
-                if self.run_pibootctl('set', self.MEM_ARG+'='+self.MEM[i]) != 'error':
+            if (self.memradiobuttons[i].get_active()
+                    and self.MEM[i] != self.current_mem):
+                if (self.run_pibootctl('set', self.MEM_ARG+'='+self.MEM[i])
+                        != 'error'):
                     self.current_mem = self.MEM[i]
                     self.rebootlabel.set_visible(True)
 

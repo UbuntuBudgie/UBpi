@@ -6,8 +6,6 @@
 # setup will install service or change to the provided password
 # password is required with setup parameter
 #
-# enable / disable require sudo privileges
-# status does NOT require sudo privileges
 
 function disable_vnc() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
@@ -25,6 +23,18 @@ function enable_vnc() {
   else
     echo 'Enabling vnc'
     systemctl --user enable x11vnc --now
+  fi
+}
+
+function check_vnc () {
+  echo "Checking for vnc"
+  if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+    echo 'vnc not found. Installing...'
+    sudo apt update && sudo apt install -y x11vnc
+    if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+      echo "x11vnc was not installed"
+      exit 1
+    fi
   fi
 }
 
@@ -47,12 +57,9 @@ function setup_vnc() {
   elif [[ "$5" != "" ]]; then
     SUBNET="-allow $5"
   fi
-  echo "Checking for vnc"
-  if [ $(dpkg-query -W -f='${Status}' x11vnc 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    echo 'vnc not found. Installing...'
-    apt update
-    apt install -y x11vnc
-  fi
+
+  check_vnc
+
   SOURCEFILE=/usr/share/applications/x11vnc.desktop
   DESTFILE=$HOME/.local/share/applications/x11vnc.desktop
   if [[ ! -f "$DESTFILE" ]]; then
@@ -60,12 +67,12 @@ function setup_vnc() {
       cp $SOURCEFILE $DESTFILE
     fi
   fi
-  echo hi
   if ! grep -Fxq "hidden=true" $DESTFILE; then
       echo "Hidden=true" >> $DESTFILE
-  else
-    systemctl --user disable x11vnc --now
   fi
+
+  systemctl --user disable --now x11vnc
+
   if [[ ! -e $HOME/.config/systemd/user ]]; then
     mkdir -p $HOME/.config/systemd/user
   fi
@@ -99,11 +106,17 @@ function vnc_status() {
 #  exit 2
 #fi
 
+DIRNAME=$(dirname $(realpath -s $0))
+
 systemctl --user is-active x11vnc > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
 systemctl --user is-enabled x11vnc > /dev/null 2>&1 && ENABLED=1 || ENABLED=0
 
 if [ "$1" = "setup" ]; then
   setup_vnc $ACTIVE $ENABLED $2 $3 $4
+  exit 0
+elif [ "$1" = "setupgui" ]; then
+  check_vnc
+  python3 $DIRNAME/vncwindow.py
   exit 0
 elif [ "$1" = "enable" ]; then
   enable_vnc $ACTIVE $ENABLED

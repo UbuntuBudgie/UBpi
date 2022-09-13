@@ -2,7 +2,6 @@ import gi
 import dbus
 import subprocess
 import time
-import socket
 import hint
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
@@ -41,7 +40,8 @@ class Layout:
         resolution = builder.get_object("ResolutionLabel")
         resolution.set_text(str(width) + " x " + str(height))
 
-        standard_recommendation = builder.get_object("StandardRecommendedLabel")
+        standard_recommendation = builder.get_object(
+                                  "StandardRecommendedLabel")
         compact_recommendation = builder.get_object("CompactRecommendedLabel")
         mini_recommendation = builder.get_object("MiniRecommendedLabel")
 
@@ -85,7 +85,9 @@ class Layout:
             self._set_theme()
             self._apply_layout("ubuntubudgie")
         else:
-            self._set_showtime(self._fontname+showtime[0], self._fontname+showtime[1], showtime[2])
+            self._set_showtime(self._fontname+showtime[0],
+                               self._fontname+showtime[1],
+                               showtime[2])
             self._set_desktopfonts(layouttype)
             self._set_theme()
             self._apply_layout("ubuntubudgiecompact")
@@ -122,8 +124,9 @@ class Layout:
         panels = gsettings.get_strv('panels')
 
         for panel in panels:
-            gsettings = Gio.Settings.new_with_path('com.solus-project.budgie-panel.panel',
-                                                   '/com/solus-project/budgie-panel/panels/{' + panel + '}/')
+            gsettings = Gio.Settings.new_with_path(
+                'com.solus-project.budgie-panel.panel',
+                '/com/solus-project/budgie-panel/panels/{' + panel + '}/')
             if type(value) == bool:
                 gsettings.set_boolean(key, value)
             elif type(value) == int:

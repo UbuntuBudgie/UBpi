@@ -34,10 +34,10 @@ CONFIG_FILE = '/boot/firmware/config.txt'
     - If keys are not present in the config.txt, the clock speed is
       reported as the default (1500 for pi4 and cm4, or 1800 for pi 400)
 """
-RPI4   = 'pi4'    # Affects all Raspberry Pi 4s (includes CM4 and pi400)
+RPI4 = 'pi4'      # Affects all Raspberry Pi 4s (includes CM4 and pi400)
 RPI400 = 'pi400'  # Affects Raspberry Pi 400 only
-CM4    = 'cm4'    # Affects Compute Module 4 only
-ALL    = 'all'    # Affects all Raspberry Pis regardless of model
+CM4 = 'cm4'       # Affects Compute Module 4 only
+ALL = 'all'       # Affects all Raspberry Pis regardless of model
 
 
 class ConfigSection(list):

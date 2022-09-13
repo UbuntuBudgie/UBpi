@@ -43,7 +43,8 @@ class FindMyPi:
         self.nmap_button.connect("clicked", self.on_nmap_button_clicked)
         hint.add(self.nmap_button, self.app_statuslabel, hint.NMAP_BUTTON)
         self.refresh_button.connect("clicked",  self.on_refresh_clicked)
-        hint.add(self.refresh_button, self.app_statuslabel, hint.REFRESH_BUTTON)
+        hint.add(self.refresh_button, self.app_statuslabel,
+                 hint.REFRESH_BUTTON)
         self.copyip_button.connect("clicked", self.on_copyip_clicked)
         hint.add(self.copyip_button, self.app_statuslabel, hint.COPYIP_BUTTON)
         self.ssh_button.connect("clicked", self.on_ssh_clicked)

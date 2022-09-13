@@ -1,6 +1,3 @@
-import dbus
-import subprocess
-import time
 import os
 import sys
 import hint
@@ -48,25 +45,26 @@ def check_args():
                         help="Recognize this machine as the specifed model")
     parser.add_argument("--model", action='append')
     parser.add_argument("--cpuinfo", action='append',
-                        help="When --cpuinfo is used with --model, a matching CPU" +
-                        " will be recognized as the specified model")
-    args = parser.parse_args()
-    model_list = []
-    models = args.model if args.model is not None else []
-    cpu_infos = args.cpuinfo if args.cpuinfo is not None else []
+                        help="When --cpuinfo is used with --model, a matching"
+                        + " CPU will be recognized as the specified model")
+    parsed_args = parser.parse_args()
+    pi_model_list = []
+    models = parsed_args.model if parsed_args.model is not None else []
+    cpu_infos = parsed_args.cpuinfo if parsed_args.cpuinfo is not None else []
     if len(cpu_infos) != len(models):
         parser.error("number of --cpuinfo and --model arguments must match")
     else:
-        for i in range(len(models)):
-            model_list.append([models[i], cpu_infos[i]])
-    return args, model_list
+        for index, model in enumerate(models):
+            pi_model_list.append([model, cpu_infos[index]])
+    return parsed_args, pi_model_list
 
 
 args, model_list = check_args()
 path = os.path.dirname(os.path.abspath(__file__))
 resource = Gio.Resource.load(path + '/org.ubuntubudgie.armconfig.gresource')
 Gio.resources_register(resource)
-builder = Gtk.Builder.new_from_resource('/org/ubuntubudgie/armconfig/config.ui')
+builder = Gtk.Builder.new_from_resource(
+    '/org/ubuntubudgie/armconfig/config.ui')
 window = builder.get_object("ConfigWindow")
 window.show_all()
 
