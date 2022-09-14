@@ -5,7 +5,7 @@
     sudo apt install libglib2.0-dev-bin
     git clone https://github.com/UbuntuBudgie/UBpi
     cd UBpi/configuration-app
-    mkdir build
+    mkdir build && cd build
     meson --prefix=/usr --libdir=/usr/lib
     sudo ninja install
 
