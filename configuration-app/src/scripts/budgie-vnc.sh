@@ -76,7 +76,7 @@ function setup_vnc() {
   if [[ ! -e $HOME/.config/systemd/user ]]; then
     mkdir -p $HOME/.config/systemd/user
   fi
-  cp /usr/lib/budgie-desktop/arm/x11vnc.service $HOME/.config/systemd/user/
+  cp /usr/lib/budgie-desktop/arm/scripts/x11vnc.service $HOME/.config/systemd/user/
   sed -i "/ExecStart/c\ExecStart=/usr/bin/x11vnc $WARNING $GONE -repeat -forever -display :0 $VIEWONLY $SUBNET $PWOPTION" $HOME/.config/systemd/user/x11vnc.service
   x11vnc -storepasswd $3 $HOME/.config/x11vnc.pwd
   systemctl --user daemon-reload
@@ -116,7 +116,7 @@ if [ "$1" = "setup" ]; then
   exit 0
 elif [ "$1" = "setupgui" ]; then
   check_vnc
-  python3 $DIRNAME/vncwindow.py
+  python3 $DIRNAME/../vncwindow.py
   exit 0
 elif [ "$1" = "enable" ]; then
   enable_vnc $ACTIVE $ENABLED

@@ -90,7 +90,7 @@ if args.get_model_info:
     if len(pimodel) > 1:
         sys.exit(pimodel[1].strip() + " " + overclock.get_model_memory())
     else:
-        sys.exit("Unable to get Pi model info.  Is this a Raspberry Pi?")
+        sys.exit("Unable to get Pi model info. Is this a Raspberry Pi?")
 
 if ((overclock.pi_model is None and not args.force_arm_mode)
         or args.force_findpi_mode):

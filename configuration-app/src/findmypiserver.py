@@ -2,7 +2,6 @@
 
 import socket
 from select import select
-import time
 
 
 class FindMyPIServer:

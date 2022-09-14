@@ -12,6 +12,7 @@ import psutil
 import hint
 import vncwindow
 import apthelper
+import os
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio, Gtk
@@ -27,11 +28,13 @@ class Remote:
         services: vnc, xrdp, ssh, and FindMyPi server. Remote options will be
         handled through Budgie Control Center when possible
     """
-    SERVICES = ["/usr/lib/budgie-desktop/arm/budgie-vnc.sh",
-                "/usr/lib/budgie-desktop/arm/budgie-xrdp.sh",
-                "/usr/lib/budgie-desktop/arm/budgie-ssh.sh",
-                "/usr/lib/budgie-desktop/arm/findmypiserver.py"]
-    AUTOLOGIN = "/usr/lib/budgie-desktop/arm/budgie-autologin.sh"
+    WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    SERVICES = [os.path.join(WORKING_DIR, "scripts", "budgie-vnc.sh"),
+                os.path.join(WORKING_DIR, "scripts", "budgie-xrdp.sh"),
+                os.path.join(WORKING_DIR, "scripts", "budgie-ssh.sh"),
+                os.path.join(WORKING_DIR, "findmypiserver.py")]
+    AUTOLOGIN = os.path.join(WORKING_DIR, "scripts", "budgie-autologin.sh")
     LIGHTDMCONF = "/etc/lightdm/lightdm.conf"
 
     def __init__(self, builder):

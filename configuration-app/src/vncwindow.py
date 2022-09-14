@@ -1,5 +1,6 @@
 import socket
 import subprocess
+import os
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
@@ -7,7 +8,8 @@ from gi.repository import Gtk, Gdk
 
 class VncWindow(Gtk.Window):
 
-    SETUPSCRIPT = '/usr/lib/budgie-desktop/arm/budgie-vnc.sh'
+    WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
+    SETUPSCRIPT = os.path.join(WORKING_DIR, 'scripts', 'budgie-vnc.sh')
 
     def __init__(self, modal=True, transient_for=None):
 
