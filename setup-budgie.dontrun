@@ -66,7 +66,7 @@ sssd-ad sssd-ad-common sssd-common sssd-ipa sssd-krb5 sssd-krb5-common sssd-ldap
 totem totem-common totem-plugins tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu \
 ubuntu-report ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-jammy xcursor-themes xdg-desktop-portal-gnome \
 xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom xwayland yaru-theme-gnome-shell yaru-theme-gtk \
-yaru-theme-icon yaru-theme-sound metacity metacity-common
+yaru-theme-icon yaru-theme-sound
 
 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt upgrade -y
 
