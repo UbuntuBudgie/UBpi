@@ -9,10 +9,6 @@
     meson --prefix=/usr --libdir=/usr/lib
     sudo ninja install
 
-If installing, it may be necessary aftaer install to run:
-
-    sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
-
 ## To Do:
 
 - [X] Hide ssh/vnc  checkboxes until implementation

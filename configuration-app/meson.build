@@ -20,4 +20,4 @@ install_data(
     install_dir: '/usr/share/glib-2.0/schemas',
 )
 
-meson.add_install_script('meson_post_install')
+meson.add_install_script('meson_post_install.py')
