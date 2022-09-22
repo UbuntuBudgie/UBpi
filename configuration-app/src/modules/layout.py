@@ -2,7 +2,7 @@ import gi
 import dbus
 import subprocess
 import time
-import hint
+from lib import hint
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
 

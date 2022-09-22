@@ -2,13 +2,14 @@ from gi.repository import GLib
 import subprocess
 import os
 import sys
-import hint
+from lib import hint
 
 
 class Overclock:
 
     WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
-    PI_CLOCKSPEED = os.path.join(WORKING_DIR, 'scripts', 'pi-clockspeed.py')
+    PI_CLOCKSPEED = os.path.join(WORKING_DIR, '..', 'scripts',
+                                 'pi-clockspeed.py')
     PI_SPEEDS = ['1500', '1800', '2000']
     PI_1800_MODELS = ['400']  # models which run at 1800 by default
 

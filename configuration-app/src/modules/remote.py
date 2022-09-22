@@ -9,9 +9,7 @@ import getpass
 import socket
 import subprocess
 import psutil
-import hint
-import vncwindow
-import apthelper
+from lib import hint, vncwindow, apthelper
 import os
 import gi
 gi.require_version("Gtk", "3.0")
@@ -30,11 +28,13 @@ class Remote:
     """
     WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    SERVICES = [os.path.join(WORKING_DIR, "scripts", "budgie-vnc.sh"),
-                os.path.join(WORKING_DIR, "scripts", "budgie-xrdp.sh"),
-                os.path.join(WORKING_DIR, "scripts", "budgie-ssh.sh"),
-                os.path.join(WORKING_DIR, "findmypiserver.py")]
-    AUTOLOGIN = os.path.join(WORKING_DIR, "scripts", "budgie-autologin.sh")
+    SERVICES = [os.path.join(WORKING_DIR, "..", "scripts", "budgie-vnc.sh"),
+                os.path.join(WORKING_DIR, "..", "scripts", "budgie-xrdp.sh"),
+                os.path.join(WORKING_DIR, "..", "scripts", "budgie-ssh.sh"),
+                os.path.join(WORKING_DIR, "..", "findmypi",
+                             "findmypiserver.py")]
+    AUTOLOGIN = os.path.join(WORKING_DIR, "..", "scripts",
+                             "budgie-autologin.sh")
     LIGHTDMCONF = "/etc/lightdm/lightdm.conf"
 
     def __init__(self, builder):

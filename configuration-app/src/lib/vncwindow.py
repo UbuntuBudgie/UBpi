@@ -9,7 +9,7 @@ from gi.repository import Gtk, Gdk
 class VncWindow(Gtk.Window):
 
     WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
-    SETUPSCRIPT = os.path.join(WORKING_DIR, 'scripts', 'budgie-vnc.sh')
+    SETUPSCRIPT = os.path.join(WORKING_DIR, '..', 'scripts', 'budgie-vnc.sh')
 
     def __init__(self, modal=True, transient_for=None):
 
@@ -21,7 +21,6 @@ class VncWindow(Gtk.Window):
         self.set_title("VNC Configuration")
 
         warnings = ['', '- Do not use root / login password for VNC',
-                    '- VNC is restricted to local subnet by default',
                     '- VNC should only be enabled on trusted networks', '']
         self.set_default_size(170, 100)
         pwlabels = [Gtk.Label(label=" Enter a Password:"),
@@ -45,7 +44,7 @@ class VncWindow(Gtk.Window):
             grid.attach(self.icons[i], 2, 1+i, 1, 1)
         self.restrict_checkbutton = Gtk.CheckButton(
                                     label="Restrict to local network")
-        self.restrict_checkbutton.set_active(True)
+        self.restrict_checkbutton.set_active(False)
         self.prompt_checkbutton = Gtk.CheckButton(
                                   label="Prompt to allow connection")
         self.prompt_checkbutton.set_active(False)

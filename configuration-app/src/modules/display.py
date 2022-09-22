@@ -2,7 +2,7 @@ from gi.repository import GLib
 import subprocess
 import os
 import sys
-import hint
+from lib import hint
 
 
 class Display:
@@ -11,7 +11,7 @@ class Display:
     MODE_ARG = 'video.firmware.mode'
     MEM_ARG = 'gpu.mem'
     CONFIG = '/boot/firmware/config.txt'
-    PI_KMSMODE = os.path.join(WORKING_DIR, 'scripts', 'pi-kmsmode.sh')
+    PI_KMSMODE = os.path.join(WORKING_DIR, '..', 'scripts', 'pi-kmsmode.sh')
 
     MODE = ['fkms', 'kms', 'legacy']
     MEM = ['128', '256', '512']

@@ -1,9 +1,8 @@
 import getpass
 import re
 import time
-import hint
-import apthelper
-from findmypiclient import FindMyPiTreeView
+from lib import hint, apthelper
+from findmypi.findmypiclient import FindMyPiTreeView
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib, Gio

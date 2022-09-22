@@ -1,12 +1,12 @@
 import os
 import sys
-import hint
+from lib import hint
 import argparse
-from remote import Remote
-from overclock import Overclock
-from layout import Layout
-from display import Display
-from findmypi import FindMyPi
+from modules.remote import Remote
+from modules.overclock import Overclock
+from modules.layout import Layout
+from modules.display import Display
+from findmypi.findmypi import FindMyPi
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
