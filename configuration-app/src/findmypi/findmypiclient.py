@@ -13,6 +13,12 @@ class FindMyPIClient:
     # checking mac addresses, or having a UDP server running on the PI.
     # Used by the FindMyPiTreeView, but designed to be used independently
 
+    PI_MACS = [
+        ["4B or newer", ['dc:a6:32:']],
+        ["3B+ or earlier", ['b8:27:eb:']],
+        ["", ['28:cd:c1', 'e4:5f:01:']]
+    ]
+
     def __init__(self, port=32323):
         self.ip_prefix = self._get_ip_prefix()
         self.max_threads = 255  # max number of threads to scan network
@@ -36,12 +42,10 @@ class FindMyPIClient:
 
     def _get_model_by_mac(self, mac_addr):
         # Returns Pi model, based on mac address
-        if 'dc:a6:32:' in mac_addr.lower():
-            return 'Raspberry PI 4B or newer'
-        elif 'b8:27:eb:' in mac_addr.lower():
-            return 'Raspberry PI 3B+ or earlier'
-        else:
-            return ''
+        for model in self.PI_MACS:
+            if any(mac.lower() in mac_addr.lower() for mac in model[1]):
+                return " ".join(["Raspberry PI", model[0]])
+        return ''
 
     def _run_nmap(self):
         # Run nmap to try to expose all mac addresses on network
