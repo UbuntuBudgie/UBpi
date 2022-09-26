@@ -5,7 +5,7 @@ Date 1st August 2022
 Hi folks,
 
 
-This is our raspberry pi build based upon 22.10 - it is of alpha quality to be used for feedback and testing
+This is our beta raspberry pi build based upon 22.10 - it is of beta quality to be used for feedback and testing
 
 https://discourse.ubuntubudgie.org/t/testing-22-10-are-you-brave-enough/5975
 
@@ -90,6 +90,8 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
     sudo apt install seahorse
 
 and change the change the password to a blank password. This will store ALL passwords unencrypted, and will work around this issue. However, if you have any sensitive passwords stored, or the device is shared by multiple users, its a convenience vs. security tradeoff.
+
+5. After the initial setup, the Sharing panel of Budgie Control Center may freeze on first use. Rebooting after the initial setup avoids this issue.
 
 
 
