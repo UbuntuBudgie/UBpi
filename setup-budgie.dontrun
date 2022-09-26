@@ -53,20 +53,24 @@ apt remove -y gdm3 gnome-shell
 
 apt install -y ubuntu-budgie-desktop-raspi
 
-apt remove -y apt-config-icons-hidpi branding-ubuntu cheese eog evince evince-common evolution-data-server \
-evolution-data-server-common fprintd gamemode gamemode-daemon gnome-calculator gnome-calendar \
-gnome-font-viewer gnome-initial-setup gnome-session-canberra gnome-shell-common gnome-system-monitor \
-gnome-terminal gnome-terminal-data gnome-text-editor gnome-video-effects grilo-plugins-0.3-base \
-gsettings-ubuntu-schemas gstreamer1.0-plugins-base-apps gstreamer1.0-tools ibus-table ldap-utils \
-media-player-info nautilus nautilus-data nautilus-extension-gnome-terminal nautilus-sendto \
-network-manager-config-connectivity-ubuntu plymouth-theme-spinner python3-mako python3-markupsafe \
-python3-sss remmina remmina-common remmina-plugin-rdp remmina-plugin-secret remmina-plugin-vnc rhythmbox \
-rhythmbox-data rhythmbox-plugin-alternative-toolbar rhythmbox-plugins seahorse shotwell shotwell-common sssd \
-sssd-ad sssd-ad-common sssd-common sssd-ipa sssd-krb5 sssd-krb5-common sssd-ldap sssd-proxy systemd-oomd \
-totem totem-common totem-plugins tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu \
-ubuntu-report ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-jammy xcursor-themes xdg-desktop-portal-gnome \
-xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom xwayland yaru-theme-gnome-shell yaru-theme-gtk \
-yaru-theme-icon yaru-theme-sound
+apt remove -y gnome-bluetooth-sendto ibus ibus-gtk ibus-gtk3 ibus-table \
+gnome-initial-setup ubuntu-report systemd-oomd eog gnome-control-center system-config-printer gnome-terminal \
+gnome-text-editor gnome-font-viewer nautilus xdg-desktop-portal-gnome evince gnome-system-monitor gnome-calculator \
+apt-config-icons-hidpi gamemode seahorse yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-icon yaru-theme-sound \
+ubuntu-wallpapers gnome-session-canberra plymouth-theme-spinner ubuntu-settings gsettings-ubuntu-schemas \
+gstreamer1.0-plugins-base-apps xcursor-themes libpam-fprintd libpam-sss rhythmbox cheese totem remmina shotwell \
+gnome-calendar branding-ubuntu libreoffice-style-breeze evince-common fprintd gamemode-daemon gir1.2-rb-3.0 gir1.2-totem-1.0 \
+gnome-bluetooth-3-common gnome-control-center-data gnome-terminal-data gnome-video-effects grilo-plugins-0.3-base \
+gstreamer1.0-tools ldap-utils libavahi-ui-gtk3-0 libbasicobjects0 libc-ares2 libcollection4 libcolord-gtk4-1 libcue2 \
+libdhash1 libdmapsharing-3.0-2 libedataserverui4-1.0-0 libevdocument3-4 libevview3-3 libfprint-2-2 libfreerdp-client2-2 \
+libgamemode0 libgamemodeauto0 libgdm1 libgexiv2-2 libgif7 libgnome-autoar-0-0 libgnome-bg-4-2 libgnome-bluetooth-3.0-13 \
+libgnome-bluetooth-ui-3.0-13 libgnome-rr-4-2 libgom-1.0-0 libgrilo-0.3-0 libgtksourceview-5-0 libgtksourceview-5-common \
+libini-config5 libipa-hbac0 libjavascriptcoregtk-5.0-0 liblirc-client0 libnfsidmap1 libnss-sss libpam-pwquality libpath-utils1 \
+libportal-gtk3-1 libportal-gtk4-1 libportal1 libref-array1 librhythmbox-core10 libsasl2-modules-gssapi-mit libsss-certmap0 \
+libsss-idmap0 libsss-nss-idmap0 libsysmetrics1 libtotem0 libtracker-sparql-3.0-0 libvncclient1 libwebkit2gtk-5.0-0 libxcb-icccm4 \
+libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xv0 media-player-info python3-mako python3-markupsafe python3-sss \
+remmina-common rhythmbox-data shotwell-common totem-common tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu \
+ubuntu-wallpapers-jammy ubuntu-wallpapers xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom
 
 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt upgrade -y
 
