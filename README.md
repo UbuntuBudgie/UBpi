@@ -1,15 +1,11 @@
 # Ubuntu Budgie Pi4 22.10
 
-Date 26th September 2022
+Date 20th October 2022
 
 Hi folks,
 
 
-This is beta raspberry pi build based upon 22.10 to be used for feedback and testing
-
-https://discourse.ubuntubudgie.org/t/testing-22-10-are-you-brave-enough/5975
-
-
+This is stable release raspberry pi build based upon 22.10.
 
 **This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
@@ -80,18 +76,17 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 # Known issues
 
 1. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
-2. After the initial setup is complete, if you immediately log in, some of the snaps (Firefox / Budgie Welcome) may not be immediately available. The icons will automatically appear in the menu after the first couple of minutes, however, Firefox will have to be manually added to the Plank dock if desired. You can avoid this by allowing about a minute between the completion of the setup and the first login.
-3. Various kernel modules have been moved from the linux-modules-raspi package in order to reduce the initramfs size. This results in several applications (i.e. Docker, zram) failing due to missing kernel modules. To work around this:
+2. Various kernel modules have been moved from the linux-modules-raspi package in order to reduce the initramfs size. This results in several applications (i.e. Docker, zram) failing due to missing kernel modules. To work around this:
 
     sudo apt install linux-modules-extra-raspi
 
-4. When using the auto-login option, gnome keyring may not be allowed, causing issues if you are using remote access options that require a password to connect. You can disable the password by installing seahorse:
+3. When using the auto-login option, gnome keyring may not be allowed, causing issues if you are using remote access options that require a password to connect. You can disable the password by installing seahorse:
 
     sudo apt install seahorse
 
 and change the change the password to a blank password. This will store ALL passwords unencrypted, and will work around this issue. However, if you have any sensitive passwords stored, or the device is shared by multiple users, its a convenience vs. security tradeoff.
 
-5. After the initial setup, the Sharing panel of Budgie Control Center may freeze on first use. Rebooting after the initial setup avoids this issue.
+4. After the initial setup, the Sharing panel of Budgie Control Center may freeze on first use. Rebooting after the initial setup avoids this issue.
 
 
 
