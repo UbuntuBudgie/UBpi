@@ -1,11 +1,11 @@
-# Ubuntu Budgie Pi4 22.10
+# Ubuntu Budgie Pi4 23.04
 
-Date 20th October 2022
+Date: N/A in development
 
 Hi folks,
 
 
-This is stable release raspberry pi build based upon 22.10.
+--> Update This is stable release raspberry pi build based upon 22.10.
 
 **This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
