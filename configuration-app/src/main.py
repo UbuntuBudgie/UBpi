@@ -1,24 +1,21 @@
+import os
+import sys
+from lib import hint
+import argparse
+from modules.remote import Remote
+from modules.overclock import Overclock
+from modules.layout import Layout
+from modules.display import Display
+from findmypi.findmypi import FindMyPi
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
 
-import dbus
-import subprocess
-import time
-import os
-import sys
-import hint
-import argparse
-from remote import Remote
-from overclock import Overclock
-from layout import Layout
-from display import Display
-from findmypi import FindMyPi
 
 class Handler:
     def on_ConfigWindow_destroy(self, *args):
         gsettings.set_boolean('runarmconfig',
-            startlogincheckbutton.get_active())
+                              startlogincheckbutton.get_active())
         Gtk.main_quit()
 
     def on_ApplyButton_clicked(self):
@@ -35,6 +32,7 @@ class Handler:
     def on_RefreshIP_clicked(self):
         remote.refresh_ip()
 
+
 def check_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--force-findpi-mode", action="store_true",
@@ -46,25 +44,27 @@ def check_args():
     parser.add_argument("--force-model", choices=['CM4', '4', '400'],
                         help="Recognize this machine as the specifed model")
     parser.add_argument("--model", action='append')
-    cpu_arg = parser.add_argument("--cpuinfo", action='append',
-                        help="When --cpuinfo is used with --model, a matching CPU" +
-                             " will be recognized as the specified model")
-    args = parser.parse_args()
-    model_list = []
-    models = args.model if args.model is not None else []
-    cpu_infos = args.cpuinfo if args.cpuinfo is not None else []
+    parser.add_argument("--cpuinfo", action='append',
+                        help="When --cpuinfo is used with --model, a matching"
+                        + " CPU will be recognized as the specified model")
+    parsed_args = parser.parse_args()
+    pi_model_list = []
+    models = parsed_args.model if parsed_args.model is not None else []
+    cpu_infos = parsed_args.cpuinfo if parsed_args.cpuinfo is not None else []
     if len(cpu_infos) != len(models):
         parser.error("number of --cpuinfo and --model arguments must match")
     else:
-        for i in range(len(models)):
-            model_list.append([models[i], cpu_infos[i]])
-    return args, model_list
+        for index, model in enumerate(models):
+            pi_model_list.append([model, cpu_infos[index]])
+    return parsed_args, pi_model_list
+
 
 args, model_list = check_args()
 path = os.path.dirname(os.path.abspath(__file__))
 resource = Gio.Resource.load(path + '/org.ubuntubudgie.armconfig.gresource')
 Gio.resources_register(resource)
-builder = Gtk.Builder.new_from_resource('/org/ubuntubudgie/armconfig/config.ui')
+builder = Gtk.Builder.new_from_resource(
+    '/org/ubuntubudgie/armconfig/config.ui')
 window = builder.get_object("ConfigWindow")
 window.show_all()
 
@@ -90,13 +90,13 @@ if args.get_model_info:
     if len(pimodel) > 1:
         sys.exit(pimodel[1].strip() + " " + overclock.get_model_memory())
     else:
-        sys.exit("Unable to get Pi model info.  Is this a Raspberry Pi?")
+        sys.exit("Unable to get Pi model info. Is this a Raspberry Pi?")
 
 if ((overclock.pi_model is None and not args.force_arm_mode)
         or args.force_findpi_mode):
     findmypi = FindMyPi(builder)
 else:
-    remote = Remote(builder, overclock)
+    remote = Remote(builder)
     display = Display(builder, overclock)
 
 Gtk.main()

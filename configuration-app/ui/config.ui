@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="CopyImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">edit-copy</property>
+  </object>
+  <object class="GtkImage" id="RefreshIcon">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">view-refresh</property>
+  </object>
   <object class="GtkWindow" id="ConfigWindow">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Budgie ARM TweakTool</property>
@@ -552,63 +562,6 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="column-homogeneous">True</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkLabel" id="IPLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="margin-right">5</property>
-                        <property name="label" translatable="yes">0.0.0.0</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="RefreshIPButton">
-                        <property name="label">gtk-refresh</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">start</property>
-                        <property name="use-stock">True</property>
-                        <property name="image-position">right</property>
-                        <property name="always-show-image">True</property>
-                        <signal name="clicked" handler="on_RefreshIP_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin-right">5</property>
-                    <property name="label" translatable="yes">IP Address</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkButton" id="VNCButton">
                     <property name="label" translatable="yes">VNC Sharing</property>
@@ -642,23 +595,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="XRDPStatusLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="margin-left">5</property>
-                    <property name="wrap">True</property>
-                    <property name="ellipsize">end</property>
-                    <property name="width-chars">25</property>
-                    <property name="max-width-chars">25</property>
-                    <property name="lines">2</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="SSHButton">
                     <property name="label" translatable="yes">SSH Access</property>
                     <property name="visible">True</property>
@@ -675,44 +611,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="SSHStatusLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="margin-left">5</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="FindMyPiButton">
                     <property name="label" translatable="yes">FindMyPi Server</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="valign">center</property>
-                    <property name="margin-top">4</property>
-                    <property name="margin-bottom">2</property>
+                    <property name="margin-top">2</property>
+                    <property name="margin-bottom">4</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="FindMyPiStatusLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="valign">center</property>
-                    <property name="margin-left">10</property>
-                    <property name="wrap">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
                     <property name="top-attach">4</property>
                   </packing>
                 </child>
@@ -723,12 +633,13 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="halign">center</property>
+                    <property name="margin-top">4</property>
                     <property name="draw-indicator">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">5</property>
-                    <property name="width">2</property>
+                    <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
@@ -737,11 +648,72 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="wrap">True</property>
+                    <property name="xpad">5</property>
                     <property name="ellipsize">end</property>
-                    <property name="width-chars">25</property>
-                    <property name="max-width-chars">25</property>
+                    <property name="width-chars">24</property>
+                    <property name="single-line-mode">True</property>
                     <property name="lines">2</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="XRDPStatusLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="xpad">5</property>
+                    <property name="ellipsize">end</property>
+                    <property name="width-chars">24</property>
+                    <property name="lines">2</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="SSHStatusLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="xpad">5</property>
+                    <property name="ellipsize">end</property>
+                    <property name="width-chars">24</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="FindMyPiStatusLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="xpad">5</property>
+                    <property name="width-chars">24</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">    Status: </property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -749,22 +721,103 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">    Status: </property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">    Status: </property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">    Status: </property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkButton" id="RefreshIPButton">
+                    <property name="label" translatable="yes">Refresh</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">start</property>
+                    <property name="margin-top">4</property>
+                    <property name="margin-bottom">4</property>
+                    <property name="image">RefreshIcon</property>
+                    <property name="image-position">right</property>
+                    <property name="always-show-image">True</property>
+                    <signal name="clicked" handler="on_RefreshIP_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="xpad">6</property>
+                        <property name="label" translatable="yes">IP Address</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="IPLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
+                        <property name="xpad">10</property>
+                        <property name="label" translatable="yes">0.0.0.0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -799,7 +852,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-left">4</property>
                     <property name="label" translatable="yes">Video Mode</property>
                   </object>
                   <packing>
@@ -1004,10 +1056,12 @@
             <child>
               <object class="GtkCheckButton" id="StartLoginCheckButton">
                 <property name="label" translatable="yes">Start on login</property>
+                <property name="name">busyspinner</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="halign">start</property>
+                <property name="hexpand">False</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -1024,6 +1078,7 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -1043,16 +1098,19 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">1</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkSpinner" id="StatusSpinner">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
@@ -1093,12 +1151,17 @@
       </object>
     </child>
   </object>
-  <object class="GtkImage" id="CopyImage">
+  <object class="GtkImage" id="RefreshImage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-copy</property>
+    <property name="icon-name">view-refresh</property>
   </object>
-  <!-- n-columns=4 n-rows=3 -->
+  <object class="GtkImage" id="SSHImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">go-next</property>
+  </object>
+  <!-- n-columns=6 n-rows=3 -->
   <object class="GtkGrid" id="FindMyPiGrid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -1117,16 +1180,18 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
-        <property name="width">4</property>
+        <property name="width">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkButton" id="PiRefreshButton">
-        <property name="label">gtk-refresh</property>
+        <property name="label" translatable="yes">Refresh</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
-        <property name="use-stock">True</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
+        <property name="image">RefreshImage</property>
         <property name="image-position">right</property>
         <property name="always-show-image">True</property>
       </object>
@@ -1141,6 +1206,8 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
         <property name="image">CopyImage</property>
         <property name="image-position">right</property>
         <property name="always-show-image">True</property>
@@ -1158,15 +1225,44 @@
         <property name="hexpand">True</property>
       </object>
       <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+        <property name="width">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="NmapButton">
+        <property name="width-request">130</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="halign">end</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
+      </object>
+      <packing>
+        <property name="left-attach">5</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">  SSH user:</property>
+      </object>
+      <packing>
         <property name="left-attach">2</property>
         <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="NmapButton">
+      <object class="GtkEntry" id="SSHUserEntry">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
+        <property name="halign">start</property>
+        <property name="width-chars">11</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left-attach">3</property>
@@ -1174,16 +1270,21 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
+      <object class="GtkButton" id="PiSSHButton">
+        <property name="label" translatable="yes">Run SSH</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="margin-start">2</property>
+        <property name="margin-end">2</property>
+        <property name="image">SSHImage</property>
+        <property name="image-position">right</property>
+        <property name="always-show-image">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">4</property>
+        <property name="top-attach">1</property>
+      </packing>
     </child>
   </object>
 </interface>

@@ -3,7 +3,7 @@
 # Usage: budgie-xrdp.sh [enable|disable|status]
 #
 # enable / disable require sudo priveleges
-# status does NOT require sudo priveleges 
+# status does NOT require sudo priveleges
 
 function disable_xrdp() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
@@ -32,8 +32,9 @@ function enable_xrdp() {
   fi
 
   echo 'Checking configuration file'
+  echo $FILE
   sed -e '/\/etc\/X11\/Xsession/ s/^#*/#/g' -i $FILE
-  if ! grep -Fxq "budgie-desktop" $FILE; then 
+  if ! grep -Fxq "budgie-desktop" $FILE; then
     echo 'budgie-desktop' >> $FILE
     echo 'Restarting xrdp service'
     systemctl restart xrdp
@@ -44,19 +45,16 @@ function enable_xrdp() {
 function xrdp_status() {
   EXIT=0
   if [[ $1 -eq 1 &&  $2 -eq 1 ]]; then
-    SERVICE="ok"
+    SERVICE="Enabled"
   else
-    SERVICE="stopped"
+    SERVICE="Disabled"
     EXIT=1
   fi
   if [ $(dpkg-query -W -f='${Status}' xrdp 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    INSTALLED="not installed"
-    EXIT=1
-  else
-    INSTALLED="installed"
+    SERVICE="Not Installed"
+    EXIT=2
   fi
-  echo "xrdp is $INSTALLED"
-  echo "xrdp service is $SERVICE"
+  echo "XRDP is $SERVICE"
   exit $EXIT
 }
 
@@ -69,6 +67,12 @@ FILE='/etc/xrdp/startwm.sh'
 
 systemctl is-active xrdp > /dev/null 2>&1 && ACTIVE=1 || ACTIVE=0
 systemctl is-enabled xrdp > /dev/null 2>&1 && ENABLED=1 || ENABLED=0
+
+if [ ! -f "$FILE" ]; then
+  ENABLED=0
+elif ! grep -q budgie $FILE; then
+  ENABLED=0
+fi
 
 if [ "$1" = "enable" ]; then
   enable_xrdp $ACTIVE $ENABLED

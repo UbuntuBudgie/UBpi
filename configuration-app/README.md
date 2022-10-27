@@ -3,14 +3,11 @@
 ## Install:
 
     sudo apt install libglib2.0-dev-bin
-    sudo bash ./install.sh
-
-## run the app:
-
-    python3 main.py
-
-to generate the resource file after modifying the .ui file
-glib-compile-resources org.ubuntubudgie.armconfig.gresource.xml
+    git clone https://github.com/UbuntuBudgie/UBpi
+    cd UBpi/configuration-app
+    mkdir build && cd build
+    meson --prefix=/usr --libdir=/usr/lib
+    sudo ninja install
 
 ## To Do:
 
@@ -28,10 +25,10 @@ glib-compile-resources org.ubuntubudgie.armconfig.gresource.xml
 
 - [ ] option for the compact/mini layouts to enable xrandr pan and scrolling for lower screen devices such as the raspi touch screen
 - [X] Enable VNC Server: start/stop VNC - dunno how
-- [ ] "FindMyPi" - setup a UDP server - something like https://stackoverflow.com/questions/27893804/udp-client-server-socket-in-python - on connecting return the IP address of the PI
-- [ ] "FindMyPi" - client version of app with a big "FindMyPi" that displays the IP address of the PI on the network
+- [X] "FindMyPi" - setup a UDP server - something like https://stackoverflow.com/questions/27893804/udp-client-server-socket-in-python - on connecting return the IP address of the PI
+- [X] "FindMyPi" - client version of app with a big "FindMyPi" that displays the IP address of the PI on the network
 - [X] Enable SSH: install openssh-server if not installed - use packagekit python module at a guess
 - [X] Enable SSH: start/stop SSH - probably https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-18-04/
-- [ ] Headless mode: one click method to switch to auto logon, turn off screensaver etc.
+- [X] Headless mode: one click method to switch to auto logon, turn off screensaver etc.
 - [X] Setup XRDP: RDP is superior to vnc so a one click method along these lines would be useful https://froth-and-java.dev/posts/ubuntu-budgie-and-xrdp
 - [ ] Look at touch-screen long right click methods https://github.com/bareboat-necessities/evdev-right-click-emulation https://github.com/bareboat-necessities/my-bareboat/blob/master/right-click-emu/right-click-emu.sh

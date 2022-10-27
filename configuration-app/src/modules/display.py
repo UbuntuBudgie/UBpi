@@ -1,34 +1,36 @@
 from gi.repository import GLib
-from overclock import Overclock
 import subprocess
-import hint
+import os
+import sys
+from lib import hint
+
 
 class Display:
-
+    WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
     PIBOOTCTL = GLib.find_program_in_path('pibootctl')
-    MODE_ARG  = 'video.firmware.mode'
-    MEM_ARG   = 'gpu.mem'
-    CONFIG    = '/boot/firmware/config.txt'
-    PI_KMSMODE = '/usr/lib/budgie-desktop/arm/pi-kmsmode.sh'
+    MODE_ARG = 'video.firmware.mode'
+    MEM_ARG = 'gpu.mem'
+    CONFIG = '/boot/firmware/config.txt'
+    PI_KMSMODE = os.path.join(WORKING_DIR, '..', 'scripts', 'pi-kmsmode.sh')
 
     MODE = ['fkms', 'kms', 'legacy']
-    MEM  = ['128', '256', '512']
+    MEM = ['128', '256', '512']
 
     def __init__(self, builder, device):
         self.displaygrid = builder.get_object("DisplayGrid")
 
-        self.moderadiobuttons = [ builder.get_object("FkmsRadioButton"),
-                                  builder.get_object("KmsRadioButton"),
-                                  builder.get_object("LegacyRadioButton") ]
+        self.moderadiobuttons = [builder.get_object("FkmsRadioButton"),
+                                 builder.get_object("KmsRadioButton"),
+                                 builder.get_object("LegacyRadioButton")]
 
-        self.memradiobuttons =  [ builder.get_object("Mem128RadioButton"),
-                                  builder.get_object("Mem256RadioButton"),
-                                  builder.get_object("Mem512RadioButton") ]
+        self.memradiobuttons = [builder.get_object("Mem128RadioButton"),
+                                builder.get_object("Mem256RadioButton"),
+                                builder.get_object("Mem512RadioButton")]
 
         self.modebutton = builder.get_object("ModeButton")
         self.current_mode = ''
         self.membutton = builder.get_object("MemoryButton")
-        self.current_mem  = ''
+        self.current_mem = ''
 
         self.rebootlabel = builder.get_object("RebootLabel")
         self.rebootlabel.set_visible(False)
@@ -46,24 +48,29 @@ class Display:
         if device.pi_model is not None:
             if self.load_initial():
                 self.modebutton.connect("clicked", self.on_modebutton_clicked)
-                self.memsignal = self.membutton.connect("clicked", self.on_membutton_clicked)
+                self.memsignal = self.membutton.connect(
+                    "clicked", self.on_membutton_clicked)
             if not self.safe_to_change_mode():
                 self.disable_mode_selection()
         else:
-            #self.disable_controls()
+            # self.disable_controls()
             self.displaygrid.set_visible(False)
 
     def on_modebutton_clicked(self, *args):
         for i in range(len(self.moderadiobuttons)):
-            if self.moderadiobuttons[i].get_active() and self.MODE[i] != self.current_mode:
-                if self.run_pibootctl('set', self.MODE_ARG+'='+self.MODE[i]) != 'error':
+            if (self.moderadiobuttons[i].get_active()
+                    and self.MODE[i] != self.current_mode):
+                if (self.run_pibootctl('set', self.MODE_ARG+'='+self.MODE[i])
+                        != 'error'):
                     self.current_mode = self.MODE[i]
                     self.rebootlabel.set_visible(True)
 
     def on_membutton_clicked(self, *args):
         for i in range(len(self.memradiobuttons)):
-            if self.memradiobuttons[i].get_active() and self.MEM[i] != self.current_mem:
-                if self.run_pibootctl('set', self.MEM_ARG+'='+self.MEM[i]) != 'error':
+            if (self.memradiobuttons[i].get_active()
+                    and self.MEM[i] != self.current_mem):
+                if (self.run_pibootctl('set', self.MEM_ARG+'='+self.MEM[i])
+                        != 'error'):
                     self.current_mem = self.MEM[i]
                     self.rebootlabel.set_visible(True)
 
@@ -83,7 +90,8 @@ class Display:
         return None
 
     def load_initial(self):
-        result = self.run_pibootctl('get', self.MODE_ARG, self.MEM_ARG, '--shell')
+        result = self.run_pibootctl('get', self.MODE_ARG,
+                                    self.MEM_ARG, '--shell')
         # If pibootctl is missing or unsuccessful (i.e. run on a non-Pi device)
         if result == 'error':
             print("Unable to run pibootctl")
@@ -115,8 +123,8 @@ class Display:
             args.append(item)
 
         try:
-            output = subprocess.check_output(args,
-                stderr=subprocess.STDOUT).decode("utf-8").strip('\'\n')
+            output = subprocess.check_output(args, stderr=subprocess.STDOUT)
+            output = output.decode("utf-8").strip('\'\n')
         except subprocess.CalledProcessError as e:
             output = e.output.decode("utf-8")
             return 'error'

@@ -3,7 +3,7 @@
 # Usage: budgie-ssh.sh [enable|disable|status]
 #
 # enable / disable require sudo privileges
-# status does NOT require sudo privileges 
+# status does NOT require sudo privileges
 
 function disable_ssh() {
   if [[ $1 -eq 1  ||  $2 -eq 1 ]]; then
@@ -37,19 +37,17 @@ function enable_ssh() {
 function ssh_status() {
   EXIT=0
   if [[ $1 -eq 1 &&  $2 -eq 1 ]]; then
-    SERVICE="active"
+    SERVICE="Enabled"
+    EXIT=0
   else
-    SERVICE="inactive"
+    SERVICE="Disabled"
     EXIT=1
   fi
   if [ $(dpkg-query -W -f='${Status}' openssh-server 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    INSTALLED="not installed"
-    EXIT=1
-  else
-    INSTALLED="installed"
+    SERVICE="Not Installed"
+    EXIT=2
   fi
-  echo "ssh is $INSTALLED"
-  echo "ssh service is $SERVICE"
+  echo "SSH is $SERVICE"
   exit $EXIT
 }
 

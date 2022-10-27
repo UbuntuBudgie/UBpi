@@ -1,18 +1,23 @@
-import gi
-gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, GLib, Pango
 import socket
 import threading
 import time
 import queue
 import subprocess
-import re
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, Gdk, GLib, Pango
 
 
 class FindMyPIClient:
     # Gets a list of Pis by one of two methods: scanning the network and
     # checking mac addresses, or having a UDP server running on the PI.
     # Used by the FindMyPiTreeView, but designed to be used independently
+
+    PI_MACS = [
+        ["4B or newer", ['dc:a6:32:']],
+        ["3B+ or earlier", ['b8:27:eb:']],
+        ["", ['28:cd:c1', 'e4:5f:01:']]
+    ]
 
     def __init__(self, port=32323):
         self.ip_prefix = self._get_ip_prefix()
@@ -37,21 +42,20 @@ class FindMyPIClient:
 
     def _get_model_by_mac(self, mac_addr):
         # Returns Pi model, based on mac address
-        if 'dc:a6:32:' in mac_addr.lower():
-            return 'Raspberry PI 4B or newer'
-        elif 'b8:27:eb:' in mac_addr.lower():
-            return 'Raspberry PI 3B+ or earlier'
-        else:
-            return ''
+        for model in self.PI_MACS:
+            if any(mac.lower() in mac_addr.lower() for mac in model[1]):
+                return " ".join(["Raspberry PI", model[0]])
+        return ''
 
     def _run_nmap(self):
         # Run nmap to try to expose all mac addresses on network
-        nmap = [GLib.find_program_in_path('nmap'), '-sn', self.ip_prefix+"0/24"]
+        nmap = [GLib.find_program_in_path('nmap'), '-sn',
+                self.ip_prefix+"0/24"]
         try:
             subprocess.check_output(nmap,
                                     stderr=subprocess.STDOUT).decode("utf-8")
-        except subprocess.CalledProcessError as e:
-            print(e.output.decode("utf-8"))
+        except Exception as e:
+            print(e)
 
     def _run_arp(self):
         # Look at /proc/net/arp for the list of mac addresses for IPs
@@ -214,6 +218,7 @@ class FindMyPiTreeView (Gtk.TreeView):
 
     def set_method(self, method='server'):
         self.use_arp = True if method == 'mac' else False
+        self.method_changed = True
 
     def start(self):
         # Starts the thread that updates the treeview
@@ -231,6 +236,12 @@ class FindMyPiTreeView (Gtk.TreeView):
 
     def _update_list(self, pi_list):
         to_remove = []
+        # If we switch methods we need to clear the list or else they will
+        # display with the old information from the previous scans
+        if self.method_changed:
+            self.method_changed = False
+            self.pi_liststore.clear()
+
         # Search liststore, generate list of iterations to be removed
         # Also removes existing PIs from the list of PIs to add
         iter_child = self.pi_liststore.get_iter_first()

@@ -2,19 +2,18 @@ import gi
 import dbus
 import subprocess
 import time
-import socket
-import hint
-
+from lib import hint
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib
 
+
 class Layout:
-    _fontname="Sawasdee "
+    _fontname = "Sawasdee "
 
     # types of layouts that can be applied
-    MINI=1
-    COMPACT=2
-    STANDARD=3
+    MINI = 1
+    COMPACT = 2
+    STANDARD = 3
 
     def __init__(self, builder):
         self.logoutloginlabel = builder.get_object("LogoutLoginLabel")
@@ -41,7 +40,8 @@ class Layout:
         resolution = builder.get_object("ResolutionLabel")
         resolution.set_text(str(width) + " x " + str(height))
 
-        standard_recommendation = builder.get_object("StandardRecommendedLabel")
+        standard_recommendation = builder.get_object(
+                                  "StandardRecommendedLabel")
         compact_recommendation = builder.get_object("CompactRecommendedLabel")
         mini_recommendation = builder.get_object("MiniRecommendedLabel")
 
@@ -67,7 +67,6 @@ class Layout:
         hint.add(self.miniradiobutton, app_statuslabel, hint.MINI_RES)
         hint.add(applybutton, app_statuslabel, hint.APPLY_LAYOUT)
 
-
     def apply(self, layouttype):
 
         if layouttype == Layout.MINI:
@@ -86,7 +85,9 @@ class Layout:
             self._set_theme()
             self._apply_layout("ubuntubudgie")
         else:
-            self._set_showtime(self._fontname+showtime[0], self._fontname+showtime[1], showtime[2])
+            self._set_showtime(self._fontname+showtime[0],
+                               self._fontname+showtime[1],
+                               showtime[2])
             self._set_desktopfonts(layouttype)
             self._set_theme()
             self._apply_layout("ubuntubudgiecompact")
@@ -123,8 +124,9 @@ class Layout:
         panels = gsettings.get_strv('panels')
 
         for panel in panels:
-            gsettings = Gio.Settings.new_with_path('com.solus-project.budgie-panel.panel',
-                                                   '/com/solus-project/budgie-panel/panels/{' + panel + '}/')
+            gsettings = Gio.Settings.new_with_path(
+                'com.solus-project.budgie-panel.panel',
+                '/com/solus-project/budgie-panel/panels/{' + panel + '}/')
             if type(value) == bool:
                 gsettings.set_boolean(key, value)
             elif type(value) == int:
@@ -197,7 +199,7 @@ class Layout:
         settings = Gio.Settings.new("org.gnome.desktop.interface")
         settings.set_string("monospace-font-name", "Ubuntu Mono "+mono_size)
         settings.set_string("font-name", "Noto Sans "+font_size)
-        settings.set_string("document-font-name" , "Noto Sans "+font_size)
+        settings.set_string("document-font-name", "Noto Sans "+font_size)
 
         settings = Gio.Settings.new("org.nemo.desktop")
         settings.set_string("font", "Noto Sans "+font_size)
@@ -229,12 +231,12 @@ class Layout:
         settings.reset("datefont")
         settings.reset("linespacing")
 
-    #def _reset_theme(self):
-    #    settings = Gio.Settings.new("org.gnome.desktop.interface")
-    #    settings.reset("gtk-theme")
+    # def _reset_theme(self):
+    #     settings = Gio.Settings.new("org.gnome.desktop.interface")
+    #     settings.reset("gtk-theme")
 
-    #    settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
-    #    settings.reset("theme")
+    #     settings = Gio.Settings.new("org.gnome.desktop.wm.preferences")
+    #     settings.reset("theme")
 
     def _set_animation(self):
         # we turn off animations for budgie for improved responsiveness

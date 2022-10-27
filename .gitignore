@@ -1,6 +1,7 @@
-configuration-app/org.ubuntubudgie.armconfig.gresource
+configuration-app/ui/org.ubuntubudgie.armconfig.gresource
 
 __pycache__/
+build/
 
 *.img
 *.xz
