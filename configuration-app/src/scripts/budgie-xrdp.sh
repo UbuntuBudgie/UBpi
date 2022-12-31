@@ -39,6 +39,10 @@ function enable_xrdp() {
     echo 'Restarting xrdp service'
     systemctl restart xrdp
   fi
+  if ! grep -Fq "XDG_DATA_DIRS" $FILE; then
+    BUDGIEDIR='XDG_DATA_DIRS="/usr/share/budgie-desktop:$XDG_DATA_DIRS"'
+    sed -i "s|^budgie-desktop|$BUDGIEDIR\nbudgie-desktop|g" $FILE
+  fi
   echo 'Done!'
 }
 
