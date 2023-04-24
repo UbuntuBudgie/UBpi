@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-IMAGE="kinetic-preinstalled-desktop-arm64+raspi.img"
+IMAGE="lunar-preinstalled-desktop-arm64+raspi.img"
 RELEASE="https://cdimage.ubuntu.com/daily-preinstalled/current"
-RELEASEIMAGE="kinetic-budgie-preinstalled-desktop-arm64+raspi.img"
+RELEASEIMAGE="lunar-budgie-preinstalled-desktop-arm64+raspi.img"
 MOUNT="/mnt/pi"
 NAMESERVER=1.1.1.1
 
@@ -14,7 +14,6 @@ fi
 if [ ! -f "/usr/bin/qemu-arm-static" ]; then
   echo "Please make sure to install the following packages:"
   echo "   binfmt-support"
-  echo "   qemu"
   echo "   qemu-user-static"
   exit 1
 fi

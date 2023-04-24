@@ -1,11 +1,11 @@
 # Ubuntu Budgie Pi4 23.04
 
-Date: N/A in development
+Date: 22 April 2023
 
 Hi folks,
 
 
---> Update This is stable release raspberry pi build based upon 22.10.
+--> Update This is stable release raspberry pi build based upon 23.04.
 
 **This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
@@ -55,7 +55,7 @@ First, Install preload.
 
     sudo apt-get install preload
 
-Once installed, let’s go and change some of the settings to make it a bit more aggressive loading libraries and applications in ram. 
+Once installed, let’s go and change some of the settings to make it a bit more aggressive loading libraries and applications in ram.
 
 Let’s open preload configuration file.
 

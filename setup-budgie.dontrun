@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-snap download ubuntu-budgie-welcome --channel=latest/stable/ubuntu-22.10
+snap download core20 --channel=latest/stable
+snap download ubuntu-budgie-welcome --channel=latest/stable/ubuntu-23.04
+mv core20*.assert /var/lib/snapd/seed/assertions/
+mv core20*.snap /var/lib/snapd/seed/snaps/
 mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
 mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
 rm /var/lib/snapd/seed/snaps/snap-store*.snap
@@ -21,16 +24,18 @@ rm -rf /var/snap/snap-store
 rm /etc/systemd/system/*.mount
 
 WELCOME=$(ls /var/lib/snapd/seed/snaps/ubuntu-budgie-welcome* | sed 's#.*/##')
+CORE22=$(ls /var/lib/snapd/seed/snaps/core22* | sed 's#.*/##')
 CORE20=$(ls /var/lib/snapd/seed/snaps/core20* | sed 's#.*/##')
 SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd_* | sed 's#.*/##')
 FIREFOX=$(ls /var/lib/snapd/seed/snaps/firefox* | sed 's#.*/##')
 GTKCOMMON=$(ls /var/lib/snapd/seed/snaps/gtk-common-themes* | sed 's#.*/##')
-GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-3* | sed 's#.*/##')
+GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-* | sed 's#.*/##')
 BARE=$(ls /var/lib/snapd/seed/snaps/bare* | sed 's#.*/##')
 DESKTOPINT=$(ls /var/lib/snapd/seed/snaps/snapd-desktop-integration_* | sed 's#.*/##')
 
 sed -i "/file: ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: core22_/c\    file: $CORE22" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: snapd_/c\    file: $SNAPD" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: gnome-/c\    file: $GNOME" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: gtk-common-themes/c\    file: $GTKCOMMON" /var/lib/snapd/seed/seed.yaml
@@ -39,7 +44,7 @@ sed -i "/file: bare_/c\    file: $BARE" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: snapd-desktop-integration_/c\    file: $DESKTOPINT" /var/lib/snapd/seed/seed.yaml
 
 rm /var/lib/snapd/state.json
-sed -i 's/After=snapd.service snapd.socket/After=core20.start-snapd.service/' /lib/systemd/system/snapd.seeded.service
+sed -i 's/After=snapd.service snapd.socket/After=snapd.service/' /lib/systemd/system/snapd.seeded.service
 
 apt update
 
@@ -50,8 +55,6 @@ apt update
 # apt purge -y linux-headers-5.13.0-1008-raspi linux-image-5.13.0-1008-raspi
 
 apt remove -y gdm3 gnome-shell
-
-apt install -y ubuntu-budgie-desktop-raspi
 
 apt remove -y gnome-bluetooth-sendto ibus ibus-gtk ibus-gtk3 ibus-table \
 gnome-initial-setup ubuntu-report systemd-oomd eog gnome-control-center system-config-printer gnome-terminal \
@@ -71,6 +74,8 @@ libsss-idmap0 libsss-nss-idmap0 libsysmetrics1 libtotem0 libtracker-sparql-3.0-0
 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xv0 media-player-info python3-mako python3-markupsafe python3-sss \
 remmina-common rhythmbox-data shotwell-common totem-common tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu \
 ubuntu-wallpapers-jammy ubuntu-wallpapers xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom
+
+apt install -y ubuntu-budgie-desktop-raspi
 
 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt upgrade -y
 
@@ -94,6 +99,7 @@ update-alternatives --install /usr/share/plymouth/themes/default.plymouth defaul
 update-alternatives --set default.plymouth /usr/share/plymouth/themes/ubuntu-budgie-logo/ubuntu-budgie-logo.plymouth
 update-initramfs -u
 
+apt remove -y gnome-initial-setup	
 apt -y autoremove
 apt -y autoclean
 apt -y clean
