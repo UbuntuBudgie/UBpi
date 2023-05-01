@@ -6,3 +6,7 @@ build/
 *.img
 *.xz
 *.ui~
+rcksum*
+SHA256SUMS
+*.deb
+*.zs-old
