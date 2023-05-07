@@ -10,3 +10,6 @@ rcksum*
 SHA256SUMS
 *.deb
 *.zs-old
+*.log
+*.old
+

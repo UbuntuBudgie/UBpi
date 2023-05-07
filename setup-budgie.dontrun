@@ -90,13 +90,6 @@ DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt upgrade -y
 
 apt-get -y install --no-install-recommends oem-config-slideshow-ubuntu-budgie
 
-# Hopefully an upstream fix will come in the near future, if so, let's
-# do a quick check first before we modify this
-OBSOLETE=$(grep obsoleted /usr/sbin/oem-config-remove-gtk)
-if [ "$OBSOLETE" = "" ]; then
-  sed -i '/def _on_transaction/a \    trans.set_remove_obsoleted_depends(remove_obsoleted_depends=True)' /usr/sbin/oem-config-remove-gtk
-fi
-
 sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/lib/ubiquity/plugins/ubi-usersetup.py
 sed -i 's/oem-config-slideshow-ubuntu/oem-config-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
 sed -i 's/ubiquity-slideshow-ubuntu/ubiquity-slideshow-ubuntu-budgie/' /usr/sbin/oem-config-remove-gtk
