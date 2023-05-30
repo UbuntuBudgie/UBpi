@@ -1,5 +1,7 @@
 # Ubuntu Budgie Pi4 23.04
 
+[![](https://opencollective.com/ubuntubudgie/tiers/backer.svg?avatarHeight=96)](https://opencollective.com/ubuntubudgie)
+
 Date: 22 April 2023
 
 Hi folks,
