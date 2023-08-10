@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-IMAGE="jammy-preinstalled-desktop-arm64+raspi.img"
-RELEASE="http://cdimage.ubuntu.com/jammy/daily-preinstalled/current"
-RELEASEIMAGE="ubuntu-budgie-22.04.1-preinstalled-desktop-arm64+raspi.img"
+IMAGE="ubuntu-22.04.3-preinstalled-desktop-arm64+raspi.img"
+RELEASE="http://cdimage.ubuntu.com/releases/22.04/release"
+RELEASEIMAGE="ubuntu-budgie-22.04.3-preinstalled-desktop-arm64+raspi.img"
 MOUNT="/mnt/pi"
 NAMESERVER=1.1.1.1
 
