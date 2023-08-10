@@ -1,11 +1,25 @@
-# Ubuntu Budgie Pi4 22.04.1
+# Ubuntu Budgie Pi4 22.04.3
 
-Date 4th August 2022
+Date 10th August 2023
 
-Hi folks,
+We are pleased to announce the release of the next version of our distro, the third 22.04 LTS point release.
 
+The LTS version is supported for 3 years while the regular releases are supported for 9 months.
 
-This is our raspberry pi build based upon 22.04.1LTS
+The new release rolls-up various fixes and optimizations by Ubuntu Budgie team, that have been released since the 22.04.2 release in February:
+
+* Budgie Welcome updates include lots more translation updates
+* various bug fixes for our budgie-applets known as budgie-extras
+* new version of budgie-analogue-clock-applet
+* brand new fluent based makeover including fluent-gtk-theme and fluent-icon-theme
+* new version of mcmojave-circle icon theme
+* ability to add nemo-terminal to the file-manager
+* new version of tela-circle-icon-theme
+* new version of whitesur-icon-theme
+
+We also inherit hundreds of stability, bug-fixes and optimizations made to the underlying Ubuntu repositories. Many thanks to all the volunteers, Debian & Ubuntu maintainers and Canonical employees who have done such a sterling job packaging the changes that many more developers from all over the world have resolved. The power of FOSS that we are all proud to be part of.
+
+You can read more about 22.04 via our [Release Notes](https://discourse.ubuntu.com/t/jammy-jellyfish-release-notes/24668)
 
 **This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
