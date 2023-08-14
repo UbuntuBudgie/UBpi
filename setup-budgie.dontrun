@@ -22,17 +22,21 @@ rm /etc/systemd/system/*.mount
 
 WELCOME=$(ls /var/lib/snapd/seed/snaps/ubuntu-budgie-welcome* | sed 's#.*/##')
 CORE20=$(ls /var/lib/snapd/seed/snaps/core20* | sed 's#.*/##')
+CORE22=$(ls /var/lib/snapd/seed/snaps/core22* | sed 's#.*/##')
 SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd_* | sed 's#.*/##')
 FIREFOX=$(ls /var/lib/snapd/seed/snaps/firefox* | sed 's#.*/##')
 GTKCOMMON=$(ls /var/lib/snapd/seed/snaps/gtk-common-themes* | sed 's#.*/##')
-GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-3* | sed 's#.*/##')
+GNOME3=$(ls /var/lib/snapd/seed/snaps/gnome-3* | sed 's#.*/##')
+GNOME4=$(ls /var/lib/snapd/seed/snaps/gnome-4* | sed 's#.*/##')
 BARE=$(ls /var/lib/snapd/seed/snaps/bare* | sed 's#.*/##')
 DESKTOPINT=$(ls /var/lib/snapd/seed/snaps/snapd-desktop-integration_* | sed 's#.*/##')
 
 sed -i "/file: ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: core22_/c\    file: $CORE22" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: snapd_/c\    file: $SNAPD" /var/lib/snapd/seed/seed.yaml
-sed -i "/file: gnome-/c\    file: $GNOME" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: gnome-3/c\    file: $GNOME3" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: gnome-4/c\    file: $GNOME4" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: gtk-common-themes/c\    file: $GTKCOMMON" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: firefox_/c\    file: $FIREFOX" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: bare_/c\    file: $BARE" /var/lib/snapd/seed/seed.yaml
@@ -62,7 +66,7 @@ apt remove -y network-manager-config-connectivity-ubuntu gnome-initial-setup ubu
   gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock \
   gnome-shell-extension-appindicator systemd-oomd nautilus-sendto nautilus-share \
   xdg-desktop-portal-gnome plymouth-theme-spinner gstreamer1.0-plugins-base-apps \
-  libpam-fprintd libpam-sss usb-creator-gtk branding-ubuntu libreoffice-style-breeze 
+  libpam-fprintd libpam-sss usb-creator-gtk branding-ubuntu libreoffice-style-breeze
 
 apt upgrade -y
 

@@ -1,20 +1,28 @@
 snaps:
   -
-    name: core20
+    name: core22
     channel: stable
-    file: core20_1380.snap
+    file: core22_861.snap
   -
     name: snapd
     channel: stable
-    file: snapd_15183.snap
+    file: snapd_19459.snap
   -
     name: firefox
     channel: stable/ubuntu-22.04
-    file: firefox_1155.snap
+    file: firefox_2918.snap
+  -
+    name: core20
+    channel: stable
+    file: core20_1977.snap
   -
     name: gnome-3-38-2004
     channel: stable/ubuntu-22.04
-    file: gnome-3-38-2004_100.snap
+    file: gnome-3-38-2004_145.snap
+  -
+    name: gnome-42-2204
+    channel: stable/ubuntu-22.04
+    file: gnome-42-2204_122.snap
   -
     name: bare
     channel: stable
@@ -22,11 +30,11 @@ snaps:
   -
     name: gtk-common-themes
     channel: stable/ubuntu-22.04
-    file: gtk-common-themes_1526.snap
+    file: gtk-common-themes_1535.snap
   -
     name: snapd-desktop-integration
     channel: stable/ubuntu-22.04
-    file: snapd-desktop-integration_9.snap
+    file: snapd-desktop-integration_85.snap
   -
     name: ubuntu-budgie-welcome
     channel: stable/ubuntu-22.04
