@@ -6,10 +6,10 @@ if [ "${ARCH}" != "aarch64" ]; then
   exit
 fi
 
-snap download core20 --channel=latest/stable
-snap download ubuntu-budgie-welcome --channel=latest/stable/ubuntu-23.04
-mv core20*.assert /var/lib/snapd/seed/assertions/
-mv core20*.snap /var/lib/snapd/seed/snaps/
+mv /etc/resolv.conf /etc/resolv.conf.tmp
+echo 'nameserver 1.1.1.1' > /etc/resolv.conf
+
+snap download ubuntu-budgie-welcome --channel=latest/stable
 mv ubuntu-budgie-welcome*.assert /var/lib/snapd/seed/assertions/
 mv ubuntu-budgie-welcome*.snap /var/lib/snapd/seed/snaps/
 rm /var/lib/snapd/seed/snaps/snap-store*.snap
@@ -31,19 +31,17 @@ rm /etc/systemd/system/*.mount
 
 WELCOME=$(ls /var/lib/snapd/seed/snaps/ubuntu-budgie-welcome* | sed 's#.*/##')
 CORE22=$(ls /var/lib/snapd/seed/snaps/core22* | sed 's#.*/##')
-CORE20=$(ls /var/lib/snapd/seed/snaps/core20* | sed 's#.*/##')
 SNAPD=$(ls /var/lib/snapd/seed/snaps/snapd_* | sed 's#.*/##')
 FIREFOX=$(ls /var/lib/snapd/seed/snaps/firefox* | sed 's#.*/##')
 GTKCOMMON=$(ls /var/lib/snapd/seed/snaps/gtk-common-themes* | sed 's#.*/##')
-GNOME=$(ls /var/lib/snapd/seed/snaps/gnome-* | sed 's#.*/##')
+GNOME4=$(ls /var/lib/snapd/seed/snaps/gnome-4* | sed 's#.*/##')
 BARE=$(ls /var/lib/snapd/seed/snaps/bare* | sed 's#.*/##')
 DESKTOPINT=$(ls /var/lib/snapd/seed/snaps/snapd-desktop-integration_* | sed 's#.*/##')
 
 sed -i "/file: ubuntu-budgie-welcome_/c\    file: $WELCOME" /var/lib/snapd/seed/seed.yaml
-sed -i "/file: core20_/c\    file: $CORE20" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: core22_/c\    file: $CORE22" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: snapd_/c\    file: $SNAPD" /var/lib/snapd/seed/seed.yaml
-sed -i "/file: gnome-/c\    file: $GNOME" /var/lib/snapd/seed/seed.yaml
+sed -i "/file: gnome-4/c\    file: $GNOME4" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: gtk-common-themes/c\    file: $GTKCOMMON" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: firefox_/c\    file: $FIREFOX" /var/lib/snapd/seed/seed.yaml
 sed -i "/file: bare_/c\    file: $BARE" /var/lib/snapd/seed/seed.yaml
@@ -82,6 +80,8 @@ libxcb-xv0 media-player-info python3-mako python3-markupsafe python3-sss remmina
 totem-common tracker tracker-extract tracker-miner-fs ubiquity-slideshow-ubuntu ubuntu-wallpapers-lunar ubuntu-wallpapers \
 xserver-xephyr xserver-xorg-input-all xserver-xorg-input-wacom
 
+apt autoremove -y
+
 apt install -y ubuntu-budgie-desktop-raspi
 
 sudo dpkg -i /tmp/*.deb
@@ -106,5 +106,6 @@ apt -y autoclean
 apt -y clean
 
 rm /usr/bin/setup-budgie.sh
-echo -n "" > /etc/resolv.conf
-
+rm /etc/resolv.conf
+mv /etc/resolv.conf.temp /etc/resolv.conf
+mv /etc/apt/sources.list.bak /etc/apt/sources.list

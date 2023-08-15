@@ -4,10 +4,6 @@ snaps:
     channel: stable
     file: core22_1380.snap
   -
-    name: core20
-    channel: stable
-    file: core20_1380.snap
-  -
     name: snapd
     channel: stable
     file: snapd_15183.snap

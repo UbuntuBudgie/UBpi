@@ -78,27 +78,35 @@ cp $BASEIMAGE.xz $IMAGE.xz
 log "Uncompressing image"
 xz -d -v $IMAGE.xz
 
+# Expand the image and then the partition
+qemu-img resize $IMAGE +500m
+parted $IMAGE resizepart 2 100%
+
 # Set up the chroot environment
 log "Creating mount"
 OFFSET=$(parted "$IMAGE" unit b print | grep "ext4" | awk '{ print substr($2,0,length($2)-1) }')
 mkdir -p $MOUNT
 mount -o loop,offset=$OFFSET $IMAGE $MOUNT
+PIDEVICE=$(losetup | grep PI-IMAGE | awk '{print $1}')
+resize2fs $PIDEVICE
 cp seed.yaml $MOUNT/var/lib/snapd/seed/seed.yaml
 cp /usr/bin/qemu-arm-static $MOUNT/usr/bin/
 cp setup-budgie.dontrun $MOUNT/usr/bin/setup-budgie.sh
+cp $MOUNT/etc/apt/sources.list $MOUNT/etc/apt/sources.list.bak
+cp aptsources $MOUNT/etc/apt/sources.list
 
 # If we want to install any .debs, we can place them in the patches folder
 # They will automatically be installed by the conversion script
 cp patches/*.deb $MOUNT/tmp
 
 chmod +x $MOUNT/usr/bin/setup-budgie.sh
-echo "nameserver $NAMESERVER" > $MOUNT/run/systemd/resolve/stub-resolv.conf
+#echo "nameserver $NAMESERVER" > $MOUNT/run/systemd/resolve/stub-resolv.conf
 # rm $MOUNT/run/systemd/resolve/stub-resolv.conf
 # echo "nameserver $NAMESERVER" > tempconf.tmp
 # cp tempconf.tmp $MOUNT/run/systemd/resolve/stub-resolv.conf
 # rm tempconf.tmp
 cd $MOUNT
-log "Setting up chroot environment"
+#log "Setting up chroot environment"
 mount -t proc /proc proc/
 mount --make-rslave proc/
 mount --rbind /sys sys/
@@ -107,9 +115,9 @@ mount --rbind /dev dev/
 mount --make-rslave dev/
 
 # Create the image
-log "Running conversion"
+#log "Running conversion"
 chroot $MOUNT /usr/bin/setup-budgie.sh
-log "Conversion complete"
+#log "Conversion complete"
 
 # Clean up the image
 rm $MOUNT/usr/bin/qemu-arm-static
@@ -117,7 +125,7 @@ rm $MOUNT/tmp/*
 
 # Clean up local machine. Regardless, local machine will be in an unstable state after this
 # and should ultimately be reboot on completion
-log "Cleaning up chroot environment"
+#log "Cleaning up chroot environment"
 cd $SCRIPT_PATH
 umount -l -R $MOUNT/dev
 umount -l -R $MOUNT/sys
