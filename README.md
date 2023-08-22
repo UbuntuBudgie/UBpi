@@ -1,13 +1,16 @@
-# Ubuntu Budgie Pi4 23.04
+# Ubuntu Budgie Pi4 23.10
 
 [![](https://opencollective.com/ubuntubudgie/tiers/backer.svg?avatarHeight=96)](https://opencollective.com/ubuntubudgie)
 
-Date: 22 April 2023
+Date: 22 August 2023
 
 Hi folks,
 
+This is our Raspberry Pi build based upon 23.10 - it is of alpha quality to be used for feedback and testing.
 
---> Update This is stable release raspberry pi build based upon 23.04.
+https://discourse.ubuntubudgie.org/t/testing-23-10-are-you-brave-enough/6699
+
+Please be sure to read the list of known issues.
 
 **This image is recommended only for a Pi4B or Pi400 with 2Gb/4Gb/8Gb RAM.**
 
@@ -77,7 +80,8 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 
 # Known issues
 
-1. The graphics are slightly glitchy under fkms. We recommend using the KMS mode for direct access displays and fkms for remote access.
+1. The default image currently does not ship with universe and multiverse repositories enabled. Therefore, you will encounter issues installing software from these repos. As a workaround, simply run Software Sources (or software-properties-gtk from terminal) and enable these from the Ubuntu Software tab
+
 2. Various kernel modules have been moved from the linux-modules-raspi package in order to reduce the initramfs size. This results in several applications (i.e. Docker, zram) failing due to missing kernel modules. To work around this:
 
     sudo apt install linux-modules-extra-raspi
@@ -89,8 +93,6 @@ That should be enough tweaks for now. Time for a good old reboot. Fingers crosse
 and change the change the password to a blank password. This will store ALL passwords unencrypted, and will work around this issue. However, if you have any sensitive passwords stored, or the device is shared by multiple users, its a convenience vs. security tradeoff.
 
 4. After the initial setup, the Sharing panel of Budgie Control Center may freeze on first use. Rebooting after the initial setup avoids this issue.
-
-
 
 Please feedback via our discourse forum https://discourse.ubuntubudgie.org
 
