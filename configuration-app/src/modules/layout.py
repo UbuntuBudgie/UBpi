@@ -185,7 +185,7 @@ class Layout:
             iface.ResetLayout(layout)
 
     def _set_compact_menu(self):
-        args = ['/usr/lib/budgie-desktop/arm/reset.sh', 'true']
+        args = ['/usr/lib/budgie-desktop/arm/scripts/reset.sh', 'true']
 
         try:
             subprocess.run(args)
@@ -221,7 +221,7 @@ class Layout:
 
     def _set_theme(self):
         # default to Qogir since it doesnt use lots of animation
-        theme = "QogirBudgie-dark"
+        theme = "QogirBudgie-Dark"
         settings = Gio.Settings.new("org.gnome.desktop.interface")
         settings.set_string("gtk-theme", theme)
 
