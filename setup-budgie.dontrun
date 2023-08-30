@@ -71,15 +71,15 @@ gnome-terminal-data gnome-text-editor grilo-plugins-0.3-base gsettings-ubuntu-sc
 ibus ibus-data ibus-gtk ibus-gtk3 ibus-gtk4 ibus-table libcamel-1.2-64 libcolord-gtk4-1 libcue2 libebackend-1.2-11 libebook-1.2-21 \
 libebook-contacts-1.2-4 libecal-2.0-2 libedata-book-1.2-27
 
-apt remove - y libedata-cal-2.0-2 libedataserver-1.2-27 libedataserverui-1.2-4 libedataserverui4-1.0-0 libeditorconfig0 \
+apt remove -y libedata-cal-2.0-2 libedataserver-1.2-27 libedataserverui-1.2-4 libedataserverui4-1.0-0 libeditorconfig0 \
 libevdocument3-4 libevview3-3 libgamemode0 libgamemodeauto0 libgdm1 libgexiv2-2 libgif7 libgnome-autoar-0-0 libgnome-bg-4-2 \
 libgnome-bluetooth-ui-3.0-13 libgnome-rr-4-2 libgom-1.0-0 libgrilo-0.3-0 libgtksourceview-5-0 libgtksourceview-5-common \
 libjavascriptcoregtk-6.0-1 libphonenumber8 libportal-gtk3-1 libportal-gtk4-1 libportal1 libprotobuf32 libsysmetrics1 \
 libtotem0 libtracker-sparql-3.0-0 libwebkitgtk-6.0-4 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 \
 libxcb-xv0 nautilus nautilus-data nautilus-extension-gnome-terminal network-manager-config-connectivity-ubuntu \
-python3-ibus-1.0 systemd-oomd totem totem-common totem-plugins tracker tracker-extract seahorse tracker-miner-fs \
+python3-ibus-1.0 systemd-oomd totem totem-common totem-plugins tracker tracker-extract tracker-miner-fs \
 ubuntu-report ubuntu-session ubuntu-settings ubuntu-wallpapers ubuntu-wallpapers-lunar xdg-desktop-portal-gnome xserver-xephyr \
-xserver-xorg-input-all xserver-xorg-input-wacom plymouth-spinner-theme xwayland yaru-theme-gnome-shell yaru-theme-gtk \
+xserver-xorg-input-all xserver-xorg-input-wacom xwayland yaru-theme-gnome-shell yaru-theme-gtk \
 yaru-theme-icon yaru-theme-sound
 
 apt autoremove -y
