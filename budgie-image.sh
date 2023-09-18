@@ -79,16 +79,16 @@ log "Uncompressing image"
 xz -d -v $IMAGE.xz
 
 # Expand the image and then the partition
-qemu-img resize $IMAGE +500m
-parted $IMAGE resizepart 2 100%
+#qemu-img resize $IMAGE +500m
+#parted $IMAGE resizepart 2 100%
 
 # Set up the chroot environment
 log "Creating mount"
 OFFSET=$(parted "$IMAGE" unit b print | grep "ext4" | awk '{ print substr($2,0,length($2)-1) }')
 mkdir -p $MOUNT
 mount -o loop,offset=$OFFSET $IMAGE $MOUNT
-PIDEVICE=$(losetup | grep PI-IMAGE | awk '{print $1}')
-resize2fs $PIDEVICE
+#PIDEVICE=$(losetup | grep PI-IMAGE | awk '{print $1}')
+#resize2fs $PIDEVICE
 cp seed.yaml $MOUNT/var/lib/snapd/seed/seed.yaml
 cp /usr/bin/qemu-arm-static $MOUNT/usr/bin/
 cp setup-budgie.dontrun $MOUNT/usr/bin/setup-budgie.sh
