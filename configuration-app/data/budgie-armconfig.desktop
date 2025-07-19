@@ -3,6 +3,6 @@ Type=Application
 Name=Budgie Pi
 Comment=Application to manage Budgie on a Raspberry Pi
 Exec=python3 /usr/lib/budgie-desktop/arm/main.py
-Icon=system-settings
+Icon=distributor-logo-raspbian
 Categories=Utility;
 Keywords=configuration;arm;pi;raspberry
