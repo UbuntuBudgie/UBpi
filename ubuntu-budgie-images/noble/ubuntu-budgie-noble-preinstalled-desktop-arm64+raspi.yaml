@@ -1,0 +1,106 @@
+name: ubuntu-budgie-desktop-raspi-arm64
+display-name: Ubuntu Budgie Preinstalled Desktop Raspberry Pi arm64
+revision: 1
+architecture: arm64
+series: noble
+class: preinstalled
+kernel: linux-image-raspi
+gadget:
+  url: "https://git.launchpad.net/snap-pi"
+  branch: "classic"
+  type: "git"
+  target: "desktop"
+rootfs:
+  archive: ubuntu
+  flavor: ubuntu-budgie
+  sources-list-deb822: true
+  components:
+    - main
+    - restricted
+    - universe
+    - multiverse
+  mirror: "http://ports.ubuntu.com/ubuntu-ports/"
+  pocket: updates
+  seed:
+    urls:
+      - "git://git.launchpad.net/~ubuntubudgie-dev/ubuntu-seeds/+git/"
+      - "git://git.launchpad.net/~ubuntu-core-dev/ubuntu-seeds/+git/"
+    branch: noble
+    names:
+      - desktop
+      - desktop-minimal
+      - desktop-raspi
+      - supported-common
+      - supported-raspi-common
+      - raspi-common
+customization:
+  cloud-init:
+    user-data: |
+      #cloud-config
+      growpart:
+        mode: auto
+        devices: ['/']
+        ignore_growroot_disabled: true
+
+      resize_rootfs: true
+
+  extra-snaps:
+    -
+      name: snapd
+    -
+      name: core22
+    -
+      name: bare
+    -
+      name: gtk-common-themes
+      channel: stable/ubuntu-24.04
+    -
+      name: firefox
+      channel: stable/ubuntu-24.04
+    -
+      name: snapd-desktop-integration
+      channel: stable/ubuntu-24.04
+    -
+      name: ubuntu-budgie-welcome
+      channel: stable/ubuntu-24.04
+      classic: true
+  extra-packages:
+    - name: cloud-init
+    - name: ubuntu-standard
+    - name: oem-config-gtk
+    - name: ubiquity-frontend-gtk
+    - name: language-pack-en-base
+    - name: oem-config-slideshow-ubuntu-budgie
+    - name: ubiquity-slideshow-ubuntu
+  fstab:
+    -
+      label: "writable"
+      mountpoint: "/"
+      filesystem-type: "ext4"
+      mount-options: "discard"
+      dump: false
+      fsck-order: 1
+    -
+      label: "system-boot"
+      mountpoint: "/boot/firmware"
+      filesystem-type: "vfat"
+      mount-options: "defaults"
+      dump: false
+      fsck-order: 1
+
+  manual:
+    # Lightdm is broken on Pi 5 without this fix
+    copy-file:
+      - source: "99-vc4.conf"
+        destination: "/etc/X11/xorg.conf.d/99-vc4.conf"
+      - source: "99-disable-network-config.cfg"
+        destination: "/etc/cloud/cloud.cfg.d/99-disable-network-config.cfg"
+    execute:
+      - path: "/usr/sbin/oem-config-prepare"
+
+artifacts:
+  img:
+    -
+      name: ubuntu-budgie-noble-preinstalled-desktop-arm64+raspi.img
+  manifest:
+    name: ubuntu-budgie-noble-preinstalled-desktop-arm64+raspi.manifest
